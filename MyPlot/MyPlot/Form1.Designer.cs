@@ -35,7 +35,7 @@ namespace MyPlot
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1036, 677);
+            this.ClientSize = new System.Drawing.Size(1355, 879);
             this.Name = "MyPlot";
             this.Text = "MyPlot";
             this.ResumeLayout(false);
