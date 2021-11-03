@@ -13,7 +13,12 @@ namespace MyPlot
     {
         public bool enabled { get; set; }
         public int volume { get; set; }
-        public IList<string> madia_files { get; set; }
+        public IList<string> media_files { get; set; }
+
+        //Runtime values
+        public int   play_index;
+        public float play_position;
+        public float play_speed;
     }
     public class PIPPlayerConfig
     {
@@ -27,6 +32,11 @@ namespace MyPlot
         public bool enabled { get; set; }
         public int volume { get; set; }
         public IList<string> audio_files { get; set; }
+
+        //Runtime values
+        public int play_index;
+        public float play_position;
+        public float play_speed;
     }
 
     public class RadioPlayerConfig

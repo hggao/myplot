@@ -51,6 +51,8 @@ namespace MyPlot
             this.vlcCtrlMain.Text = "vlcCtrlMain";
             this.vlcCtrlMain.VlcLibDirectory = ((System.IO.DirectoryInfo)(resources.GetObject("vlcCtrlMain.VlcLibDirectory")));
             this.vlcCtrlMain.VlcMediaplayerOptions = null;
+            this.vlcCtrlMain.EndReached += new System.EventHandler<Vlc.DotNet.Core.VlcMediaPlayerEndReachedEventArgs>(this.vlcCtrlMain_EndReached);
+            this.vlcCtrlMain.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.vlcCtrlMain_KeyPress);
             // 
             // vlcCtrlAudio
             // 
@@ -63,6 +65,7 @@ namespace MyPlot
             this.vlcCtrlAudio.Text = "vlcCtrlAudio";
             this.vlcCtrlAudio.VlcLibDirectory = ((System.IO.DirectoryInfo)(resources.GetObject("vlcCtrlAudio.VlcLibDirectory")));
             this.vlcCtrlAudio.VlcMediaplayerOptions = null;
+            this.vlcCtrlAudio.EndReached += new System.EventHandler<Vlc.DotNet.Core.VlcMediaPlayerEndReachedEventArgs>(this.vlcCtrlAudio_EndReached);
             // 
             // vlcCtrlRadio
             // 

@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Vlc.DotNet.Core;
 
 namespace MyPlot
 {
     public partial class MyPlot : Form
     {
-        private ConfigureMain playersConfig;
+        private ConfigureMain playersConfig = null;
 
         public MyPlot()
         {
@@ -17,12 +19,11 @@ namespace MyPlot
 
         private async void MyPlot_Load(object sender, EventArgs e)
         {
-            //Load the configurations of all players.
+            //Load the configurations of all player controls.
             playersConfig = new ConfigureMain();
             playersConfig.LoadConfigure("C:\\videodev360gps\\config_default.json");
 
-            SetPlayerControlSize();
-
+            //Special waiting for webView2 control done its initialization
             webView21.CoreWebView2InitializationCompleted += WebView_CoreWebView2InitializationCompleted;
             Debug.WriteLine("before InitializeAsync");
             await InitializeAsync();
@@ -31,8 +32,15 @@ namespace MyPlot
             {
                 Debug.WriteLine("not ready");
             }
-            webView21.NavigateToString(System.IO.File.ReadAllText("browse_index.html"));
-            Debug.WriteLine("after NavigateToString");
+
+            //Based on configration to set all controls appearance
+            SetPlayerControlAppearance();
+
+            //Start the real works of each players
+            MainPlayerStart();
+            PIPPlayerStart();
+            AudioPlayerStart();
+            RadioPlayerStart();
         }
 
         private async Task InitializeAsync()
@@ -49,34 +57,190 @@ namespace MyPlot
 
         private void MyPlot_Resize(object sender, EventArgs e)
         {
-            SetPlayerControlSize();
+            SetPlayerControlAppearance();
         }
 
-        private void SetPlayerControlSize()
+        private void SetPlayerControlAppearance()
         {
             Size newSize = ClientSize;
 
             //Set main player to occupy the whole client area.
-            vlcCtrlMain.Location = new Point(0, 0);
-            vlcCtrlMain.Size = newSize;
+            if (playersConfig.configData.mainPlayerConfig.enabled)
+            {
+                vlcCtrlMain.Location = new Point(0, 0);
+                vlcCtrlMain.Size = newSize;
+                vlcCtrlMain.Visible = true;
+            } else
+            {
+                vlcCtrlMain.Visible = false;
+            }
 
             //Set PIP web player at the bottom right corner
-            newSize.Width = ClientSize.Width / 3;
-            newSize.Height = ClientSize.Height / 3;
-            webView21.Location = new Point(ClientSize.Width - newSize.Width, ClientSize.Height - newSize.Height);
-            webView21.Size = newSize;
+            if (playersConfig.configData.pipPlayerConfig.enabled)
+            {
+                newSize.Width = ClientSize.Width / 3;
+                newSize.Height = ClientSize.Height / 3;
+                webView21.Location = new Point(ClientSize.Width - newSize.Width, ClientSize.Height - newSize.Height);
+                webView21.Size = newSize;
+                webView21.Visible = true;
+            }
+            else
+            {
+                webView21.Visible = false;
+            }
+            //webView21.NavigateToString(System.IO.File.ReadAllText("browse_index.html"));
 
             //Set Audio player at the bottom left
-            newSize.Width = ClientSize.Width * 2 / 3;
-            newSize.Height = ClientSize.Height / 6;
-            vlcCtrlAudio.Location = new Point(0, ClientSize.Height - newSize.Height);
-            vlcCtrlAudio.Size = newSize;
+            if (playersConfig.configData.audioPlayerConfig.enabled)
+            {
+                newSize.Width = ClientSize.Width * 2 / 3;
+                newSize.Height = ClientSize.Height / 6;
+                vlcCtrlAudio.Location = new Point(0, ClientSize.Height - newSize.Height);
+                vlcCtrlAudio.Size = newSize;
+                vlcCtrlAudio.Visible = true;
+            }
+            else
+            {
+                vlcCtrlAudio.Visible = false;
+            }
 
             //Set Radio player at the right up
-            newSize.Width = ClientSize.Width / 6;
-            newSize.Height = ClientSize.Height * 2 / 3;
-            vlcCtrlRadio.Location = new Point(ClientSize.Width - newSize.Width, 0);
-            vlcCtrlRadio.Size = newSize;
+            if (playersConfig.configData.radioPlayerConfig.enabled)
+            {
+                newSize.Width = ClientSize.Width / 6;
+                newSize.Height = ClientSize.Height * 2 / 3;
+                vlcCtrlRadio.Location = new Point(ClientSize.Width - newSize.Width, 0);
+                vlcCtrlRadio.Size = newSize;
+                vlcCtrlRadio.Visible = true;
+            }
+            else
+            {
+                vlcCtrlRadio.Visible = false;
+            }
+        }
+
+        private void MainPlayerStart()
+        {
+            if (vlcCtrlMain.Visible == false)
+            {
+                return;
+            }
+
+            MainPlayerConfig config = playersConfig.configData.mainPlayerConfig;
+            config.play_index = -1;
+            config.play_position = 0.0f;
+            config.play_speed = 1.0f;
+            vlcCtrlMain.VlcMediaPlayer.Audio.Volume = config.volume;
+            MainPlayerPlayNext();
+        }
+
+        private void PIPPlayerStart()
+        {
+            if (webView21.Visible == false)
+            {
+                return;
+            }
+
+            webView21.NavigateToString(System.IO.File.ReadAllText("browse_index.html"));
+        }
+
+        private void AudioPlayerStart()
+        {
+            if (vlcCtrlAudio.Visible == false)
+            {
+                return;
+            }
+
+            AudioPlayerConfig config = playersConfig.configData.audioPlayerConfig;
+            config.play_index = -1;
+            config.play_position = 0.0f;
+            config.play_speed = 1.0f;
+            vlcCtrlAudio.VlcMediaPlayer.Audio.Volume = config.volume;
+            AudioPlayerPlayNext();
+        }
+
+        private void RadioPlayerStart()
+        {
+            if (vlcCtrlRadio.Visible == false)
+            {
+                return;
+            }
+
+            string firstRadio = playersConfig.configData.radioPlayerConfig.radio_urls[0];
+            vlcCtrlRadio.VlcMediaPlayer.Audio.Volume = playersConfig.configData.radioPlayerConfig.volume;
+            vlcCtrlRadio.Play(new Uri(firstRadio));
+        }
+
+        public void MainPlayerPlayNext()
+        {
+            MainPlayerConfig config = playersConfig.configData.mainPlayerConfig;
+
+            //TODO: add looping, reshuffle flags later. Now we loop it without reshuffle by default
+            config.play_index = (config.play_index + 1) % config.media_files.Count;
+            vlcCtrlMain.Play(new Uri(config.media_files[config.play_index]));
+        }
+  
+        private void vlcCtrlMain_EndReached(object sender, Vlc.DotNet.Core.VlcMediaPlayerEndReachedEventArgs e)
+        {
+            Thread t = new Thread(new ThreadStart(MainPlayerPlayNext));
+            t.Start();
+        }
+        public void AudioPlayerPlayNext()
+        {
+            AudioPlayerConfig config = playersConfig.configData.audioPlayerConfig;
+
+            //TODO: add looping, reshuffle flags later. Now we loop it without reshuffle by default
+            config.play_index = (config.play_index + 1) % config.audio_files.Count;
+            vlcCtrlAudio.Play(new Uri(config.audio_files[config.play_index]));
+        }
+
+        private void vlcCtrlAudio_EndReached(object sender, VlcMediaPlayerEndReachedEventArgs e)
+        {
+            Thread t = new Thread(new ThreadStart(AudioPlayerPlayNext));
+            t.Start();
+        }
+
+        private void vlcCtrlMain_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == ' ')
+            {
+
+                //===============================
+                string mymsg = "Null";
+
+                /* Options
+                string[] playOptions = vlcCtrlMain.VlcMediaplayerOptions;
+                if (playOptions == null)
+                {
+                     playOptions = new string[1] { "NULL" };
+                }
+                string msg = playOptions.ToString();
+                */
+
+                /* Position, Time, Rate, Length
+                mymsg = "Position: ";
+                mymsg += vlcCtrlMain.VlcMediaPlayer.Position.ToString();
+                mymsg += "\n Time: ";
+                mymsg += vlcCtrlMain.VlcMediaPlayer.Time.ToString();
+                mymsg += "\n Rate: ";
+                vlcCtrlMain.VlcMediaPlayer.Rate = 2.0f;
+                mymsg += vlcCtrlMain.VlcMediaPlayer.Rate.ToString();
+                mymsg += "\n Length: ";
+                mymsg += vlcCtrlMain.VlcMediaPlayer.Length.ToString();
+                */
+
+                /* Media
+                */
+                VlcMedia md = vlcCtrlMain.VlcMediaPlayer.GetMedia();
+                mymsg = "Title: ";
+                mymsg += md.Title;
+                mymsg += "\n AspectRatio: ";
+                mymsg += vlcCtrlMain.VlcMediaPlayer.Video.AspectRatio;
+
+                MessageBox.Show(mymsg);
+                //===============================
+
+            }
         }
     }
 }
