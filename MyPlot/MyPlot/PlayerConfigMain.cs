@@ -13,6 +13,8 @@ namespace MyPlot
     {
         public bool enabled { get; set; }
         public int volume { get; set; }
+        public bool loop { get; set; }
+        public bool reshuffle { get; set; }
         public IList<string> media_files { get; set; }
 
         //Runtime values
@@ -24,6 +26,8 @@ namespace MyPlot
     {
         public bool enabled { get; set; }
         public int volume { get; set; }
+        public bool loop { get; set; }
+        public bool reshuffle { get; set; }
         public IList<string> pip_urls { get; set; }
     }
 
@@ -31,6 +35,8 @@ namespace MyPlot
     {
         public bool enabled { get; set; }
         public int volume { get; set; }
+        public bool loop { get; set; }
+        public bool reshuffle { get; set; }
         public IList<string> audio_files { get; set; }
 
         //Runtime values
@@ -43,6 +49,8 @@ namespace MyPlot
     {
         public bool enabled { get; set; }
         public int volume { get; set; }
+        public bool loop { get; set; }
+        public bool reshuffle { get; set; }
         public IList<string> radio_urls { get; set; }
     }
 

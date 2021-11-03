@@ -10,6 +10,7 @@ namespace MyPlot
 {
     public partial class MyPlot : Form
     {
+        private string configFile = "C:\\videodev360gps\\config_default.json";
         private ConfigureMain playersConfig = null;
 
         public MyPlot()
@@ -21,7 +22,7 @@ namespace MyPlot
         {
             //Load the configurations of all player controls.
             playersConfig = new ConfigureMain();
-            playersConfig.LoadConfigure("C:\\videodev360gps\\config_default.json");
+            playersConfig.LoadConfigure(configFile);
 
             //Special waiting for webView2 control done its initialization
             webView21.CoreWebView2InitializationCompleted += WebView_CoreWebView2InitializationCompleted;
@@ -134,6 +135,18 @@ namespace MyPlot
             MainPlayerPlayNext();
         }
 
+        private void MainPlayerStop()
+        {
+            if (vlcCtrlMain.Visible == false)
+            {
+                return;
+            }
+            if (vlcCtrlMain.IsPlaying)
+            {
+                vlcCtrlMain.Stop();
+            }
+        }
+
         private void PIPPlayerStart()
         {
             if (webView21.Visible == false)
@@ -159,6 +172,18 @@ namespace MyPlot
             AudioPlayerPlayNext();
         }
 
+        private void AudioPlayerStop()
+        {
+            if (vlcCtrlAudio.Visible == false)
+            {
+                return;
+            }
+            if (vlcCtrlAudio.IsPlaying)
+            {
+                vlcCtrlAudio.Stop();
+            }
+        }
+
         private void RadioPlayerStart()
         {
             if (vlcCtrlRadio.Visible == false)
@@ -169,6 +194,18 @@ namespace MyPlot
             string firstRadio = playersConfig.configData.radioPlayerConfig.radio_urls[0];
             vlcCtrlRadio.VlcMediaPlayer.Audio.Volume = playersConfig.configData.radioPlayerConfig.volume;
             vlcCtrlRadio.Play(new Uri(firstRadio));
+        }
+
+        private void RadioPlayerStop()
+        {
+            if (vlcCtrlRadio.Visible == false)
+            {
+                return;
+            }
+            if (vlcCtrlRadio.IsPlaying)
+            {
+                vlcCtrlRadio.Stop();
+            }
         }
 
         public void MainPlayerPlayNext()
@@ -240,6 +277,33 @@ namespace MyPlot
                 MessageBox.Show(mymsg);
                 //===============================
 
+            }
+        }
+
+        private void Settings_Click(object sender, EventArgs e)
+        {
+            using (SettingsDialog settingDlg = new SettingsDialog())
+            {
+                settingDlg.configFile = configFile;
+                settingDlg.StartPosition = FormStartPosition.Manual;
+                settingDlg.Location = this.PointToScreen(new Point(64, 36));
+                if (settingDlg.ShowDialog() == DialogResult.OK)
+                {
+                    if (configFile != settingDlg.configFile)
+                    {
+                        MainPlayerStop();
+                        AudioPlayerStop();
+                        RadioPlayerStop();
+                        configFile = settingDlg.configFile;
+                        playersConfig = new ConfigureMain();
+                        playersConfig.LoadConfigure(configFile);
+                        SetPlayerControlAppearance();
+                        MainPlayerStart();
+                        PIPPlayerStart();
+                        AudioPlayerStart();
+                        RadioPlayerStart();
+                    }
+                }
             }
         }
     }

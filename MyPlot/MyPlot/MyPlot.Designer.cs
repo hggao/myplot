@@ -34,6 +34,7 @@ namespace MyPlot
             this.vlcCtrlAudio = new Vlc.DotNet.Forms.VlcControl();
             this.vlcCtrlRadio = new Vlc.DotNet.Forms.VlcControl();
             this.webView21 = new Microsoft.Web.WebView2.WinForms.WebView2();
+            this.Settings = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.vlcCtrlMain)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.vlcCtrlAudio)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.vlcCtrlRadio)).BeginInit();
@@ -89,11 +90,24 @@ namespace MyPlot
             this.webView21.TabIndex = 3;
             this.webView21.ZoomFactor = 1D;
             // 
+            // Settings
+            // 
+            this.Settings.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Settings.Location = new System.Drawing.Point(24, 24);
+            this.Settings.Name = "Settings";
+            this.Settings.Size = new System.Drawing.Size(24, 24);
+            this.Settings.TabIndex = 4;
+            this.Settings.TabStop = false;
+            this.Settings.Text = "*";
+            this.Settings.UseVisualStyleBackColor = true;
+            this.Settings.Click += new System.EventHandler(this.Settings_Click);
+            // 
             // MyPlot
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1221, 823);
+            this.Controls.Add(this.Settings);
             this.Controls.Add(this.webView21);
             this.Controls.Add(this.vlcCtrlRadio);
             this.Controls.Add(this.vlcCtrlAudio);
@@ -116,6 +130,7 @@ namespace MyPlot
         private Vlc.DotNet.Forms.VlcControl vlcCtrlAudio;
         private Vlc.DotNet.Forms.VlcControl vlcCtrlRadio;
         private Microsoft.Web.WebView2.WinForms.WebView2 webView21;
+        private System.Windows.Forms.Button Settings;
     }
 }
 
