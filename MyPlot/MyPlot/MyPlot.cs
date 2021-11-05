@@ -1,21 +1,52 @@
 ﻿using System;
+using System.IO;
 using System.Diagnostics;
 using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Vlc.DotNet.Core;
+using LibVLCSharp;
+using LibVLCSharp.Shared;
+using LibVLCSharp.WinForms;
 
 namespace MyPlot
 {
     public partial class MyPlot : Form
     {
-        private string configFile = "C:\\videodev360gps\\config_default.json";
+        private string configFile = @"C:\Users\hongg\Documents\GitHub\myplot\MyPlot\MyPlot\bin\Debug\config\video_only.myplot.json";
         private ConfigureMain playersConfig = null;
+
+        //LibVLCSharp instances
+        public LibVLC _libVLC;
+        public MediaPlayer _videoMP;
+        public MediaPlayer _audioMP;
+        public MediaPlayer _radioMP;
 
         public MyPlot()
         {
+            if (!DesignMode)
+            {
+                Core.Initialize();
+            }
+
             InitializeComponent();
+
+            _libVLC = new LibVLC();
+
+            _videoMP = new MediaPlayer(_libVLC);
+            _videoMP.SetRole(MediaPlayerRole.Video);
+            _videoMP.EndReached += VideoPlayer_EndReached;
+            videoView.MediaPlayer = _videoMP;
+
+            _audioMP = new MediaPlayer(_libVLC);
+            _audioMP.SetRole(MediaPlayerRole.Music);
+            _audioMP.EndReached += AudioPlayer_EndReached;
+            audioView.MediaPlayer = _audioMP;
+
+            _radioMP = new MediaPlayer(_libVLC);
+            _radioMP.SetRole(MediaPlayerRole.Music);
+            _radioMP.EndReached += RadioPlayer_EndReached;
+            radioView.MediaPlayer = _radioMP;
         }
 
         private async void MyPlot_Load(object sender, EventArgs e)
@@ -38,10 +69,21 @@ namespace MyPlot
             SetPlayerControlAppearance();
 
             //Start the real works of each players
-            MainPlayerStart();
-            PIPPlayerStart();
+            VideoPlayerStart();
+            WebPlayerStart();
             AudioPlayerStart();
             RadioPlayerStart();
+        }
+
+        private void MyPlot_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            _videoMP.Stop();
+            _videoMP.Dispose();
+            _audioMP.Stop();
+            _audioMP.Dispose();
+            _radioMP.Stop();
+            _radioMP.Dispose();
+            _libVLC.Dispose();
         }
 
         private async Task InitializeAsync()
@@ -65,18 +107,18 @@ namespace MyPlot
         {
             Size newSize = ClientSize;
 
-            //Set main player to occupy the whole client area.
+            //Set Video player to occupy the whole client area.
             if (playersConfig.configData.mainPlayerConfig.enabled)
             {
-                vlcCtrlMain.Location = new Point(0, 0);
-                vlcCtrlMain.Size = newSize;
-                vlcCtrlMain.Visible = true;
+                videoView.Location = new Point(0, 0);
+                videoView.Size = newSize;
+                videoView.Visible = true;
             } else
             {
-                vlcCtrlMain.Visible = false;
+                videoView.Visible = false;
             }
 
-            //Set PIP web player at the bottom right corner
+            //Set Web player at the bottom right corner
             if (playersConfig.configData.pipPlayerConfig.enabled)
             {
                 newSize.Width = ClientSize.Width / 3;
@@ -94,35 +136,40 @@ namespace MyPlot
             //Set Audio player at the bottom left
             if (playersConfig.configData.audioPlayerConfig.enabled)
             {
-                newSize.Width = ClientSize.Width * 2 / 3;
-                newSize.Height = ClientSize.Height / 6;
-                vlcCtrlAudio.Location = new Point(0, ClientSize.Height - newSize.Height);
-                vlcCtrlAudio.Size = newSize;
-                vlcCtrlAudio.Visible = true;
+                audioView.Location = new Point(68, 12);
+                //newSize.Width = 96;
+                //newSize.Height = 54;
+                //audioView.Size = newSize;
+
+                audioView.Visible = true;
             }
             else
             {
-                vlcCtrlAudio.Visible = false;
+                audioView.Visible = false;
             }
 
             //Set Radio player at the right up
             if (playersConfig.configData.radioPlayerConfig.enabled)
             {
-                newSize.Width = ClientSize.Width / 6;
-                newSize.Height = ClientSize.Height * 2 / 3;
-                vlcCtrlRadio.Location = new Point(ClientSize.Width - newSize.Width, 0);
-                vlcCtrlRadio.Size = newSize;
-                vlcCtrlRadio.Visible = true;
+                //newSize.Width = 96;
+                //newSize.Height = 54;
+                //radioView.Size = newSize;
+                radioView.Location = new Point(180, 12);
+                radioView.Visible = true;
             }
             else
             {
-                vlcCtrlRadio.Visible = false;
+                radioView.Visible = false;
             }
+
+            //===== Global control above all the four players.
+            menuMain.Visible = false;
+
         }
 
-        private void MainPlayerStart()
+        private void VideoPlayerStart()
         {
-            if (vlcCtrlMain.Visible == false)
+            if (videoView.Visible == false)
             {
                 return;
             }
@@ -131,23 +178,41 @@ namespace MyPlot
             config.play_index = -1;
             config.play_position = 0.0f;
             config.play_speed = 1.0f;
-            vlcCtrlMain.VlcMediaPlayer.Audio.Volume = config.volume;
-            MainPlayerPlayNext();
+            videoView.MediaPlayer.Volume = config.volume;
+            VideoPlayerPlayNext();
         }
 
-        private void MainPlayerStop()
+        public void VideoPlayerPlayNext()
         {
-            if (vlcCtrlMain.Visible == false)
+            MainPlayerConfig config = playersConfig.configData.mainPlayerConfig;
+
+            //TODO: add looping, reshuffle flags later. Now we loop it without reshuffle by default
+            config.play_index = (config.play_index + 1) % config.media_files.Count;
+            var media = new Media(_libVLC, new Uri(config.media_files[config.play_index]));
+            videoView.MediaPlayer.Play(media);
+            videoView.MediaPlayer.UpdateViewpoint(0, 0, 0, 115);
+            media.Dispose();
+        }
+
+        private void VideoPlayer_EndReached(object sender, EventArgs e)
+        {
+            Thread t = new Thread(new ThreadStart(VideoPlayerPlayNext));
+            t.Start();
+        }
+
+        private void VideoPlayerStop()
+        {
+            if (videoView.Visible == false)
             {
                 return;
             }
-            if (vlcCtrlMain.IsPlaying)
+            if (videoView.MediaPlayer.IsPlaying)
             {
-                vlcCtrlMain.Stop();
+                videoView.MediaPlayer.Stop();
             }
         }
 
-        private void PIPPlayerStart()
+        private void WebPlayerStart()
         {
             if (webView21.Visible == false)
             {
@@ -159,7 +224,7 @@ namespace MyPlot
 
         private void AudioPlayerStart()
         {
-            if (vlcCtrlAudio.Visible == false)
+            if (audioView.Visible == false)
             {
                 return;
             }
@@ -168,143 +233,197 @@ namespace MyPlot
             config.play_index = -1;
             config.play_position = 0.0f;
             config.play_speed = 1.0f;
-            vlcCtrlAudio.VlcMediaPlayer.Audio.Volume = config.volume;
+            audioView.MediaPlayer.Volume = config.volume;
             AudioPlayerPlayNext();
         }
 
-        private void AudioPlayerStop()
-        {
-            if (vlcCtrlAudio.Visible == false)
-            {
-                return;
-            }
-            if (vlcCtrlAudio.IsPlaying)
-            {
-                vlcCtrlAudio.Stop();
-            }
-        }
-
-        private void RadioPlayerStart()
-        {
-            if (vlcCtrlRadio.Visible == false)
-            {
-                return;
-            }
-
-            string firstRadio = playersConfig.configData.radioPlayerConfig.radio_urls[0];
-            vlcCtrlRadio.VlcMediaPlayer.Audio.Volume = playersConfig.configData.radioPlayerConfig.volume;
-            vlcCtrlRadio.Play(new Uri(firstRadio));
-        }
-
-        private void RadioPlayerStop()
-        {
-            if (vlcCtrlRadio.Visible == false)
-            {
-                return;
-            }
-            if (vlcCtrlRadio.IsPlaying)
-            {
-                vlcCtrlRadio.Stop();
-            }
-        }
-
-        public void MainPlayerPlayNext()
-        {
-            MainPlayerConfig config = playersConfig.configData.mainPlayerConfig;
-
-            //TODO: add looping, reshuffle flags later. Now we loop it without reshuffle by default
-            config.play_index = (config.play_index + 1) % config.media_files.Count;
-            vlcCtrlMain.Play(new Uri(config.media_files[config.play_index]));
-        }
-  
-        private void vlcCtrlMain_EndReached(object sender, Vlc.DotNet.Core.VlcMediaPlayerEndReachedEventArgs e)
-        {
-            Thread t = new Thread(new ThreadStart(MainPlayerPlayNext));
-            t.Start();
-        }
         public void AudioPlayerPlayNext()
         {
             AudioPlayerConfig config = playersConfig.configData.audioPlayerConfig;
 
             //TODO: add looping, reshuffle flags later. Now we loop it without reshuffle by default
             config.play_index = (config.play_index + 1) % config.audio_files.Count;
-            vlcCtrlAudio.Play(new Uri(config.audio_files[config.play_index]));
+            var media = new Media(_libVLC, new Uri(config.audio_files[config.play_index]));
+            audioView.MediaPlayer.Play(media);
+            media.Dispose();
         }
 
-        private void vlcCtrlAudio_EndReached(object sender, VlcMediaPlayerEndReachedEventArgs e)
+        private void AudioPlayer_EndReached(object sender, EventArgs e)
         {
             Thread t = new Thread(new ThreadStart(AudioPlayerPlayNext));
             t.Start();
         }
 
-        private void vlcCtrlMain_KeyPress(object sender, KeyPressEventArgs e)
+        private void AudioPlayerStop()
         {
-            if (e.KeyChar == ' ')
+            if (audioView.Visible == false)
             {
-
-                //===============================
-                string mymsg = "Null";
-
-                /* Options
-                string[] playOptions = vlcCtrlMain.VlcMediaplayerOptions;
-                if (playOptions == null)
-                {
-                     playOptions = new string[1] { "NULL" };
-                }
-                string msg = playOptions.ToString();
-                */
-
-                /* Position, Time, Rate, Length
-                mymsg = "Position: ";
-                mymsg += vlcCtrlMain.VlcMediaPlayer.Position.ToString();
-                mymsg += "\n Time: ";
-                mymsg += vlcCtrlMain.VlcMediaPlayer.Time.ToString();
-                mymsg += "\n Rate: ";
-                vlcCtrlMain.VlcMediaPlayer.Rate = 2.0f;
-                mymsg += vlcCtrlMain.VlcMediaPlayer.Rate.ToString();
-                mymsg += "\n Length: ";
-                mymsg += vlcCtrlMain.VlcMediaPlayer.Length.ToString();
-                */
-
-                /* Media
-                */
-                VlcMedia md = vlcCtrlMain.VlcMediaPlayer.GetMedia();
-                mymsg = "Title: ";
-                mymsg += md.Title;
-                mymsg += "\n AspectRatio: ";
-                mymsg += vlcCtrlMain.VlcMediaPlayer.Video.AspectRatio;
-
-                MessageBox.Show(mymsg);
-                //===============================
-
+                return;
+            }
+            if (audioView.MediaPlayer.IsPlaying)
+            {
+                audioView.MediaPlayer.Stop();
             }
         }
 
-        private void Settings_Click(object sender, EventArgs e)
+        private void RadioPlayerStart()
         {
-            using (SettingsDialog settingDlg = new SettingsDialog())
+            if (radioView.Visible == false)
             {
-                settingDlg.configFile = configFile;
-                settingDlg.StartPosition = FormStartPosition.Manual;
-                settingDlg.Location = this.PointToScreen(new Point(64, 36));
-                if (settingDlg.ShowDialog() == DialogResult.OK)
+                return;
+            }
+
+            string firstRadio = playersConfig.configData.radioPlayerConfig.radio_urls[0];
+            radioView.MediaPlayer.Volume = playersConfig.configData.radioPlayerConfig.volume;
+            var media = new Media(_libVLC, new Uri(firstRadio));
+            radioView.MediaPlayer.Play(media);
+            media.Dispose();
+        }
+
+        private void RadioPlayer_EndReached(object sender, EventArgs e)
+        {
+            //Assume radio strem URL could be playing forever
+        }
+
+        private void RadioPlayerStop()
+        {
+            if (radioView.Visible == false)
+            {
+                return;
+            }
+            if (radioView.MediaPlayer.IsPlaying)
+            {
+                radioView.MediaPlayer.Stop();
+            }
+        }
+
+        private void videoView_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            string controlKeys = "aAdDsSwWqQeEfFrR ";
+            if (videoView.MediaPlayer.Media.Tracks[0].Data.Video.Projection == VideoProjection.Equirectangular &&
+                controlKeys.Contains(e.KeyChar.ToString()))
+            {
+                VideoUpdateViewPoint(e.KeyChar);
+                return;
+            }
+
+            if (e.KeyChar == 27) // ESC
+            {
+                if (menuMain.Visible)
                 {
-                    if (configFile != settingDlg.configFile)
-                    {
-                        MainPlayerStop();
-                        AudioPlayerStop();
-                        RadioPlayerStop();
-                        configFile = settingDlg.configFile;
-                        playersConfig = new ConfigureMain();
-                        playersConfig.LoadConfigure(configFile);
-                        SetPlayerControlAppearance();
-                        MainPlayerStart();
-                        PIPPlayerStart();
-                        AudioPlayerStart();
-                        RadioPlayerStart();
-                    }
+                    menuMain.Visible = false;
+                }
+                else
+                {
+                    menuMain.Visible = true;
                 }
             }
+        }
+
+        private void VideoUpdateViewPoint(char keyChar)
+        { 
+            float delta = 1.0f;
+            VideoViewpoint vp = videoView.MediaPlayer.Viewpoint;
+            float yaw = vp.Yaw;
+            float pitch = vp.Pitch;
+            float roll = vp.Roll;
+            float fov = vp.Fov;
+
+            switch (keyChar) {
+                case 'a':
+                case 'A':
+                    yaw -= delta;
+                    break;
+                case 'd':
+                case 'D':
+                    yaw += delta;
+                    break;
+                case 'w':
+                case 'W':
+                    pitch -= delta;
+                    break;
+                case 's':
+                case 'S':
+                    pitch += delta;
+                    break;
+                case 'q':
+                case 'Q':
+                    roll -= delta;
+                    break;
+                case 'e':
+                case 'E':
+                    roll += delta;
+                    break;
+                case 'f':
+                case 'F':
+                    fov -= delta;
+                    break;
+                case 'r':
+                case 'R':
+                    fov += delta;
+                    break;
+                case ' ':
+                    yaw = 0; pitch = 0; fov = 0; fov = 115;
+                    break;
+            }
+            videoView.MediaPlayer.UpdateViewpoint(yaw, pitch, roll, fov);
+        }
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.InitialDirectory = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "config");
+            ofd.Filter = "MyPlot Config (*.myplot.json)|*.myplot.json";
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                RestartPlayerWithNewConfig(ofd.FileName);
+            }
+
+        }
+
+        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SettingsDialog settingDlg = new SettingsDialog();
+            settingDlg.configFile = configFile;
+            settingDlg.StartPosition = FormStartPosition.Manual;
+            settingDlg.Location = this.PointToScreen(new Point(64, 36));
+            if (settingDlg.ShowDialog() == DialogResult.OK)
+            {
+                RestartPlayerWithNewConfig(settingDlg.configFile);
+            }
+        }
+
+        private void RestartPlayerWithNewConfig(string newConfigFile)
+        {
+            if (configFile != newConfigFile)
+            {
+                VideoPlayerStop();
+                AudioPlayerStop();
+                RadioPlayerStop();
+                configFile = newConfigFile;
+                playersConfig = new ConfigureMain();
+                playersConfig.LoadConfigure(configFile);
+                SetPlayerControlAppearance();
+                VideoPlayerStart();
+                WebPlayerStart();
+                AudioPlayerStart();
+                RadioPlayerStart();
+            }
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void userGuideToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("User Guide is on its way.");
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("MyPlot Ver 0.1 Copyright Reserved!");
         }
     }
 }
