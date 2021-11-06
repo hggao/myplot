@@ -13,7 +13,7 @@ namespace MyPlot
 {
     public partial class MyPlot : Form
     {
-        private string configFile = @"C:\Users\hongg\Documents\GitHub\myplot\MyPlot\MyPlot\bin\Debug\config\video_only.myplot.json";
+        private string configFile = @"C:\Users\hongg\Documents\GitHub\myplot\MyPlot\MyPlot\bin\Debug\config\radio_only.myplot.json";
         private ConfigureMain playersConfig = null;
 
         //LibVLCSharp instances
@@ -21,6 +21,9 @@ namespace MyPlot
         public MediaPlayer _videoMP;
         public MediaPlayer _audioMP;
         public MediaPlayer _radioMP;
+
+        //Runtime flags
+        private bool mouseButtonDown = false;
 
         public MyPlot()
         {
@@ -36,6 +39,7 @@ namespace MyPlot
             _videoMP = new MediaPlayer(_libVLC);
             _videoMP.SetRole(MediaPlayerRole.Video);
             _videoMP.EndReached += VideoPlayer_EndReached;
+            _videoMP.Playing += VideoPlayer_Playing;
             videoView.MediaPlayer = _videoMP;
 
             _audioMP = new MediaPlayer(_libVLC);
@@ -73,10 +77,12 @@ namespace MyPlot
             WebPlayerStart();
             AudioPlayerStart();
             RadioPlayerStart();
+
         }
 
         private void MyPlot_FormClosed(object sender, FormClosedEventArgs e)
         {
+            timerControlbar.Dispose();
             _videoMP.Stop();
             _videoMP.Dispose();
             _audioMP.Stop();
@@ -113,9 +119,13 @@ namespace MyPlot
                 videoView.Location = new Point(0, 0);
                 videoView.Size = newSize;
                 videoView.Visible = true;
-            } else
+                videoView.Focus();
+                vPanel.Enabled = true;
+            }
+            else
             {
                 videoView.Visible = false;
+                vPanel.Enabled = false;
             }
 
             //Set Web player at the bottom right corner
@@ -142,10 +152,12 @@ namespace MyPlot
                 //audioView.Size = newSize;
 
                 audioView.Visible = true;
+                aPanel.Enabled = true;
             }
             else
             {
                 audioView.Visible = false;
+                aPanel.Enabled = false;
             }
 
             //Set Radio player at the right up
@@ -156,14 +168,29 @@ namespace MyPlot
                 //radioView.Size = newSize;
                 radioView.Location = new Point(180, 12);
                 radioView.Visible = true;
+                rPanel.Enabled = true;
             }
             else
             {
                 radioView.Visible = false;
+                rPanel.Enabled = false;
             }
 
             //===== Global control above all the four players.
-            menuMain.Visible = false;
+            MayHideMenu();
+
+            int pX = 0;
+            int pY = 0;
+            if (ClientSize.Width > playerControlbar.Width)
+            {
+                pX = (ClientSize.Width - playerControlbar.Width) / 2;
+            }
+            if (ClientSize.Height - playerControlbar.Height > 20)
+            {
+                pY = ClientSize.Height - playerControlbar.Height - 20;
+            }
+            playerControlbar.Location = new Point(pX, pY);
+            playerControlbar.Visible = false; 
 
         }
 
@@ -191,7 +218,14 @@ namespace MyPlot
             var media = new Media(_libVLC, new Uri(config.media_files[config.play_index]));
             videoView.MediaPlayer.Play(media);
             videoView.MediaPlayer.UpdateViewpoint(0, 0, 0, 115);
+            Debug.WriteLine("======Video playing started");
+            Debug.WriteLine(config.media_files[config.play_index]);
             media.Dispose();
+        }
+
+        private void VideoPlayer_Playing(object sender, EventArgs e)
+        {
+            //videoView.MediaPlayer.EnableMouseInput = false;
         }
 
         private void VideoPlayer_EndReached(object sender, EventArgs e)
@@ -245,6 +279,8 @@ namespace MyPlot
             config.play_index = (config.play_index + 1) % config.audio_files.Count;
             var media = new Media(_libVLC, new Uri(config.audio_files[config.play_index]));
             audioView.MediaPlayer.Play(media);
+            Debug.WriteLine("======Playing audio started");
+            Debug.WriteLine(config.audio_files[config.play_index]);
             media.Dispose();
         }
 
@@ -273,10 +309,13 @@ namespace MyPlot
                 return;
             }
 
+            Debug.WriteLine("======Prepare to play the first radio URL");
             string firstRadio = playersConfig.configData.radioPlayerConfig.radio_urls[0];
             radioView.MediaPlayer.Volume = playersConfig.configData.radioPlayerConfig.volume;
             var media = new Media(_libVLC, new Uri(firstRadio));
             radioView.MediaPlayer.Play(media);
+            Debug.WriteLine("======Radio start playing");
+            Debug.WriteLine(firstRadio);
             media.Dispose();
         }
 
@@ -299,24 +338,12 @@ namespace MyPlot
 
         private void videoView_KeyPress(object sender, KeyPressEventArgs e)
         {
-            string controlKeys = "aAdDsSwWqQeEfFrR ";
+            string controlKeys = "aAdDsSwWqQeEfFrRcC";
             if (videoView.MediaPlayer.Media.Tracks[0].Data.Video.Projection == VideoProjection.Equirectangular &&
                 controlKeys.Contains(e.KeyChar.ToString()))
             {
                 VideoUpdateViewPoint(e.KeyChar);
                 return;
-            }
-
-            if (e.KeyChar == 27) // ESC
-            {
-                if (menuMain.Visible)
-                {
-                    menuMain.Visible = false;
-                }
-                else
-                {
-                    menuMain.Visible = true;
-                }
             }
         }
 
@@ -362,7 +389,8 @@ namespace MyPlot
                 case 'R':
                     fov += delta;
                     break;
-                case ' ':
+                case 'c':
+                case 'C':
                     yaw = 0; pitch = 0; fov = 0; fov = 115;
                     break;
             }
@@ -378,7 +406,7 @@ namespace MyPlot
             {
                 RestartPlayerWithNewConfig(ofd.FileName);
             }
-
+            MayHideMenu();
         }
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -391,6 +419,7 @@ namespace MyPlot
             {
                 RestartPlayerWithNewConfig(settingDlg.configFile);
             }
+            MayHideMenu();
         }
 
         private void RestartPlayerWithNewConfig(string newConfigFile)
@@ -419,11 +448,202 @@ namespace MyPlot
         private void userGuideToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MessageBox.Show("User Guide is on its way.");
+            MayHideMenu();
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MessageBox.Show("MyPlot Ver 0.1 Copyright Reserved!");
+            MayHideMenu();
+        }
+
+        private void MyPlot_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == 27) // ESC
+            {
+                if (menuMain.Visible)
+                {
+                    MayHideMenu();
+                }
+                else
+                {
+                    menuMain.Visible = true;
+                }
+                e.Handled = true;
+                return;
+            }
+            if (e.KeyChar == ' ')
+            {
+                if (playerControlbar.Visible)
+                {
+                    timerControlbar.Enabled = false;
+                    playerControlbar.Visible = false;
+                }
+                else
+                {
+                    playerControlbar.Visible = true;
+                    playerControlbar.Focus();
+                    timerControlbar.Enabled = true;
+                }
+                e.Handled = true;
+                return;
+            }
+
+            e.Handled = false;
+        }
+
+        private void MayHideMenu()
+        {
+            if (menuMain.Visible && 
+                playersConfig != null && playersConfig.configData.mainPlayerConfig.enabled)
+            {
+                menuMain.Visible = false;
+            }
+        }
+
+        private void fullScreenToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (FormBorderStyle == FormBorderStyle.None)
+            {
+                FormBorderStyle = FormBorderStyle.Sizable;
+                WindowState = FormWindowState.Normal;
+            } else
+            {
+                FormBorderStyle = FormBorderStyle.None;
+                WindowState = FormWindowState.Maximized;
+            }
+        }
+
+        private void timerControlbar_Tick(object sender, EventArgs e)
+        {
+            if (!playerControlbar.Visible)
+            {
+                return;
+            }
+            UpdateControlbarValues();
+        }
+
+        private void UpdateControlbarValues()
+        {
+            if (playersConfig == null) return;
+
+            if (vPanel.Enabled)
+            {
+                if (videoView.MediaPlayer.IsPlaying)
+                {
+                    vPlay.Text = "II";
+                }
+                else
+                {
+                    vPlay.Text = ">";
+                }
+                if (!vPos.ContainsFocus || !mouseButtonDown)
+                {
+                    int pos = (int)(videoView.MediaPlayer.Position * vPos.Maximum);
+                    vPos.Value = pos >= 0 ? pos : 0;
+                }
+                if (!vVolume.ContainsFocus || !mouseButtonDown)
+                {
+                    int vol = videoView.MediaPlayer.Volume;
+                    vVolume.Value = vol >= 0 ? vol : 0;
+                }
+            }
+
+            if (aPanel.Enabled)
+            {
+                if (audioView.MediaPlayer.IsPlaying)
+                {
+                    aPlay.Text = "II";
+                }
+                else
+                {
+                    aPlay.Text = ">";
+                }
+                if (!aPos.ContainsFocus || !mouseButtonDown)
+                {
+                    int pos = (int)(audioView.MediaPlayer.Position * aPos.Maximum);
+                    aPos.Value = pos >= 0 ? pos : 0;
+                }
+                if (!aVolume.ContainsFocus || !mouseButtonDown)
+                {
+                    int vol = audioView.MediaPlayer.Volume;
+                    aVolume.Value = vol >=0 ? vol : 0;
+                }
+            }
+
+            if (rPanel.Enabled)
+            {
+                if (radioView.MediaPlayer.IsPlaying)
+                {
+                    rPlay.Text = "II";
+                }
+                else
+                {
+                    rPlay.Text = ">";
+                }
+                if (!rPos.ContainsFocus || !mouseButtonDown)
+                {
+                    int pos = (int)(radioView.MediaPlayer.Position * rPos.Maximum);
+                    rPos.Value = pos >= 0 ? pos : 0;
+                }
+                if (!rVolume.ContainsFocus || !mouseButtonDown)
+                {
+                    int vol = radioView.MediaPlayer.Volume;
+                    rVolume.Value = vol >= 0 ? vol : 0;
+                }
+            }
+        }
+
+        private void vPos_MouseDown(object sender, MouseEventArgs e)
+        {
+            mouseButtonDown = true;
+        }
+
+        private void vPos_MouseUp(object sender, MouseEventArgs e)
+        {
+            mouseButtonDown = false;
+        }
+
+        private void vPos_Scroll(object sender, EventArgs e)
+        {
+            TrackBar tb = (TrackBar)sender;
+            float newPos = (float)tb.Value / (float)tb.Maximum;
+            videoView.MediaPlayer.Position = newPos;
+        }
+
+        private void vVolume_Scroll(object sender, EventArgs e)
+        {
+            TrackBar tb = (TrackBar)sender;
+            playersConfig.configData.mainPlayerConfig.volume = tb.Value;
+            videoView.MediaPlayer.Volume = tb.Value;
+        }
+
+        private void aPos_Scroll(object sender, EventArgs e)
+        {
+            TrackBar tb = (TrackBar)sender;
+            float newPos = (float)tb.Value / (float)tb.Maximum;
+            audioView.MediaPlayer.Position = newPos;
+        }
+
+        private void aVolume_Scroll(object sender, EventArgs e)
+        {
+            TrackBar tb = (TrackBar)sender;
+            playersConfig.configData.audioPlayerConfig.volume = tb.Value;
+            audioView.MediaPlayer.Volume = tb.Value;
+        }
+
+        private void rPos_Scroll(object sender, EventArgs e)
+        {
+            TrackBar tb = (TrackBar)sender;
+            float newPos = (float)tb.Value / (float)tb.Maximum;
+            radioView.MediaPlayer.Position = newPos;
+        }
+
+        private void rVolume_Scroll(object sender, EventArgs e)
+        {
+            TrackBar tb = (TrackBar)sender;
+            playersConfig.configData.radioPlayerConfig.volume = tb.Value;
+            radioView.MediaPlayer.Volume = tb.Value;
         }
     }
 }
