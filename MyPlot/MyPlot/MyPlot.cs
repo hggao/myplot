@@ -60,11 +60,11 @@ namespace MyPlot
             playersConfig.LoadConfigure(configFile);
 
             //Special waiting for webView2 control done its initialization
-            webView21.CoreWebView2InitializationCompleted += WebView_CoreWebView2InitializationCompleted;
+            webView.CoreWebView2InitializationCompleted += WebView_CoreWebView2InitializationCompleted;
             Debug.WriteLine("before InitializeAsync");
             await InitializeAsync();
             Debug.WriteLine("after InitializeAsync");
-            if ((webView21 == null) || (webView21.CoreWebView2 == null))
+            if ((webView == null) || (webView.CoreWebView2 == null))
             {
                 Debug.WriteLine("not ready");
             }
@@ -95,8 +95,8 @@ namespace MyPlot
         private async Task InitializeAsync()
         {
             Debug.WriteLine("InitializeAsync");
-            await webView21.EnsureCoreWebView2Async(null);
-            Debug.WriteLine("WebView2 Runtime version: " + webView21.CoreWebView2.Environment.BrowserVersionString);
+            await webView.EnsureCoreWebView2Async(null);
+            Debug.WriteLine("WebView2 Runtime version: " + webView.CoreWebView2.Environment.BrowserVersionString);
         }
 
         private void WebView_CoreWebView2InitializationCompleted(object sender, Microsoft.Web.WebView2.Core.CoreWebView2InitializationCompletedEventArgs e)
@@ -113,7 +113,7 @@ namespace MyPlot
         {
             Size newSize = ClientSize;
 
-            //Set Video player to occupy the whole client area.
+            //Video player has the top priority, if it is enabled, it would occupy the whole client area
             if (playersConfig.configData.mainPlayerConfig.enabled)
             {
                 videoView.Location = new Point(0, 0);
@@ -128,52 +128,74 @@ namespace MyPlot
                 vPanel.Enabled = false;
             }
 
-            //Set Web player at the bottom right corner
+            //Web player has the second priority, it video player isn't enabled, it would occupy the whole client area
             if (playersConfig.configData.pipPlayerConfig.enabled)
             {
-                newSize.Width = ClientSize.Width / 3;
-                newSize.Height = ClientSize.Height / 3;
-                webView21.Location = new Point(ClientSize.Width - newSize.Width, ClientSize.Height - newSize.Height);
-                webView21.Size = newSize;
-                webView21.Visible = true;
+                newSize = ClientSize;
+                if (playersConfig.configData.mainPlayerConfig.enabled)
+                {
+                    newSize.Width = ClientSize.Width * 4 / 10;
+                    newSize.Height = ClientSize.Height * 4 / 10;
+                    webView.Location = new Point(ClientSize.Width - newSize.Width - 12, ClientSize.Height - newSize.Height - 12);
+                }
+                else
+                {
+                    webView.Location = new Point(0, 0);
+                }
+                webView.Size = newSize;
+                webView.Visible = true;
             }
             else
             {
-                webView21.Visible = false;
+                webView.Visible = false;
             }
-            //webView21.NavigateToString(System.IO.File.ReadAllText("browse_index.html"));
 
-            //Set Audio player at the bottom left
+            //Set Audio player at the bottom left if video/web enalbed, otherwise put it at center.
             if (playersConfig.configData.audioPlayerConfig.enabled)
             {
-                audioView.Location = new Point(68, 12);
-                //newSize.Width = 96;
-                //newSize.Height = 54;
-                //audioView.Size = newSize;
-
+                if (playersConfig.configData.mainPlayerConfig.enabled || playersConfig.configData.pipPlayerConfig.enabled)
+                {
+                    audioView.Location = new Point(64, 32);
+                }
+                else
+                {
+                    audioView.Location = new Point((ClientSize.Width - audioView.Width) / 2, (ClientSize.Height - audioView.Height) / 2);
+                }
+                audioPicBox.Location = audioView.Location;
                 audioView.Visible = true;
                 aPanel.Enabled = true;
+                audioPicBox.Visible = true;
             }
             else
             {
                 audioView.Visible = false;
                 aPanel.Enabled = false;
+                audioPicBox.Visible = false;
             }
 
-            //Set Radio player at the right up
+            //Set Radio player at the bottom left if video/web enalbed, otherwise put it at center.
+            //NOTE: We assume Audio and Radio don't exist together
             if (playersConfig.configData.radioPlayerConfig.enabled)
             {
-                //newSize.Width = 96;
-                //newSize.Height = 54;
-                //radioView.Size = newSize;
-                radioView.Location = new Point(180, 12);
+                if (playersConfig.configData.mainPlayerConfig.enabled || playersConfig.configData.pipPlayerConfig.enabled)
+                {
+                    radioView.Location = new Point(ClientSize.Width - radioView.Width - 64, 32);
+
+                }
+                else
+                {
+                    radioView.Location = new Point((ClientSize.Width - audioView.Width) / 2, (ClientSize.Height - audioView.Height) / 2);
+                }
+                radioPicBox.Location = radioView.Location;
                 radioView.Visible = true;
                 rPanel.Enabled = true;
+                radioPicBox.Visible = true;
             }
             else
             {
                 radioView.Visible = false;
                 rPanel.Enabled = false;
+                radioPicBox.Visible = false;
             }
 
             //===== Global control above all the four players.
@@ -248,12 +270,12 @@ namespace MyPlot
 
         private void WebPlayerStart()
         {
-            if (webView21.Visible == false)
+            if (webView.Visible == false)
             {
                 return;
             }
 
-            webView21.NavigateToString(System.IO.File.ReadAllText("browse_index.html"));
+            webView.NavigateToString(System.IO.File.ReadAllText("browse_index.html"));
         }
 
         private void AudioPlayerStart()
@@ -494,8 +516,8 @@ namespace MyPlot
 
         private void MayHideMenu()
         {
-            if (menuMain.Visible && 
-                playersConfig != null && playersConfig.configData.mainPlayerConfig.enabled)
+            if (menuMain.Visible && playersConfig != null && 
+                (playersConfig.configData.mainPlayerConfig.enabled || playersConfig.configData.pipPlayerConfig.enabled))
             {
                 menuMain.Visible = false;
             }

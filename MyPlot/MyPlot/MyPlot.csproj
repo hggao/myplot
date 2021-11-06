@@ -127,7 +127,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Bitmap1.bmp" />
+    <None Include="radio_playing.gif" />
     <None Include="Pause.bmp" />
+    <None Include="music_notes.gif" />
     <Content Include="Play.bmp" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
