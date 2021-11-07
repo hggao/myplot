@@ -53,6 +53,7 @@ namespace MyPlot
             this.aPrev = new System.Windows.Forms.Button();
             this.aPos = new System.Windows.Forms.TrackBar();
             this.label2 = new System.Windows.Forms.Label();
+            this.aVolIcon = new System.Windows.Forms.PictureBox();
             this.rPanel = new System.Windows.Forms.GroupBox();
             this.rNext = new System.Windows.Forms.Button();
             this.rVolume = new System.Windows.Forms.TrackBar();
@@ -60,19 +61,18 @@ namespace MyPlot
             this.rPlay = new System.Windows.Forms.Button();
             this.rPrev = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
+            this.rVolIcon = new System.Windows.Forms.PictureBox();
             this.vPanel = new System.Windows.Forms.GroupBox();
             this.vNext = new System.Windows.Forms.Button();
             this.vPlay = new System.Windows.Forms.Button();
             this.vPrev = new System.Windows.Forms.Button();
             this.vVolume = new System.Windows.Forms.TrackBar();
             this.vPos = new System.Windows.Forms.TrackBar();
+            this.vVolIcon = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.timerControlbar = new System.Windows.Forms.Timer(this.components);
             this.radioPicBox = new System.Windows.Forms.PictureBox();
             this.audioPicBox = new System.Windows.Forms.PictureBox();
-            this.aVolIcon = new System.Windows.Forms.PictureBox();
-            this.rVolIcon = new System.Windows.Forms.PictureBox();
-            this.vVolIcon = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.webView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.videoView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.audioView)).BeginInit();
@@ -82,17 +82,17 @@ namespace MyPlot
             this.aPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.aVolume)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.aPos)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.aVolIcon)).BeginInit();
             this.rPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.rVolume)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rPos)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rVolIcon)).BeginInit();
             this.vPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.vVolume)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.vPos)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.vVolIcon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radioPicBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.audioPicBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.aVolIcon)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.rVolIcon)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.vVolIcon)).BeginInit();
             this.SuspendLayout();
             // 
             // webView
@@ -105,6 +105,7 @@ namespace MyPlot
             this.webView.TabIndex = 3;
             this.webView.Visible = false;
             this.webView.ZoomFactor = 1D;
+            this.webView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.webView_KeyDown);
             // 
             // videoView
             // 
@@ -324,6 +325,15 @@ namespace MyPlot
             this.label2.Text = "Audio";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // aVolIcon
+            // 
+            this.aVolIcon.Image = global::MyPlot.Properties.Resources.Bitmap1;
+            this.aVolIcon.Location = new System.Drawing.Point(745, 20);
+            this.aVolIcon.Name = "aVolIcon";
+            this.aVolIcon.Size = new System.Drawing.Size(24, 24);
+            this.aVolIcon.TabIndex = 7;
+            this.aVolIcon.TabStop = false;
+            // 
             // rPanel
             // 
             this.rPanel.Controls.Add(this.rNext);
@@ -404,6 +414,15 @@ namespace MyPlot
             this.label3.Text = "Radio";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // rVolIcon
+            // 
+            this.rVolIcon.Image = global::MyPlot.Properties.Resources.Bitmap1;
+            this.rVolIcon.Location = new System.Drawing.Point(745, 20);
+            this.rVolIcon.Name = "rVolIcon";
+            this.rVolIcon.Size = new System.Drawing.Size(24, 24);
+            this.rVolIcon.TabIndex = 14;
+            this.rVolIcon.TabStop = false;
+            // 
             // vPanel
             // 
             this.vPanel.Controls.Add(this.vNext);
@@ -474,6 +493,15 @@ namespace MyPlot
             this.vPos.MouseDown += new System.Windows.Forms.MouseEventHandler(this.vPos_MouseDown);
             this.vPos.MouseUp += new System.Windows.Forms.MouseEventHandler(this.vPos_MouseUp);
             // 
+            // vVolIcon
+            // 
+            this.vVolIcon.Image = global::MyPlot.Properties.Resources.Bitmap1;
+            this.vVolIcon.Location = new System.Drawing.Point(745, 20);
+            this.vVolIcon.Name = "vVolIcon";
+            this.vVolIcon.Size = new System.Drawing.Size(24, 24);
+            this.vVolIcon.TabIndex = 2;
+            this.vVolIcon.TabStop = false;
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -511,33 +539,6 @@ namespace MyPlot
             this.audioPicBox.TabStop = false;
             this.audioPicBox.Visible = false;
             // 
-            // aVolIcon
-            // 
-            this.aVolIcon.Image = global::MyPlot.Properties.Resources.Bitmap1;
-            this.aVolIcon.Location = new System.Drawing.Point(745, 20);
-            this.aVolIcon.Name = "aVolIcon";
-            this.aVolIcon.Size = new System.Drawing.Size(24, 24);
-            this.aVolIcon.TabIndex = 7;
-            this.aVolIcon.TabStop = false;
-            // 
-            // rVolIcon
-            // 
-            this.rVolIcon.Image = global::MyPlot.Properties.Resources.Bitmap1;
-            this.rVolIcon.Location = new System.Drawing.Point(745, 20);
-            this.rVolIcon.Name = "rVolIcon";
-            this.rVolIcon.Size = new System.Drawing.Size(24, 24);
-            this.rVolIcon.TabIndex = 14;
-            this.rVolIcon.TabStop = false;
-            // 
-            // vVolIcon
-            // 
-            this.vVolIcon.Image = global::MyPlot.Properties.Resources.Bitmap1;
-            this.vVolIcon.Location = new System.Drawing.Point(745, 20);
-            this.vVolIcon.Name = "vVolIcon";
-            this.vVolIcon.Size = new System.Drawing.Size(24, 24);
-            this.vVolIcon.TabIndex = 2;
-            this.vVolIcon.TabStop = false;
-            // 
             // MyPlot
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -570,19 +571,19 @@ namespace MyPlot
             this.aPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.aVolume)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.aPos)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.aVolIcon)).EndInit();
             this.rPanel.ResumeLayout(false);
             this.rPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.rVolume)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.rPos)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rVolIcon)).EndInit();
             this.vPanel.ResumeLayout(false);
             this.vPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.vVolume)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.vPos)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.vVolIcon)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radioPicBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.audioPicBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.aVolIcon)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.rVolIcon)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.vVolIcon)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

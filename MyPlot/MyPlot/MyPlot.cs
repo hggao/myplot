@@ -8,12 +8,13 @@ using System.Windows.Forms;
 using LibVLCSharp;
 using LibVLCSharp.Shared;
 using LibVLCSharp.WinForms;
+using Microsoft.Web.WebView2.Core;
 
 namespace MyPlot
 {
     public partial class MyPlot : Form
     {
-        private string configFile = @"C:\Users\hongg\Documents\GitHub\myplot\MyPlot\MyPlot\bin\Debug\config\radio_only.myplot.json";
+        private string configFile = @"C:\Users\hongg\Documents\GitHub\myplot\MyPlot\MyPlot\bin\Debug\config\morning_cycling_2.myplot.json";
         private ConfigureMain playersConfig = null;
 
         //LibVLCSharp instances
@@ -66,8 +67,11 @@ namespace MyPlot
             Debug.WriteLine("after InitializeAsync");
             if ((webView == null) || (webView.CoreWebView2 == null))
             {
-                Debug.WriteLine("not ready");
+                Debug.WriteLine("!!!===Not Ready, shouldn't be.===");
+
             }
+            webView.CoreWebView2.NewWindowRequested += CoreWebView2_NewWindowRequested;
+            //webView.CoreWebView2.
 
             //Based on configration to set all controls appearance
             SetPlayerControlAppearance();
@@ -99,9 +103,15 @@ namespace MyPlot
             Debug.WriteLine("WebView2 Runtime version: " + webView.CoreWebView2.Environment.BrowserVersionString);
         }
 
-        private void WebView_CoreWebView2InitializationCompleted(object sender, Microsoft.Web.WebView2.Core.CoreWebView2InitializationCompletedEventArgs e)
+        private void WebView_CoreWebView2InitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e)
         {
             Debug.WriteLine("WebView_CoreWebView2InitializationCompleted");
+        }
+
+        private void CoreWebView2_NewWindowRequested(object sender, CoreWebView2NewWindowRequestedEventArgs e)
+        {
+            e.NewWindow = (CoreWebView2)sender;
+            //e.Handled = true;
         }
 
         private void MyPlot_Resize(object sender, EventArgs e)
@@ -140,10 +150,12 @@ namespace MyPlot
                 }
                 else
                 {
-                    webView.Location = new Point(0, 0);
+                    newSize.Height = ClientSize.Height - 24;
+                    webView.Location = new Point(0, 24);
                 }
                 webView.Size = newSize;
                 webView.Visible = true;
+                webView.BringToFront();
             }
             else
             {
@@ -413,7 +425,7 @@ namespace MyPlot
                     break;
                 case 'c':
                 case 'C':
-                    yaw = 0; pitch = 0; fov = 0; fov = 115;
+                    yaw = 0; pitch = 0; roll = 0; fov = 115;
                     break;
             }
             videoView.MediaPlayer.UpdateViewpoint(yaw, pitch, roll, fov);
@@ -505,6 +517,7 @@ namespace MyPlot
                 {
                     playerControlbar.Visible = true;
                     playerControlbar.Focus();
+                    playerControlbar.BringToFront();
                     timerControlbar.Enabled = true;
                 }
                 e.Handled = true;
@@ -516,6 +529,10 @@ namespace MyPlot
 
         private void MayHideMenu()
         {
+            if (!playersConfig.configData.mainPlayerConfig.enabled && playersConfig.configData.pipPlayerConfig.enabled)
+            {
+                return;
+            }
             if (menuMain.Visible && playersConfig != null && 
                 (playersConfig.configData.mainPlayerConfig.enabled || playersConfig.configData.pipPlayerConfig.enabled))
             {
@@ -666,6 +683,11 @@ namespace MyPlot
             TrackBar tb = (TrackBar)sender;
             playersConfig.configData.radioPlayerConfig.volume = tb.Value;
             radioView.MediaPlayer.Volume = tb.Value;
+        }
+
+        private void webView_KeyDown(object sender, KeyEventArgs e)
+        {
+            Focus();
         }
     }
 }
