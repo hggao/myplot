@@ -73,6 +73,17 @@ namespace MyPlot
             this.timerControlbar = new System.Windows.Forms.Timer(this.components);
             this.radioPicBox = new System.Windows.Forms.PictureBox();
             this.audioPicBox = new System.Windows.Forms.PictureBox();
+            this.videoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.enableDisableVideo = new System.Windows.Forms.ToolStripMenuItem();
+            this.audioToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.enableToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.webToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.enableToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.homeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.forwardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.backwardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.radioToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.enableToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.webView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.videoView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.audioView)).BeginInit();
@@ -115,7 +126,7 @@ namespace MyPlot
             this.videoView.Name = "videoView";
             this.videoView.Size = new System.Drawing.Size(1152, 648);
             this.videoView.TabIndex = 5;
-            this.videoView.Text = "videoView";
+            this.videoView.Text = " ";
             this.videoView.Visible = false;
             this.videoView.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.videoView_KeyPress);
             // 
@@ -150,6 +161,10 @@ namespace MyPlot
             this.menuMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.testToolStripMenuItem,
             this.viewToolStripMenuItem,
+            this.videoToolStripMenuItem,
+            this.audioToolStripMenuItem,
+            this.webToolStripMenuItem,
+            this.radioToolStripMenuItem,
             this.helpToolStripMenuItem});
             this.menuMain.Location = new System.Drawing.Point(0, 0);
             this.menuMain.Name = "menuMain";
@@ -205,7 +220,7 @@ namespace MyPlot
             // fullScreenToolStripMenuItem
             // 
             this.fullScreenToolStripMenuItem.Name = "fullScreenToolStripMenuItem";
-            this.fullScreenToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
+            this.fullScreenToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.fullScreenToolStripMenuItem.Text = "F&ull Screen";
             this.fullScreenToolStripMenuItem.Click += new System.EventHandler(this.fullScreenToolStripMenuItem_Click);
             // 
@@ -221,14 +236,14 @@ namespace MyPlot
             // userGuideToolStripMenuItem
             // 
             this.userGuideToolStripMenuItem.Name = "userGuideToolStripMenuItem";
-            this.userGuideToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
+            this.userGuideToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.userGuideToolStripMenuItem.Text = "&User Guide";
             this.userGuideToolStripMenuItem.Click += new System.EventHandler(this.userGuideToolStripMenuItem_Click);
             // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.aboutToolStripMenuItem.Text = "&About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
@@ -539,6 +554,90 @@ namespace MyPlot
             this.audioPicBox.TabStop = false;
             this.audioPicBox.Visible = false;
             // 
+            // videoToolStripMenuItem
+            // 
+            this.videoToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.enableDisableVideo});
+            this.videoToolStripMenuItem.Name = "videoToolStripMenuItem";
+            this.videoToolStripMenuItem.Size = new System.Drawing.Size(49, 20);
+            this.videoToolStripMenuItem.Text = "Video";
+            // 
+            // enableDisableVideo
+            // 
+            this.enableDisableVideo.Name = "enableDisableVideo";
+            this.enableDisableVideo.Size = new System.Drawing.Size(180, 22);
+            this.enableDisableVideo.Text = "Enable/Disable";
+            this.enableDisableVideo.Click += new System.EventHandler(this.enableDisableVideo_Click);
+            // 
+            // audioToolStripMenuItem
+            // 
+            this.audioToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.enableToolStripMenuItem1});
+            this.audioToolStripMenuItem.Name = "audioToolStripMenuItem";
+            this.audioToolStripMenuItem.Size = new System.Drawing.Size(51, 20);
+            this.audioToolStripMenuItem.Text = "Audio";
+            // 
+            // enableToolStripMenuItem1
+            // 
+            this.enableToolStripMenuItem1.Name = "enableToolStripMenuItem1";
+            this.enableToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.enableToolStripMenuItem1.Text = "Enable/Disable";
+            this.enableToolStripMenuItem1.Click += new System.EventHandler(this.enableDisableAudio_Click);
+            // 
+            // webToolStripMenuItem
+            // 
+            this.webToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.enableToolStripMenuItem2,
+            this.homeToolStripMenuItem,
+            this.forwardToolStripMenuItem,
+            this.backwardToolStripMenuItem});
+            this.webToolStripMenuItem.Name = "webToolStripMenuItem";
+            this.webToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
+            this.webToolStripMenuItem.Text = "Web";
+            // 
+            // enableToolStripMenuItem2
+            // 
+            this.enableToolStripMenuItem2.Name = "enableToolStripMenuItem2";
+            this.enableToolStripMenuItem2.Size = new System.Drawing.Size(180, 22);
+            this.enableToolStripMenuItem2.Text = "Enable/Disable";
+            this.enableToolStripMenuItem2.Click += new System.EventHandler(this.enableDisableWeb_Click);
+            // 
+            // homeToolStripMenuItem
+            // 
+            this.homeToolStripMenuItem.Name = "homeToolStripMenuItem";
+            this.homeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.homeToolStripMenuItem.Text = "Home";
+            this.homeToolStripMenuItem.Click += new System.EventHandler(this.homeToolStripMenuItem_Click);
+            // 
+            // forwardToolStripMenuItem
+            // 
+            this.forwardToolStripMenuItem.Name = "forwardToolStripMenuItem";
+            this.forwardToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.forwardToolStripMenuItem.Text = "Forward";
+            this.forwardToolStripMenuItem.Click += new System.EventHandler(this.forwardToolStripMenuItem_Click);
+            // 
+            // backwardToolStripMenuItem
+            // 
+            this.backwardToolStripMenuItem.Name = "backwardToolStripMenuItem";
+            this.backwardToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.backwardToolStripMenuItem.Text = "Backward";
+            this.backwardToolStripMenuItem.Click += new System.EventHandler(this.backwardToolStripMenuItem_Click);
+            // 
+            // radioToolStripMenuItem
+            // 
+            this.radioToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.enableToolStripMenuItem3});
+            this.radioToolStripMenuItem.Name = "radioToolStripMenuItem";
+            this.radioToolStripMenuItem.Size = new System.Drawing.Size(49, 20);
+            this.radioToolStripMenuItem.Text = "Radio";
+            // 
+            // enableToolStripMenuItem3
+            // 
+            this.enableToolStripMenuItem3.Name = "enableToolStripMenuItem3";
+            this.enableToolStripMenuItem3.Size = new System.Drawing.Size(180, 22);
+            this.enableToolStripMenuItem3.Text = "Enable/Disable";
+            this.enableToolStripMenuItem3.Click += new System.EventHandler(this.enableDisableRadio_Click);
+            // 
             // MyPlot
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -633,6 +732,17 @@ namespace MyPlot
         private System.Windows.Forms.Timer timerControlbar;
         private System.Windows.Forms.PictureBox audioPicBox;
         private System.Windows.Forms.PictureBox radioPicBox;
+        private System.Windows.Forms.ToolStripMenuItem videoToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem enableDisableVideo;
+        private System.Windows.Forms.ToolStripMenuItem audioToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem enableToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem webToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem enableToolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem homeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem forwardToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem backwardToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem radioToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem enableToolStripMenuItem3;
     }
 }
 

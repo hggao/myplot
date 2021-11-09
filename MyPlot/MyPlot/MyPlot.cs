@@ -14,7 +14,7 @@ namespace MyPlot
 {
     public partial class MyPlot : Form
     {
-        private string configFile = @"C:\Users\hongg\Documents\GitHub\myplot\MyPlot\MyPlot\bin\Debug\config\morning_cycling_2.myplot.json";
+        private string configFile = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "config\\default.myplot.json"); 
         private ConfigureMain playersConfig = null;
 
         //LibVLCSharp instances
@@ -121,6 +121,30 @@ namespace MyPlot
 
         private void SetPlayerControlAppearance()
         {
+            SetVideoviewAppearance();
+            SetAudioViewAppearance();
+            SetWebViewAppearance();
+            SetRadioviewAppearance();
+
+            //===== Global control above all the four players.
+            MayHideMenu();
+
+            int pX = 0;
+            int pY = 0;
+            if (ClientSize.Width > playerControlbar.Width)
+            {
+                pX = (ClientSize.Width - playerControlbar.Width) / 2;
+            }
+            if (ClientSize.Height - playerControlbar.Height > 20)
+            {
+                pY = ClientSize.Height - playerControlbar.Height - 20;
+            }
+            playerControlbar.Location = new Point(pX, pY);
+            playerControlbar.Visible = false; 
+        }
+
+        private void SetVideoviewAppearance()
+        {
             Size newSize = ClientSize;
 
             //Video player has the top priority, if it is enabled, it would occupy the whole client area
@@ -137,6 +161,39 @@ namespace MyPlot
                 videoView.Visible = false;
                 vPanel.Enabled = false;
             }
+        }
+
+        private void SetAudioViewAppearance()
+        {
+            Size newSize = ClientSize;
+
+            //Set Audio player at the bottom left if video/web enalbed, otherwise put it at center.
+            if (playersConfig.configData.audioPlayerConfig.enabled)
+            {
+                if (playersConfig.configData.mainPlayerConfig.enabled || playersConfig.configData.pipPlayerConfig.enabled)
+                {
+                    audioView.Location = new Point(64, 32);
+                }
+                else
+                {
+                    audioView.Location = new Point((ClientSize.Width - audioView.Width) / 2, (ClientSize.Height - audioView.Height) / 2);
+                }
+                audioPicBox.Location = audioView.Location;
+                audioView.Visible = true;
+                aPanel.Enabled = true;
+                audioPicBox.Visible = true;
+            }
+            else
+            {
+                audioView.Visible = false;
+                aPanel.Enabled = false;
+                audioPicBox.Visible = false;
+            }
+        }
+
+        private void SetWebViewAppearance()
+        {
+            Size newSize = ClientSize;
 
             //Web player has the second priority, it video player isn't enabled, it would occupy the whole client area
             if (playersConfig.configData.pipPlayerConfig.enabled)
@@ -161,29 +218,11 @@ namespace MyPlot
             {
                 webView.Visible = false;
             }
+        }
 
-            //Set Audio player at the bottom left if video/web enalbed, otherwise put it at center.
-            if (playersConfig.configData.audioPlayerConfig.enabled)
-            {
-                if (playersConfig.configData.mainPlayerConfig.enabled || playersConfig.configData.pipPlayerConfig.enabled)
-                {
-                    audioView.Location = new Point(64, 32);
-                }
-                else
-                {
-                    audioView.Location = new Point((ClientSize.Width - audioView.Width) / 2, (ClientSize.Height - audioView.Height) / 2);
-                }
-                audioPicBox.Location = audioView.Location;
-                audioView.Visible = true;
-                aPanel.Enabled = true;
-                audioPicBox.Visible = true;
-            }
-            else
-            {
-                audioView.Visible = false;
-                aPanel.Enabled = false;
-                audioPicBox.Visible = false;
-            }
+        private void SetRadioviewAppearance()
+        {
+            Size newSize = ClientSize;
 
             //Set Radio player at the bottom left if video/web enalbed, otherwise put it at center.
             //NOTE: We assume Audio and Radio don't exist together
@@ -209,23 +248,6 @@ namespace MyPlot
                 rPanel.Enabled = false;
                 radioPicBox.Visible = false;
             }
-
-            //===== Global control above all the four players.
-            MayHideMenu();
-
-            int pX = 0;
-            int pY = 0;
-            if (ClientSize.Width > playerControlbar.Width)
-            {
-                pX = (ClientSize.Width - playerControlbar.Width) / 2;
-            }
-            if (ClientSize.Height - playerControlbar.Height > 20)
-            {
-                pY = ClientSize.Height - playerControlbar.Height - 20;
-            }
-            playerControlbar.Location = new Point(pX, pY);
-            playerControlbar.Visible = false; 
-
         }
 
         private void VideoPlayerStart()
@@ -287,7 +309,7 @@ namespace MyPlot
                 return;
             }
 
-            webView.NavigateToString(System.IO.File.ReadAllText("browse_index.html"));
+            webView.NavigateToString(System.IO.File.ReadAllText(playersConfig.configData.pipPlayerConfig.pip_urls[0]));
         }
 
         private void AudioPlayerStart()
@@ -463,9 +485,12 @@ namespace MyPlot
                 VideoPlayerStop();
                 AudioPlayerStop();
                 RadioPlayerStop();
-                configFile = newConfigFile;
-                playersConfig = new ConfigureMain();
-                playersConfig.LoadConfigure(configFile);
+                if (newConfigFile != null)
+                {
+                    configFile = newConfigFile;
+                    playersConfig = new ConfigureMain();
+                    playersConfig.LoadConfigure(configFile);
+                }
                 SetPlayerControlAppearance();
                 VideoPlayerStart();
                 WebPlayerStart();
@@ -688,6 +713,90 @@ namespace MyPlot
         private void webView_KeyDown(object sender, KeyEventArgs e)
         {
             Focus();
+        }
+
+        private void enableDisableVideo_Click(object sender, EventArgs e)
+        {
+            if (playersConfig.configData.mainPlayerConfig.enabled)
+            {
+                playersConfig.configData.mainPlayerConfig.enabled = false;
+            }
+            else
+            {
+                playersConfig.configData.mainPlayerConfig.enabled = true;
+            }
+            RestartPlayerWithNewConfig(null);
+        }
+
+        private void enableDisableAudio_Click(object sender, EventArgs e)
+        {
+            if (playersConfig.configData.audioPlayerConfig.enabled)
+            {
+                playersConfig.configData.audioPlayerConfig.enabled = false;
+                AudioPlayerStop();
+                SetAudioViewAppearance();
+            }
+            else
+            {
+                playersConfig.configData.audioPlayerConfig.enabled = true;
+                SetAudioViewAppearance();
+                AudioPlayerStart();
+            }
+        }
+
+        private void enableDisableWeb_Click(object sender, EventArgs e)
+        {
+            if (playersConfig.configData.pipPlayerConfig.enabled)
+            {
+                playersConfig.configData.pipPlayerConfig.enabled = false;
+                SetWebViewAppearance();
+            }
+            else
+            {
+                playersConfig.configData.pipPlayerConfig.enabled = true;
+                SetWebViewAppearance();
+                WebPlayerStart();
+            }
+        }
+
+        private void homeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (webView.Visible)
+            {
+                webView.NavigateToString(System.IO.File.ReadAllText(playersConfig.configData.pipPlayerConfig.pip_urls[0]));
+            }
+        }
+
+        private void forwardToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (webView.Visible && webView.CanGoForward)
+            {
+                webView.GoForward();
+            }
+        }
+
+        private void backwardToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (webView.Visible && webView.CanGoBack)
+            {
+                webView.GoBack();
+            }
+        }
+
+        private void enableDisableRadio_Click(object sender, EventArgs e)
+        {
+            if (playersConfig.configData.radioPlayerConfig.enabled)
+            {
+                playersConfig.configData.radioPlayerConfig.enabled = false;
+                RadioPlayerStop();
+                SetRadioviewAppearance();
+            }
+            else
+            {
+                playersConfig.configData.radioPlayerConfig.enabled = true;
+                SetRadioviewAppearance();
+                RadioPlayerStart();
+            }
         }
     }
 }
