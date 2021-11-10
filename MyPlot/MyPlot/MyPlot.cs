@@ -16,6 +16,7 @@ namespace MyPlot
     {
         private string configFile = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "config\\default.myplot.json"); 
         private ConfigureMain playersConfig = null;
+        private bool formLoaded = false;
 
         //LibVLCSharp instances
         public LibVLC _libVLC;
@@ -28,6 +29,10 @@ namespace MyPlot
 
         public MyPlot()
         {
+            //Load the configurations of all player controls.
+            playersConfig = new ConfigureMain();
+            playersConfig.LoadConfigure(configFile);
+
             if (!DesignMode)
             {
                 Core.Initialize();
@@ -56,10 +61,6 @@ namespace MyPlot
 
         private async void MyPlot_Load(object sender, EventArgs e)
         {
-            //Load the configurations of all player controls.
-            playersConfig = new ConfigureMain();
-            playersConfig.LoadConfigure(configFile);
-
             //Special waiting for webView2 control done its initialization
             webView.CoreWebView2InitializationCompleted += WebView_CoreWebView2InitializationCompleted;
             Debug.WriteLine("before InitializeAsync");
@@ -71,7 +72,8 @@ namespace MyPlot
 
             }
             webView.CoreWebView2.NewWindowRequested += CoreWebView2_NewWindowRequested;
-            //webView.CoreWebView2.
+
+            formLoaded = true;
 
             //Based on configration to set all controls appearance
             SetPlayerControlAppearance();
@@ -111,7 +113,6 @@ namespace MyPlot
         private void CoreWebView2_NewWindowRequested(object sender, CoreWebView2NewWindowRequestedEventArgs e)
         {
             e.NewWindow = (CoreWebView2)sender;
-            //e.Handled = true;
         }
 
         private void MyPlot_Resize(object sender, EventArgs e)
@@ -121,6 +122,12 @@ namespace MyPlot
 
         private void SetPlayerControlAppearance()
         {
+            //In some windows, we found form resize was called before form loaded, if so we are not ready yet
+            if (!formLoaded)
+            {
+                return;
+            }
+
             SetVideoviewAppearance();
             SetAudioViewAppearance();
             SetWebViewAppearance();
