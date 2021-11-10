@@ -170,7 +170,7 @@ namespace MyPlot
             //Set Audio player at the bottom left if video/web enalbed, otherwise put it at center.
             if (playersConfig.configData.audioPlayerConfig.enabled)
             {
-                if (playersConfig.configData.mainPlayerConfig.enabled || playersConfig.configData.pipPlayerConfig.enabled)
+                if (playersConfig.configData.mainPlayerConfig.enabled || playersConfig.configData.webPlayerConfig.enabled)
                 {
                     audioView.Location = new Point(64, 32);
                 }
@@ -196,7 +196,7 @@ namespace MyPlot
             Size newSize = ClientSize;
 
             //Web player has the second priority, it video player isn't enabled, it would occupy the whole client area
-            if (playersConfig.configData.pipPlayerConfig.enabled)
+            if (playersConfig.configData.webPlayerConfig.enabled)
             {
                 newSize = ClientSize;
                 if (playersConfig.configData.mainPlayerConfig.enabled)
@@ -228,7 +228,7 @@ namespace MyPlot
             //NOTE: We assume Audio and Radio don't exist together
             if (playersConfig.configData.radioPlayerConfig.enabled)
             {
-                if (playersConfig.configData.mainPlayerConfig.enabled || playersConfig.configData.pipPlayerConfig.enabled)
+                if (playersConfig.configData.mainPlayerConfig.enabled || playersConfig.configData.webPlayerConfig.enabled)
                 {
                     radioView.Location = new Point(ClientSize.Width - radioView.Width - 64, 32);
 
@@ -309,7 +309,7 @@ namespace MyPlot
                 return;
             }
 
-            webView.NavigateToString(System.IO.File.ReadAllText(playersConfig.configData.pipPlayerConfig.pip_urls[0]));
+            webView.NavigateToString(System.IO.File.ReadAllText(playersConfig.configData.webPlayerConfig.web_urls[0]));
         }
 
         private void AudioPlayerStart()
@@ -554,12 +554,12 @@ namespace MyPlot
 
         private void MayHideMenu()
         {
-            if (!playersConfig.configData.mainPlayerConfig.enabled && playersConfig.configData.pipPlayerConfig.enabled)
+            if (!playersConfig.configData.mainPlayerConfig.enabled && playersConfig.configData.webPlayerConfig.enabled)
             {
                 return;
             }
             if (menuMain.Visible && playersConfig != null && 
-                (playersConfig.configData.mainPlayerConfig.enabled || playersConfig.configData.pipPlayerConfig.enabled))
+                (playersConfig.configData.mainPlayerConfig.enabled || playersConfig.configData.webPlayerConfig.enabled))
             {
                 menuMain.Visible = false;
             }
@@ -746,14 +746,14 @@ namespace MyPlot
 
         private void enableDisableWeb_Click(object sender, EventArgs e)
         {
-            if (playersConfig.configData.pipPlayerConfig.enabled)
+            if (playersConfig.configData.webPlayerConfig.enabled)
             {
-                playersConfig.configData.pipPlayerConfig.enabled = false;
+                playersConfig.configData.webPlayerConfig.enabled = false;
                 SetWebViewAppearance();
             }
             else
             {
-                playersConfig.configData.pipPlayerConfig.enabled = true;
+                playersConfig.configData.webPlayerConfig.enabled = true;
                 SetWebViewAppearance();
                 WebPlayerStart();
             }
@@ -763,7 +763,7 @@ namespace MyPlot
         {
             if (webView.Visible)
             {
-                webView.NavigateToString(System.IO.File.ReadAllText(playersConfig.configData.pipPlayerConfig.pip_urls[0]));
+                webView.NavigateToString(System.IO.File.ReadAllText(playersConfig.configData.webPlayerConfig.web_urls[0]));
             }
         }
 

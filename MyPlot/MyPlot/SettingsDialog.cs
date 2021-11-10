@@ -52,21 +52,21 @@ namespace MyPlot
                 GroupBoxMainPlayer.Enabled = false;
             }
 
-            //Initialize pip player controls
-            PIPPlayerConfig pipCfg = config.configData.pipPlayerConfig;
-            this.CheckBoxPipLoop.Checked = pipCfg.loop;
-            this.CheckBoxPipReshuffle.Checked = pipCfg.reshuffle;
-            this.TrackBarPipVolume.Value = pipCfg.volume;
-            this.LabelPipVolumeText.Text = TrackBarPipVolume.Value.ToString();
-            this.ListBoxPipUrls.Items.Clear();
-            for (int i = 0; i < pipCfg.pip_urls.Count; i++)
+            //Initialize web player controls
+            WebPlayerConfig webCfg = config.configData.webPlayerConfig;
+            this.CheckBoxWebLoop.Checked = webCfg.loop;
+            this.CheckBoxWebReshuffle.Checked = webCfg.reshuffle;
+            this.TrackBarWebVolume.Value = webCfg.volume;
+            this.LabelWebVolumeText.Text = TrackBarWebVolume.Value.ToString();
+            this.ListBoxWebUrls.Items.Clear();
+            for (int i = 0; i < webCfg.web_urls.Count; i++)
             {
-                this.ListBoxPipUrls.Items.Add(pipCfg.pip_urls[i]);
+                this.ListBoxWebUrls.Items.Add(webCfg.web_urls[i]);
             }
-            this.CheckBoxPipPlayer.Checked = pipCfg.enabled;
-            if (!CheckBoxPipPlayer.Checked)
+            this.CheckBoxWebPlayer.Checked = webCfg.enabled;
+            if (!CheckBoxWebPlayer.Checked)
             {
-                GroupBoxPipPlayer.Enabled = false;
+                GroupBoxWebPlayer.Enabled = false;
             }
 
             //Initialize audio player controls
@@ -108,8 +108,8 @@ namespace MyPlot
             ButtonSaveAs.Enabled = false;
             CheckBoxMainPlayer.Enabled = false;
             GroupBoxMainPlayer.Enabled = false;
-            CheckBoxPipPlayer.Enabled = false;
-            GroupBoxPipPlayer.Enabled = false;
+            CheckBoxWebPlayer.Enabled = false;
+            GroupBoxWebPlayer.Enabled = false;
             CheckBoxAudioPlayer.Enabled = false;
             GroupBoxAudioPlayer.Enabled = false;
             CheckBoxRadioPlayer.Enabled = false;
@@ -121,7 +121,7 @@ namespace MyPlot
 
         }
 
-        private void CheckBoxPipPlayer_CheckedChanged(object sender, EventArgs e)
+        private void CheckBoxWebPlayer_CheckedChanged(object sender, EventArgs e)
         {
 
         }

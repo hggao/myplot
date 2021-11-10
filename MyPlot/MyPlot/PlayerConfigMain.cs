@@ -22,13 +22,13 @@ namespace MyPlot
         public float play_position;
         public float play_speed;
     }
-    public class PIPPlayerConfig
+    public class WebPlayerConfig
     {
         public bool enabled { get; set; }
         public int volume { get; set; }
         public bool loop { get; set; }
         public bool reshuffle { get; set; }
-        public IList<string> pip_urls { get; set; }
+        public IList<string> web_urls { get; set; }
     }
 
     public class AudioPlayerConfig
@@ -57,7 +57,7 @@ namespace MyPlot
     public class ConfigData
     {
         public MainPlayerConfig mainPlayerConfig { get; set; }
-        public PIPPlayerConfig pipPlayerConfig { get; set; }
+        public WebPlayerConfig webPlayerConfig { get; set; }
         public AudioPlayerConfig audioPlayerConfig { get; set; }
         public RadioPlayerConfig radioPlayerConfig { get; set; }
     }

@@ -31,26 +31,26 @@ namespace MyPlot
         {
             this.ButtonOK = new System.Windows.Forms.Button();
             this.GroupBoxMainPlayer = new System.Windows.Forms.GroupBox();
+            this.ListBoxMainFiles = new System.Windows.Forms.ListBox();
+            this.LabelMainVolumeText = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.TrackBarMainVolume = new System.Windows.Forms.TrackBar();
+            this.CheckBoxMainReshuffle = new System.Windows.Forms.CheckBox();
+            this.CheckBoxMainLoop = new System.Windows.Forms.CheckBox();
             this.TextBoxConfigFile = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.ButtonOpen = new System.Windows.Forms.Button();
             this.ButtonSave = new System.Windows.Forms.Button();
             this.ButtonSaveAs = new System.Windows.Forms.Button();
             this.CheckBoxMainPlayer = new System.Windows.Forms.CheckBox();
-            this.CheckBoxMainLoop = new System.Windows.Forms.CheckBox();
-            this.CheckBoxMainReshuffle = new System.Windows.Forms.CheckBox();
-            this.TrackBarMainVolume = new System.Windows.Forms.TrackBar();
-            this.label2 = new System.Windows.Forms.Label();
-            this.LabelMainVolumeText = new System.Windows.Forms.Label();
-            this.ListBoxMainFiles = new System.Windows.Forms.ListBox();
-            this.CheckBoxPipPlayer = new System.Windows.Forms.CheckBox();
-            this.GroupBoxPipPlayer = new System.Windows.Forms.GroupBox();
-            this.ListBoxPipUrls = new System.Windows.Forms.ListBox();
-            this.LabelPipVolumeText = new System.Windows.Forms.Label();
+            this.CheckBoxWebPlayer = new System.Windows.Forms.CheckBox();
+            this.GroupBoxWebPlayer = new System.Windows.Forms.GroupBox();
+            this.ListBoxWebUrls = new System.Windows.Forms.ListBox();
+            this.LabelWebVolumeText = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.TrackBarPipVolume = new System.Windows.Forms.TrackBar();
-            this.CheckBoxPipReshuffle = new System.Windows.Forms.CheckBox();
-            this.CheckBoxPipLoop = new System.Windows.Forms.CheckBox();
+            this.TrackBarWebVolume = new System.Windows.Forms.TrackBar();
+            this.CheckBoxWebReshuffle = new System.Windows.Forms.CheckBox();
+            this.CheckBoxWebLoop = new System.Windows.Forms.CheckBox();
             this.CheckBoxAudioPlayer = new System.Windows.Forms.CheckBox();
             this.GroupBoxAudioPlayer = new System.Windows.Forms.GroupBox();
             this.ListBoxAudioFiles = new System.Windows.Forms.ListBox();
@@ -69,8 +69,8 @@ namespace MyPlot
             this.CheckBoxRadioLoop = new System.Windows.Forms.CheckBox();
             this.GroupBoxMainPlayer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.TrackBarMainVolume)).BeginInit();
-            this.GroupBoxPipPlayer.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.TrackBarPipVolume)).BeginInit();
+            this.GroupBoxWebPlayer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.TrackBarWebVolume)).BeginInit();
             this.GroupBoxAudioPlayer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.TrackBarAudioVolume)).BeginInit();
             this.GroupBoxRadioPlayer.SuspendLayout();
@@ -101,6 +101,64 @@ namespace MyPlot
             this.GroupBoxMainPlayer.Size = new System.Drawing.Size(343, 182);
             this.GroupBoxMainPlayer.TabIndex = 1;
             this.GroupBoxMainPlayer.TabStop = false;
+            // 
+            // ListBoxMainFiles
+            // 
+            this.ListBoxMainFiles.AllowDrop = true;
+            this.ListBoxMainFiles.FormattingEnabled = true;
+            this.ListBoxMainFiles.Location = new System.Drawing.Point(6, 42);
+            this.ListBoxMainFiles.Name = "ListBoxMainFiles";
+            this.ListBoxMainFiles.Size = new System.Drawing.Size(331, 134);
+            this.ListBoxMainFiles.TabIndex = 5;
+            // 
+            // LabelMainVolumeText
+            // 
+            this.LabelMainVolumeText.AutoSize = true;
+            this.LabelMainVolumeText.Location = new System.Drawing.Point(157, 23);
+            this.LabelMainVolumeText.Name = "LabelMainVolumeText";
+            this.LabelMainVolumeText.Size = new System.Drawing.Size(13, 13);
+            this.LabelMainVolumeText.TabIndex = 4;
+            this.LabelMainVolumeText.Text = "0";
+            this.LabelMainVolumeText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 20);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(42, 13);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "Volume";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // TrackBarMainVolume
+            // 
+            this.TrackBarMainVolume.Location = new System.Drawing.Point(54, 19);
+            this.TrackBarMainVolume.Maximum = 100;
+            this.TrackBarMainVolume.Name = "TrackBarMainVolume";
+            this.TrackBarMainVolume.Size = new System.Drawing.Size(116, 45);
+            this.TrackBarMainVolume.TabIndex = 2;
+            this.TrackBarMainVolume.TickStyle = System.Windows.Forms.TickStyle.None;
+            // 
+            // CheckBoxMainReshuffle
+            // 
+            this.CheckBoxMainReshuffle.AutoSize = true;
+            this.CheckBoxMainReshuffle.Location = new System.Drawing.Point(266, 19);
+            this.CheckBoxMainReshuffle.Name = "CheckBoxMainReshuffle";
+            this.CheckBoxMainReshuffle.Size = new System.Drawing.Size(71, 17);
+            this.CheckBoxMainReshuffle.TabIndex = 1;
+            this.CheckBoxMainReshuffle.Text = "Reshuffle";
+            this.CheckBoxMainReshuffle.UseVisualStyleBackColor = true;
+            // 
+            // CheckBoxMainLoop
+            // 
+            this.CheckBoxMainLoop.AutoSize = true;
+            this.CheckBoxMainLoop.Location = new System.Drawing.Point(210, 19);
+            this.CheckBoxMainLoop.Name = "CheckBoxMainLoop";
+            this.CheckBoxMainLoop.Size = new System.Drawing.Size(50, 17);
+            this.CheckBoxMainLoop.TabIndex = 0;
+            this.CheckBoxMainLoop.Text = "Loop";
+            this.CheckBoxMainLoop.UseVisualStyleBackColor = true;
             // 
             // TextBoxConfigFile
             // 
@@ -158,109 +216,51 @@ namespace MyPlot
             this.CheckBoxMainPlayer.Text = "Main Player(360° or normal videos)";
             this.CheckBoxMainPlayer.UseVisualStyleBackColor = true;
             // 
-            // CheckBoxMainLoop
+            // CheckBoxWebPlayer
             // 
-            this.CheckBoxMainLoop.AutoSize = true;
-            this.CheckBoxMainLoop.Location = new System.Drawing.Point(210, 19);
-            this.CheckBoxMainLoop.Name = "CheckBoxMainLoop";
-            this.CheckBoxMainLoop.Size = new System.Drawing.Size(50, 17);
-            this.CheckBoxMainLoop.TabIndex = 0;
-            this.CheckBoxMainLoop.Text = "Loop";
-            this.CheckBoxMainLoop.UseVisualStyleBackColor = true;
+            this.CheckBoxWebPlayer.AutoSize = true;
+            this.CheckBoxWebPlayer.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.CheckBoxWebPlayer.Location = new System.Drawing.Point(394, 71);
+            this.CheckBoxWebPlayer.Name = "CheckBoxWebPlayer";
+            this.CheckBoxWebPlayer.Size = new System.Drawing.Size(374, 17);
+            this.CheckBoxWebPlayer.TabIndex = 9;
+            this.CheckBoxWebPlayer.Text = "Web Player(Web based video/text News or special programs)";
+            this.CheckBoxWebPlayer.UseVisualStyleBackColor = true;
+            this.CheckBoxWebPlayer.CheckedChanged += new System.EventHandler(this.CheckBoxWebPlayer_CheckedChanged);
             // 
-            // CheckBoxMainReshuffle
+            // GroupBoxWebPlayer
             // 
-            this.CheckBoxMainReshuffle.AutoSize = true;
-            this.CheckBoxMainReshuffle.Location = new System.Drawing.Point(266, 19);
-            this.CheckBoxMainReshuffle.Name = "CheckBoxMainReshuffle";
-            this.CheckBoxMainReshuffle.Size = new System.Drawing.Size(71, 17);
-            this.CheckBoxMainReshuffle.TabIndex = 1;
-            this.CheckBoxMainReshuffle.Text = "Reshuffle";
-            this.CheckBoxMainReshuffle.UseVisualStyleBackColor = true;
+            this.GroupBoxWebPlayer.Controls.Add(this.ListBoxWebUrls);
+            this.GroupBoxWebPlayer.Controls.Add(this.LabelWebVolumeText);
+            this.GroupBoxWebPlayer.Controls.Add(this.label4);
+            this.GroupBoxWebPlayer.Controls.Add(this.TrackBarWebVolume);
+            this.GroupBoxWebPlayer.Controls.Add(this.CheckBoxWebReshuffle);
+            this.GroupBoxWebPlayer.Controls.Add(this.CheckBoxWebLoop);
+            this.GroupBoxWebPlayer.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.GroupBoxWebPlayer.Location = new System.Drawing.Point(394, 85);
+            this.GroupBoxWebPlayer.Name = "GroupBoxWebPlayer";
+            this.GroupBoxWebPlayer.Size = new System.Drawing.Size(343, 182);
+            this.GroupBoxWebPlayer.TabIndex = 8;
+            this.GroupBoxWebPlayer.TabStop = false;
             // 
-            // TrackBarMainVolume
+            // ListBoxWebUrls
             // 
-            this.TrackBarMainVolume.Location = new System.Drawing.Point(54, 19);
-            this.TrackBarMainVolume.Maximum = 100;
-            this.TrackBarMainVolume.Name = "TrackBarMainVolume";
-            this.TrackBarMainVolume.Size = new System.Drawing.Size(116, 45);
-            this.TrackBarMainVolume.TabIndex = 2;
-            this.TrackBarMainVolume.TickStyle = System.Windows.Forms.TickStyle.None;
+            this.ListBoxWebUrls.AllowDrop = true;
+            this.ListBoxWebUrls.FormattingEnabled = true;
+            this.ListBoxWebUrls.Location = new System.Drawing.Point(6, 42);
+            this.ListBoxWebUrls.Name = "ListBoxWebUrls";
+            this.ListBoxWebUrls.Size = new System.Drawing.Size(331, 134);
+            this.ListBoxWebUrls.TabIndex = 5;
             // 
-            // label2
+            // LabelWebVolumeText
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 20);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(42, 13);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "Volume";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // LabelMainVolumeText
-            // 
-            this.LabelMainVolumeText.AutoSize = true;
-            this.LabelMainVolumeText.Location = new System.Drawing.Point(157, 23);
-            this.LabelMainVolumeText.Name = "LabelMainVolumeText";
-            this.LabelMainVolumeText.Size = new System.Drawing.Size(13, 13);
-            this.LabelMainVolumeText.TabIndex = 4;
-            this.LabelMainVolumeText.Text = "0";
-            this.LabelMainVolumeText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // ListBoxMainFiles
-            // 
-            this.ListBoxMainFiles.AllowDrop = true;
-            this.ListBoxMainFiles.FormattingEnabled = true;
-            this.ListBoxMainFiles.Location = new System.Drawing.Point(6, 42);
-            this.ListBoxMainFiles.Name = "ListBoxMainFiles";
-            this.ListBoxMainFiles.Size = new System.Drawing.Size(331, 134);
-            this.ListBoxMainFiles.TabIndex = 5;
-            // 
-            // CheckBoxPipPlayer
-            // 
-            this.CheckBoxPipPlayer.AutoSize = true;
-            this.CheckBoxPipPlayer.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CheckBoxPipPlayer.Location = new System.Drawing.Point(394, 71);
-            this.CheckBoxPipPlayer.Name = "CheckBoxPipPlayer";
-            this.CheckBoxPipPlayer.Size = new System.Drawing.Size(368, 17);
-            this.CheckBoxPipPlayer.TabIndex = 9;
-            this.CheckBoxPipPlayer.Text = "PIP Player(Web based video/text News or special programs)";
-            this.CheckBoxPipPlayer.UseVisualStyleBackColor = true;
-            this.CheckBoxPipPlayer.CheckedChanged += new System.EventHandler(this.CheckBoxPipPlayer_CheckedChanged);
-            // 
-            // GroupBoxPipPlayer
-            // 
-            this.GroupBoxPipPlayer.Controls.Add(this.ListBoxPipUrls);
-            this.GroupBoxPipPlayer.Controls.Add(this.LabelPipVolumeText);
-            this.GroupBoxPipPlayer.Controls.Add(this.label4);
-            this.GroupBoxPipPlayer.Controls.Add(this.TrackBarPipVolume);
-            this.GroupBoxPipPlayer.Controls.Add(this.CheckBoxPipReshuffle);
-            this.GroupBoxPipPlayer.Controls.Add(this.CheckBoxPipLoop);
-            this.GroupBoxPipPlayer.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.GroupBoxPipPlayer.Location = new System.Drawing.Point(394, 85);
-            this.GroupBoxPipPlayer.Name = "GroupBoxPipPlayer";
-            this.GroupBoxPipPlayer.Size = new System.Drawing.Size(343, 182);
-            this.GroupBoxPipPlayer.TabIndex = 8;
-            this.GroupBoxPipPlayer.TabStop = false;
-            // 
-            // ListBoxPipUrls
-            // 
-            this.ListBoxPipUrls.AllowDrop = true;
-            this.ListBoxPipUrls.FormattingEnabled = true;
-            this.ListBoxPipUrls.Location = new System.Drawing.Point(6, 42);
-            this.ListBoxPipUrls.Name = "ListBoxPipUrls";
-            this.ListBoxPipUrls.Size = new System.Drawing.Size(331, 134);
-            this.ListBoxPipUrls.TabIndex = 5;
-            // 
-            // LabelPipVolumeText
-            // 
-            this.LabelPipVolumeText.AutoSize = true;
-            this.LabelPipVolumeText.Location = new System.Drawing.Point(174, 23);
-            this.LabelPipVolumeText.Name = "LabelPipVolumeText";
-            this.LabelPipVolumeText.Size = new System.Drawing.Size(13, 13);
-            this.LabelPipVolumeText.TabIndex = 4;
-            this.LabelPipVolumeText.Text = "0";
-            this.LabelPipVolumeText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.LabelWebVolumeText.AutoSize = true;
+            this.LabelWebVolumeText.Location = new System.Drawing.Point(174, 23);
+            this.LabelWebVolumeText.Name = "LabelWebVolumeText";
+            this.LabelWebVolumeText.Size = new System.Drawing.Size(13, 13);
+            this.LabelWebVolumeText.TabIndex = 4;
+            this.LabelWebVolumeText.Text = "0";
+            this.LabelWebVolumeText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // label4
             // 
@@ -272,34 +272,34 @@ namespace MyPlot
             this.label4.Text = "Volume";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // TrackBarPipVolume
+            // TrackBarWebVolume
             // 
-            this.TrackBarPipVolume.Location = new System.Drawing.Point(62, 19);
-            this.TrackBarPipVolume.Maximum = 100;
-            this.TrackBarPipVolume.Name = "TrackBarPipVolume";
-            this.TrackBarPipVolume.Size = new System.Drawing.Size(115, 45);
-            this.TrackBarPipVolume.TabIndex = 2;
-            this.TrackBarPipVolume.TickStyle = System.Windows.Forms.TickStyle.None;
+            this.TrackBarWebVolume.Location = new System.Drawing.Point(62, 19);
+            this.TrackBarWebVolume.Maximum = 100;
+            this.TrackBarWebVolume.Name = "TrackBarWebVolume";
+            this.TrackBarWebVolume.Size = new System.Drawing.Size(115, 45);
+            this.TrackBarWebVolume.TabIndex = 2;
+            this.TrackBarWebVolume.TickStyle = System.Windows.Forms.TickStyle.None;
             // 
-            // CheckBoxPipReshuffle
+            // CheckBoxWebReshuffle
             // 
-            this.CheckBoxPipReshuffle.AutoSize = true;
-            this.CheckBoxPipReshuffle.Location = new System.Drawing.Point(266, 19);
-            this.CheckBoxPipReshuffle.Name = "CheckBoxPipReshuffle";
-            this.CheckBoxPipReshuffle.Size = new System.Drawing.Size(71, 17);
-            this.CheckBoxPipReshuffle.TabIndex = 1;
-            this.CheckBoxPipReshuffle.Text = "Reshuffle";
-            this.CheckBoxPipReshuffle.UseVisualStyleBackColor = true;
+            this.CheckBoxWebReshuffle.AutoSize = true;
+            this.CheckBoxWebReshuffle.Location = new System.Drawing.Point(266, 19);
+            this.CheckBoxWebReshuffle.Name = "CheckBoxWebReshuffle";
+            this.CheckBoxWebReshuffle.Size = new System.Drawing.Size(71, 17);
+            this.CheckBoxWebReshuffle.TabIndex = 1;
+            this.CheckBoxWebReshuffle.Text = "Reshuffle";
+            this.CheckBoxWebReshuffle.UseVisualStyleBackColor = true;
             // 
-            // CheckBoxPipLoop
+            // CheckBoxWebLoop
             // 
-            this.CheckBoxPipLoop.AutoSize = true;
-            this.CheckBoxPipLoop.Location = new System.Drawing.Point(205, 19);
-            this.CheckBoxPipLoop.Name = "CheckBoxPipLoop";
-            this.CheckBoxPipLoop.Size = new System.Drawing.Size(50, 17);
-            this.CheckBoxPipLoop.TabIndex = 0;
-            this.CheckBoxPipLoop.Text = "Loop";
-            this.CheckBoxPipLoop.UseVisualStyleBackColor = true;
+            this.CheckBoxWebLoop.AutoSize = true;
+            this.CheckBoxWebLoop.Location = new System.Drawing.Point(205, 19);
+            this.CheckBoxWebLoop.Name = "CheckBoxWebLoop";
+            this.CheckBoxWebLoop.Size = new System.Drawing.Size(50, 17);
+            this.CheckBoxWebLoop.TabIndex = 0;
+            this.CheckBoxWebLoop.Text = "Loop";
+            this.CheckBoxWebLoop.UseVisualStyleBackColor = true;
             // 
             // CheckBoxAudioPlayer
             // 
@@ -479,8 +479,8 @@ namespace MyPlot
             this.Controls.Add(this.GroupBoxRadioPlayer);
             this.Controls.Add(this.CheckBoxAudioPlayer);
             this.Controls.Add(this.GroupBoxAudioPlayer);
-            this.Controls.Add(this.CheckBoxPipPlayer);
-            this.Controls.Add(this.GroupBoxPipPlayer);
+            this.Controls.Add(this.CheckBoxWebPlayer);
+            this.Controls.Add(this.GroupBoxWebPlayer);
             this.Controls.Add(this.CheckBoxMainPlayer);
             this.Controls.Add(this.ButtonSaveAs);
             this.Controls.Add(this.ButtonSave);
@@ -499,9 +499,9 @@ namespace MyPlot
             this.GroupBoxMainPlayer.ResumeLayout(false);
             this.GroupBoxMainPlayer.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.TrackBarMainVolume)).EndInit();
-            this.GroupBoxPipPlayer.ResumeLayout(false);
-            this.GroupBoxPipPlayer.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.TrackBarPipVolume)).EndInit();
+            this.GroupBoxWebPlayer.ResumeLayout(false);
+            this.GroupBoxWebPlayer.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.TrackBarWebVolume)).EndInit();
             this.GroupBoxAudioPlayer.ResumeLayout(false);
             this.GroupBoxAudioPlayer.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.TrackBarAudioVolume)).EndInit();
@@ -529,14 +529,14 @@ namespace MyPlot
         private System.Windows.Forms.CheckBox CheckBoxMainLoop;
         private System.Windows.Forms.ListBox ListBoxMainFiles;
         private System.Windows.Forms.Label LabelMainVolumeText;
-        private System.Windows.Forms.CheckBox CheckBoxPipPlayer;
-        private System.Windows.Forms.GroupBox GroupBoxPipPlayer;
-        private System.Windows.Forms.ListBox ListBoxPipUrls;
-        private System.Windows.Forms.Label LabelPipVolumeText;
+        private System.Windows.Forms.CheckBox CheckBoxWebPlayer;
+        private System.Windows.Forms.GroupBox GroupBoxWebPlayer;
+        private System.Windows.Forms.ListBox ListBoxWebUrls;
+        private System.Windows.Forms.Label LabelWebVolumeText;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TrackBar TrackBarPipVolume;
-        private System.Windows.Forms.CheckBox CheckBoxPipReshuffle;
-        private System.Windows.Forms.CheckBox CheckBoxPipLoop;
+        private System.Windows.Forms.TrackBar TrackBarWebVolume;
+        private System.Windows.Forms.CheckBox CheckBoxWebReshuffle;
+        private System.Windows.Forms.CheckBox CheckBoxWebLoop;
         private System.Windows.Forms.CheckBox CheckBoxAudioPlayer;
         private System.Windows.Forms.GroupBox GroupBoxAudioPlayer;
         private System.Windows.Forms.ListBox ListBoxAudioFiles;
