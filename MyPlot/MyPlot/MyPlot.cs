@@ -517,13 +517,30 @@ namespace MyPlot
 
         private void userGuideToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("User Guide is on its way.");
+            string helpStr = "";
+            helpStr += "Keyboard controls:\n";
+            helpStr += "    ESC: Show or hide menu\n";
+            helpStr += "    Tab: Switch control input focus\n";
+            helpStr += "    Space: Show or hide volume control\n";
+            helpStr += "    a/A: Yaw 360° view point left\n";
+            helpStr += "    d/D: Yaw 360° view point right\n";
+            helpStr += "    w/W: Pitch 360° view point up\n";
+            helpStr += "    s/S: Pitch 360° view point down\n";
+            helpStr += "    q/Q: Roll 360° view point left\n";
+            helpStr += "    e/E: Roll 360° view point right\n";
+            helpStr += "    r/R: Increase 360° FOV (wider angel)\n";
+            helpStr += "    f/F: Decrease 360° FOV (smaller angel of view)\n";
+            helpStr += "    c/C: Reset(re-center) 360° view point to default\n\n";
+            helpStr += "Mouse controls:\n";
+            helpStr += "    In 360° view, hold down left mouse button to drag view point\n";
+            helpStr += "    In 360° view, use mouse wheel to control FOV\n";
+            MessageBox.Show(helpStr);
             MayHideMenu();
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("MyPlot Ver 0.1 Copyright Reserved!");
+            MessageBox.Show("MyPlot Ver 0.11 build 20211115. Copyright Reserved!");
             MayHideMenu();
         }
 
