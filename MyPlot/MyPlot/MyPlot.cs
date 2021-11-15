@@ -47,6 +47,7 @@ namespace MyPlot
             _videoMP.EndReached += VideoPlayer_EndReached;
             _videoMP.Playing += VideoPlayer_Playing;
             videoView.MediaPlayer = _videoMP;
+            videoView.MouseWheel += videoView_MouseWheel;
 
             _audioMP = new MediaPlayer(_libVLC);
             _audioMP.SetRole(MediaPlayerRole.Music);
@@ -147,7 +148,9 @@ namespace MyPlot
                 pY = ClientSize.Height - playerControlbar.Height - 20;
             }
             playerControlbar.Location = new Point(pX, pY);
-            playerControlbar.Visible = false; 
+            playerControlbar.Visible = false;
+
+            labelViewInfo.Visible = false;
         }
 
         private void SetVideoviewAppearance()
@@ -288,7 +291,8 @@ namespace MyPlot
 
         private void VideoPlayer_Playing(object sender, EventArgs e)
         {
-            //videoView.MediaPlayer.EnableMouseInput = false;
+            videoView.MediaPlayer.EnableKeyInput = false;
+            videoView.MediaPlayer.EnableMouseInput = false;
         }
 
         private void VideoPlayer_EndReached(object sender, EventArgs e)
@@ -803,6 +807,105 @@ namespace MyPlot
                 playersConfig.configData.radioPlayerConfig.enabled = true;
                 SetRadioviewAppearance();
                 RadioPlayerStart();
+            }
+        }
+
+        private bool videoViewMouseIsDown = false;
+        private Point vVMousePos = new Point(0, 0);
+
+        private void videoView_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Left)
+                return;
+            videoViewMouseIsDown = true;
+            vVMousePos = new Point(e.X, e.Y);
+        }
+
+        private void videoView_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Left)
+                return;
+            videoViewMouseIsDown = false;
+        }
+
+        private void videoView_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (!videoViewMouseIsDown || e.Button != MouseButtons.Left ||
+                (vVMousePos.X == 0 && vVMousePos.Y == 0))
+                return;
+            if (e.X == vVMousePos.X && e.Y == vVMousePos.Y)
+                return;
+            float yawDelta = e.X - vVMousePos.X;
+            float pitchDelta = e.Y - vVMousePos.Y;
+            vVMousePos = new Point(e.X, e.Y);
+         
+            VideoViewpoint vp = videoView.MediaPlayer.Viewpoint;
+            float yaw = vp.Yaw;
+            float pitch = vp.Pitch;
+            float roll = vp.Roll;
+            float fov = vp.Fov;
+
+            yaw -= (yawDelta / ClientSize.Width) * fov;
+            pitch -= (pitchDelta / ClientSize.Height) * fov;
+            videoView.MediaPlayer.UpdateViewpoint(yaw, pitch, roll, fov);
+        }
+
+        private void videoView_MouseWheel(object sender, MouseEventArgs e)
+        {
+            VideoViewpoint vp = videoView.MediaPlayer.Viewpoint;
+            float yaw = vp.Yaw;
+            float pitch = vp.Pitch;
+            float roll = vp.Roll;
+            float fov = vp.Fov;
+
+            fov += (float)e.Delta / 60.0f;
+            videoView.MediaPlayer.UpdateViewpoint(yaw, pitch, roll, fov);
+        }
+
+        private void videoInforShowHideToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!videoView.Visible)
+                return;
+
+            if (labelViewInfo.Visible)
+            {
+                labelViewInfo.Visible = false;
+            }
+            else
+            {
+                string info = " ";
+                info += videoView.MediaPlayer.Media.Tracks[0].Data.Video.Width.ToString();
+                info += " x ";
+                info += videoView.MediaPlayer.Media.Tracks[0].Data.Video.Height.ToString();
+                info += ", ";
+                if (videoView.MediaPlayer.Media.Tracks[0].Data.Video.Projection == VideoProjection.Rectangular)
+                {
+                    info += "normal";
+                }
+                else if (videoView.MediaPlayer.Media.Tracks[0].Data.Video.Projection == VideoProjection.Equirectangular)
+                {
+                    info += "360°";
+                } else
+                {
+                    info += "Cubemap";
+                }
+                info += " | File: ";
+                MainPlayerConfig config = playersConfig.configData.mainPlayerConfig;
+                info += config.media_files[config.play_index];
+
+                labelViewInfo.Text = info;
+                labelViewInfo.Location = new Point((ClientSize.Width - labelViewInfo.Width) / 2, 48);
+                labelViewInfo.Visible = true;
+                timerVideoInfo.Enabled = true;
+             }
+        }
+
+        private void timerVideoInfo_Tick(object sender, EventArgs e)
+        {
+            if (labelViewInfo.Visible)
+            {
+                timerVideoInfo.Enabled = false;
+                labelViewInfo.Visible = false;
             }
         }
     }
