@@ -76,6 +76,8 @@ namespace MyPlot
 
         public void SaveConfigure(string config_file)
         {
+            string jsonString = JsonConvert.SerializeObject(configData);
+            File.WriteAllText(config_file, jsonString);
         }
     }
 }
