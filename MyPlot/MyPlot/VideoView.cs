@@ -128,27 +128,27 @@ namespace MyPlot
             videoView.MediaPlayer.UpdateViewpoint(yaw, pitch, roll, fov);
         }
 
-        private bool videoViewMouseIsDown = false;
+        private bool videoViewRightMouseIsDown = false;
         private Point vVMousePos = new Point(0, 0);
 
         private void videoView_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button != MouseButtons.Left)
+            if (e.Button != MouseButtons.Right)
                 return;
-            videoViewMouseIsDown = true;
+            videoViewRightMouseIsDown = true;
             vVMousePos = new Point(e.X, e.Y);
         }
 
         private void videoView_MouseUp(object sender, MouseEventArgs e)
         {
-            if (e.Button != MouseButtons.Left)
+            if (e.Button != MouseButtons.Right)
                 return;
-            videoViewMouseIsDown = false;
+            videoViewRightMouseIsDown = false;
         }
 
         private void videoView_MouseMove(object sender, MouseEventArgs e)
         {
-            if (!videoViewMouseIsDown || e.Button != MouseButtons.Left ||
+            if (!videoViewRightMouseIsDown || e.Button != MouseButtons.Right ||
                 (vVMousePos.X == 0 && vVMousePos.Y == 0))
                 return;
             if (e.X == vVMousePos.X && e.Y == vVMousePos.Y)
@@ -225,6 +225,31 @@ namespace MyPlot
             {
                 timerVideoInfo.Enabled = false;
                 labelViewInfo.Visible = false;
+            }
+        }
+
+        private void relocateVideoControl()
+        {
+            if (videoCtrl.Visible)
+            {
+                var pSize = videoView.Size;
+                videoCtrl.Size = new Size(pSize.Width, 96);
+                videoCtrl.Location = PointToScreen(new Point(0, pSize.Height - videoCtrl.Height));
+                videoCtrl.LayoutControls();
+            }
+        }
+
+        private void videoView_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                if (videoCtrl.Visible)
+                {
+                    videoCtrl.Hide();
+                } else {
+                    videoCtrl.Show();
+                    relocateVideoControl();
+                }
             }
         }
     }

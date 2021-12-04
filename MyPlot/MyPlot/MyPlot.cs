@@ -10,12 +10,13 @@ using LibVLCSharp.Shared;
 using LibVLCSharp.WinForms;
 using Microsoft.Web.WebView2.Core;
 
+
 namespace MyPlot
 {
     public partial class MyPlot : Form
     {
         private string configFile = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "config\\default.myplot.json"); 
-        private ConfigureMain playersConfig = null;
+        public ConfigureMain playersConfig = null;
         private bool formLoaded = false;
 
         //LibVLCSharp instances
@@ -23,6 +24,8 @@ namespace MyPlot
         public MediaPlayer _videoMP;
         public MediaPlayer _audioMP;
         public MediaPlayer _radioMP;
+
+        private VideoControl videoCtrl = null;
 
         //Runtime flags
         private bool mouseButtonDown = false;
@@ -48,6 +51,7 @@ namespace MyPlot
             _videoMP.Playing += VideoPlayer_Playing;
             videoView.MediaPlayer = _videoMP;
             videoView.MouseWheel += videoView_MouseWheel;
+            videoCtrl = new VideoControl(this);
 
             _audioMP = new MediaPlayer(_libVLC);
             _audioMP.SetRole(MediaPlayerRole.Music);
@@ -84,7 +88,6 @@ namespace MyPlot
             WebPlayerStart();
             AudioPlayerStart();
             RadioPlayerStart();
-
         }
 
         private void MyPlot_FormClosed(object sender, FormClosedEventArgs e)
@@ -116,9 +119,15 @@ namespace MyPlot
             e.NewWindow = (CoreWebView2)sender;
         }
 
+        private void MyPlot_Move(object sender, EventArgs e)
+        {
+            relocateVideoControl();
+        }
+
         private void MyPlot_Resize(object sender, EventArgs e)
         {
             SetPlayerControlAppearance();
+            relocateVideoControl();
         }
 
         private void SetPlayerControlAppearance()

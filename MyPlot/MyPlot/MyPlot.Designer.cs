@@ -32,8 +32,6 @@ namespace MyPlot
             this.components = new System.ComponentModel.Container();
             this.webView = new Microsoft.Web.WebView2.WinForms.WebView2();
             this.videoView = new LibVLCSharp.WinForms.VideoView();
-            this.audioView = new LibVLCSharp.WinForms.VideoView();
-            this.radioView = new LibVLCSharp.WinForms.VideoView();
             this.menuMain = new System.Windows.Forms.MenuStrip();
             this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -44,6 +42,7 @@ namespace MyPlot
             this.fullScreenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.videoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.enableDisableVideo = new System.Windows.Forms.ToolStripMenuItem();
+            this.videoInforShowHideToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.audioToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.enableToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.webToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -82,15 +81,14 @@ namespace MyPlot
             this.vVolIcon = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.timerControlbar = new System.Windows.Forms.Timer(this.components);
-            this.radioPicBox = new System.Windows.Forms.PictureBox();
-            this.audioPicBox = new System.Windows.Forms.PictureBox();
-            this.videoInforShowHideToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.labelViewInfo = new System.Windows.Forms.Label();
             this.timerVideoInfo = new System.Windows.Forms.Timer(this.components);
+            this.radioPicBox = new System.Windows.Forms.PictureBox();
+            this.audioPicBox = new System.Windows.Forms.PictureBox();
+            this.radioView = new LibVLCSharp.WinForms.VideoView();
+            this.audioView = new LibVLCSharp.WinForms.VideoView();
             ((System.ComponentModel.ISupportInitialize)(this.webView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.videoView)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.audioView)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radioView)).BeginInit();
             this.menuMain.SuspendLayout();
             this.playerControlbar.SuspendLayout();
             this.aPanel.SuspendLayout();
@@ -107,6 +105,8 @@ namespace MyPlot
             ((System.ComponentModel.ISupportInitialize)(this.vVolIcon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radioPicBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.audioPicBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radioView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.audioView)).BeginInit();
             this.SuspendLayout();
             // 
             // webView
@@ -132,35 +132,10 @@ namespace MyPlot
             this.videoView.Text = " ";
             this.videoView.Visible = false;
             this.videoView.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.videoView_KeyPress);
+            this.videoView.MouseClick += new System.Windows.Forms.MouseEventHandler(this.videoView_MouseClick);
             this.videoView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.videoView_MouseDown);
             this.videoView.MouseMove += new System.Windows.Forms.MouseEventHandler(this.videoView_MouseMove);
             this.videoView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.videoView_MouseUp);
-            // 
-            // audioView
-            // 
-            this.audioView.BackColor = System.Drawing.SystemColors.Control;
-            this.audioView.BackgroundImage = global::MyPlot.Properties.Resources.music_notes;
-            this.audioView.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.audioView.Location = new System.Drawing.Point(67, 37);
-            this.audioView.MediaPlayer = null;
-            this.audioView.Name = "audioView";
-            this.audioView.Size = new System.Drawing.Size(96, 54);
-            this.audioView.TabIndex = 6;
-            this.audioView.Text = "audioView";
-            this.audioView.Visible = false;
-            // 
-            // radioView
-            // 
-            this.radioView.BackColor = System.Drawing.SystemColors.Control;
-            this.radioView.BackgroundImage = global::MyPlot.Properties.Resources.radio_playing;
-            this.radioView.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.radioView.Location = new System.Drawing.Point(895, 37);
-            this.radioView.MediaPlayer = null;
-            this.radioView.Name = "radioView";
-            this.radioView.Size = new System.Drawing.Size(96, 54);
-            this.radioView.TabIndex = 6;
-            this.radioView.Text = "radioView";
-            this.radioView.Visible = false;
             // 
             // menuMain
             // 
@@ -226,7 +201,7 @@ namespace MyPlot
             // fullScreenToolStripMenuItem
             // 
             this.fullScreenToolStripMenuItem.Name = "fullScreenToolStripMenuItem";
-            this.fullScreenToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.fullScreenToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
             this.fullScreenToolStripMenuItem.Text = "F&ull Screen";
             this.fullScreenToolStripMenuItem.Click += new System.EventHandler(this.fullScreenToolStripMenuItem_Click);
             // 
@@ -245,6 +220,13 @@ namespace MyPlot
             this.enableDisableVideo.Size = new System.Drawing.Size(194, 22);
             this.enableDisableVideo.Text = "Enable/Disable";
             this.enableDisableVideo.Click += new System.EventHandler(this.enableDisableVideo_Click);
+            // 
+            // videoInforShowHideToolStripMenuItem
+            // 
+            this.videoInforShowHideToolStripMenuItem.Name = "videoInforShowHideToolStripMenuItem";
+            this.videoInforShowHideToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
+            this.videoInforShowHideToolStripMenuItem.Text = "Video Infor Show/Hide";
+            this.videoInforShowHideToolStripMenuItem.Click += new System.EventHandler(this.videoInforShowHideToolStripMenuItem_Click);
             // 
             // audioToolStripMenuItem
             // 
@@ -623,6 +605,21 @@ namespace MyPlot
             // 
             this.timerControlbar.Tick += new System.EventHandler(this.timerControlbar_Tick);
             // 
+            // labelViewInfo
+            // 
+            this.labelViewInfo.AutoSize = true;
+            this.labelViewInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelViewInfo.Location = new System.Drawing.Point(294, 48);
+            this.labelViewInfo.Name = "labelViewInfo";
+            this.labelViewInfo.Size = new System.Drawing.Size(86, 31);
+            this.labelViewInfo.TabIndex = 10;
+            this.labelViewInfo.Text = "label4";
+            // 
+            // timerVideoInfo
+            // 
+            this.timerVideoInfo.Interval = 10000;
+            this.timerVideoInfo.Tick += new System.EventHandler(this.timerVideoInfo_Tick);
+            // 
             // radioPicBox
             // 
             this.radioPicBox.Image = global::MyPlot.Properties.Resources.radio_playing;
@@ -645,32 +642,38 @@ namespace MyPlot
             this.audioPicBox.TabStop = false;
             this.audioPicBox.Visible = false;
             // 
-            // videoInforShowHideToolStripMenuItem
+            // radioView
             // 
-            this.videoInforShowHideToolStripMenuItem.Name = "videoInforShowHideToolStripMenuItem";
-            this.videoInforShowHideToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
-            this.videoInforShowHideToolStripMenuItem.Text = "Video Infor Show/Hide";
-            this.videoInforShowHideToolStripMenuItem.Click += new System.EventHandler(this.videoInforShowHideToolStripMenuItem_Click);
+            this.radioView.BackColor = System.Drawing.SystemColors.Control;
+            this.radioView.BackgroundImage = global::MyPlot.Properties.Resources.radio_playing;
+            this.radioView.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.radioView.Location = new System.Drawing.Point(895, 37);
+            this.radioView.MediaPlayer = null;
+            this.radioView.Name = "radioView";
+            this.radioView.Size = new System.Drawing.Size(96, 54);
+            this.radioView.TabIndex = 6;
+            this.radioView.Text = "radioView";
+            this.radioView.Visible = false;
             // 
-            // labelViewInfo
+            // audioView
             // 
-            this.labelViewInfo.AutoSize = true;
-            this.labelViewInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelViewInfo.Location = new System.Drawing.Point(294, 48);
-            this.labelViewInfo.Name = "labelViewInfo";
-            this.labelViewInfo.Size = new System.Drawing.Size(86, 31);
-            this.labelViewInfo.TabIndex = 10;
-            this.labelViewInfo.Text = "label4";
-            // 
-            // timerVideoInfo
-            // 
-            this.timerVideoInfo.Interval = 10000;
-            this.timerVideoInfo.Tick += new System.EventHandler(this.timerVideoInfo_Tick);
+            this.audioView.BackColor = System.Drawing.SystemColors.Control;
+            this.audioView.BackgroundImage = global::MyPlot.Properties.Resources.music_notes;
+            this.audioView.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.audioView.Location = new System.Drawing.Point(67, 37);
+            this.audioView.MediaPlayer = null;
+            this.audioView.Name = "audioView";
+            this.audioView.Size = new System.Drawing.Size(96, 54);
+            this.audioView.TabIndex = 6;
+            this.audioView.Text = "audioView";
+            this.audioView.Visible = false;
             // 
             // MyPlot
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1152, 648);
             this.Controls.Add(this.labelViewInfo);
             this.Controls.Add(this.radioPicBox);
@@ -688,11 +691,10 @@ namespace MyPlot
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MyPlot_FormClosed);
             this.Load += new System.EventHandler(this.MyPlot_Load);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.MyPlot_KeyPress);
+            this.Move += new System.EventHandler(this.MyPlot_Move);
             this.Resize += new System.EventHandler(this.MyPlot_Resize);
             ((System.ComponentModel.ISupportInitialize)(this.webView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.videoView)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.audioView)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radioView)).EndInit();
             this.menuMain.ResumeLayout(false);
             this.menuMain.PerformLayout();
             this.playerControlbar.ResumeLayout(false);
@@ -713,6 +715,8 @@ namespace MyPlot
             ((System.ComponentModel.ISupportInitialize)(this.vVolIcon)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radioPicBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.audioPicBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radioView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.audioView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
