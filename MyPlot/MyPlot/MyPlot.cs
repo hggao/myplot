@@ -373,6 +373,7 @@ namespace MyPlot
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            /*
             SettingsDialog settingDlg = new SettingsDialog();
             settingDlg.configFile = configFile;
             settingDlg.StartPosition = FormStartPosition.Manual;
@@ -380,6 +381,15 @@ namespace MyPlot
             if (settingDlg.ShowDialog() == DialogResult.OK)
             {
                 RestartPlayerWithNewConfig(settingDlg.configFile);
+            }
+            */
+            PlaylistSetup plSetup = new PlaylistSetup();
+            plSetup.configFile = configFile;
+            plSetup.StartPosition = FormStartPosition.Manual;
+            plSetup.Location = this.PointToScreen(new Point(64, 36));
+            if (plSetup.ShowDialog() == DialogResult.OK)
+            {
+                RestartPlayerWithNewConfig(plSetup.configFile);
             }
             MayHideMenu();
         }

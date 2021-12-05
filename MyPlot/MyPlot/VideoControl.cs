@@ -97,6 +97,10 @@ namespace MyPlot
             if (!trackBarPosition.ContainsFocus || !mouseLeftButtonDown)
             {
                 int pos = (int)(_videoMP.Position * trackBarPosition.Maximum);
+                if (pos < trackBarPosition.Minimum)
+                    pos = trackBarPosition.Minimum;
+                if (pos > trackBarPosition.Maximum)
+                    pos = trackBarPosition.Maximum;
                 trackBarPosition.Value = pos >= 0 ? pos : 0;
             }
 
