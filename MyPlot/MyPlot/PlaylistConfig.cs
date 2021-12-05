@@ -15,10 +15,15 @@ namespace MyPlot
     {
         public string configFile { get; set; }
         public ConfigureMain config = null;
+        private ContextMenu delMenu = null;
 
         public PlaylistSetup()
         {
             InitializeComponent();
+
+            delMenu = new ContextMenu();
+            delMenu.MenuItems.Add("Remove", OnMenuItemRemove_Clicked);
+            ListBoxVideoList.ContextMenu = delMenu;
         }
 
         private void PlaylistSetup_Load(object sender, EventArgs e)
@@ -112,13 +117,29 @@ namespace MyPlot
             */
         }
 
-        private void linkLabelDownload_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void UpdateConfigDataFromUI()
         {
-            // Specify that the link was visited.
-            linkLabelDownload.LinkVisited = true;
+            //Update main video player config
+            MainPlayerConfig mainCfg = config.configData.mainPlayerConfig;
+            mainCfg.loop = this.CheckBoxMainLoop.Checked;
+            mainCfg.reshuffle = this.CheckBoxMainReshuffle.Checked;
+            mainCfg.volume = this.trackBarVideoVol.Value;
 
-            // Navigate to a URL.
-            System.Diagnostics.Process.Start("http://98.234.74.74/");
+            mainCfg.media_files.Clear();
+            foreach (string file in this.ListBoxVideoList.Items)
+            {
+                mainCfg.media_files.Add(file);
+            }
+            mainCfg.enabled = this.checkBoxVideoEnable.Checked;
+
+        }
+
+        private void textBoxConfigFile_TextChanged(object sender, EventArgs e)
+        {
+            configFile = textBoxConfigFile.Text;
+            config = new ConfigureMain();
+            config.LoadConfigure(configFile);
+            ApplyConfigDataToUI();
         }
 
         private void ButtonOpen_Click(object sender, EventArgs e)
@@ -132,13 +153,82 @@ namespace MyPlot
             }
         }
 
-        private void ListBoxVideoList_DragDrop(object sender, DragEventArgs e)
+        private void ButtonSave_Click(object sender, EventArgs e)
         {
+            UpdateConfigDataFromUI();
+            config.SaveConfigure(configFile);
         }
 
-        private void ListBoxVideoList_DragLeave(object sender, EventArgs e)
+        private void ButtonSaveAs_Click(object sender, EventArgs e)
         {
+            SaveFileDialog dialog = new SaveFileDialog();
+            dialog.Filter = "MyPlot Config (*.myplot.json)|*.myplot.json";
+            dialog.FilterIndex = 1;
+            dialog.RestoreDirectory = true;
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                UpdateConfigDataFromUI();
+                config.SaveConfigure(dialog.FileName);
+                textBoxConfigFile.Text = dialog.FileName;
+            }
+        }
 
+        private void linkLabelDownload_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            // Specify that the link was visited.
+            linkLabelDownload.LinkVisited = true;
+
+            // Navigate to a URL.
+            System.Diagnostics.Process.Start("http://98.234.74.74/");
+        }
+
+        private void ListBoxVideoList_DragOver(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                e.Effect = DragDropEffects.Move;
+            else
+                e.Effect = DragDropEffects.None;
+        }
+
+        private void ListBoxVideoList_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] videoExts = {".mp4", ".mov", ".wmv", ".flv", ".avi", ".mkv"};
+            string[] files = e.Data.GetData(DataFormats.FileDrop) as string[];
+            if (files == null || !files.Any())
+                return;
+
+            foreach (string file in files)
+            {
+                string ext = Path.GetExtension(file);
+                if (videoExts.Contains(ext) && !ListBoxVideoList.Items.Contains(file))
+                {
+                    ListBoxVideoList.Items.Add(file);
+                }
+            }
+        }
+
+        private void ListBoxVideoList_KeyDown(object sender, KeyEventArgs e)
+        {
+            int selectIndex = ListBoxVideoList.SelectedIndex;
+            
+            if (selectIndex >= 0 && e.KeyCode == Keys.Delete)
+            {
+                ListBoxVideoList.Items.RemoveAt(selectIndex);
+            }
+        }
+
+        private void OnMenuItemRemove_Clicked(object sender, EventArgs e)
+        {
+            int selectIndex = ListBoxVideoList.SelectedIndex;
+            if (selectIndex >= 0)
+            {
+                ListBoxVideoList.Items.RemoveAt(selectIndex);
+            }
+        }
+
+        private void trackBarVideoVol_Scroll(object sender, EventArgs e)
+        {
+            LabelVideoVolText.Text = trackBarVideoVol.Value.ToString();
         }
     }
 }

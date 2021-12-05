@@ -37,11 +37,12 @@ namespace MyPlot
             this.trackBarVolume = new System.Windows.Forms.TrackBar();
             this.trackBarPosition = new System.Windows.Forms.TrackBar();
             this.buttonFullScreen = new System.Windows.Forms.Button();
-            this.buttonSpeed = new System.Windows.Forms.Button();
             this.buttonSettings = new System.Windows.Forms.Button();
             this.labelPosition = new System.Windows.Forms.Label();
             this.labelTitle = new System.Windows.Forms.Label();
             this.timerVCPUpdate = new System.Windows.Forms.Timer(this.components);
+            this.comboBoxSpeed = new System.Windows.Forms.ComboBox();
+            this.buttonCancel = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarVolume)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarPosition)).BeginInit();
             this.SuspendLayout();
@@ -122,18 +123,9 @@ namespace MyPlot
             this.buttonFullScreen.UseVisualStyleBackColor = true;
             this.buttonFullScreen.Click += new System.EventHandler(this.buttonFullScreen_Click);
             // 
-            // buttonSpeed
-            // 
-            this.buttonSpeed.Location = new System.Drawing.Point(934, 42);
-            this.buttonSpeed.Name = "buttonSpeed";
-            this.buttonSpeed.Size = new System.Drawing.Size(32, 32);
-            this.buttonSpeed.TabIndex = 6;
-            this.buttonSpeed.Text = "S";
-            this.buttonSpeed.UseVisualStyleBackColor = true;
-            // 
             // buttonSettings
             // 
-            this.buttonSettings.Location = new System.Drawing.Point(896, 42);
+            this.buttonSettings.Location = new System.Drawing.Point(880, 42);
             this.buttonSettings.Name = "buttonSettings";
             this.buttonSettings.Size = new System.Drawing.Size(32, 32);
             this.buttonSettings.TabIndex = 8;
@@ -157,7 +149,7 @@ namespace MyPlot
             this.labelTitle.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.labelTitle.Location = new System.Drawing.Point(334, 48);
             this.labelTitle.Name = "labelTitle";
-            this.labelTitle.Size = new System.Drawing.Size(556, 22);
+            this.labelTitle.Size = new System.Drawing.Size(391, 22);
             this.labelTitle.TabIndex = 10;
             this.labelTitle.Text = "Title";
             this.labelTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -167,17 +159,49 @@ namespace MyPlot
             this.timerVCPUpdate.Interval = 50;
             this.timerVCPUpdate.Tick += new System.EventHandler(this.timerVCPUpdate_Tick);
             // 
+            // comboBoxSpeed
+            // 
+            this.comboBoxSpeed.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxSpeed.FormattingEnabled = true;
+            this.comboBoxSpeed.Items.AddRange(new object[] {
+            "0.25",
+            "0.50",
+            "0.75",
+            "1.00",
+            "1.25",
+            "1.50",
+            "1.75",
+            "2.00"});
+            this.comboBoxSpeed.Location = new System.Drawing.Point(919, 48);
+            this.comboBoxSpeed.Name = "comboBoxSpeed";
+            this.comboBoxSpeed.Size = new System.Drawing.Size(45, 21);
+            this.comboBoxSpeed.TabIndex = 11;
+            this.comboBoxSpeed.SelectedIndexChanged += new System.EventHandler(this.comboBoxSpeed_SelectedIndexChanged);
+            // 
+            // buttonCancel
+            // 
+            this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.buttonCancel.Location = new System.Drawing.Point(1023, 95);
+            this.buttonCancel.Name = "buttonCancel";
+            this.buttonCancel.Size = new System.Drawing.Size(1, 1);
+            this.buttonCancel.TabIndex = 12;
+            this.buttonCancel.Text = "Cancel";
+            this.buttonCancel.UseVisualStyleBackColor = true;
+            this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
+            // 
             // VideoControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.CancelButton = this.buttonCancel;
             this.ClientSize = new System.Drawing.Size(1024, 96);
+            this.Controls.Add(this.buttonCancel);
+            this.Controls.Add(this.comboBoxSpeed);
             this.Controls.Add(this.labelTitle);
             this.Controls.Add(this.labelPosition);
             this.Controls.Add(this.buttonSettings);
             this.Controls.Add(this.buttonFullScreen);
-            this.Controls.Add(this.buttonSpeed);
             this.Controls.Add(this.trackBarPosition);
             this.Controls.Add(this.trackBarVolume);
             this.Controls.Add(this.checkBoxSpeaker);
@@ -208,10 +232,11 @@ namespace MyPlot
         private System.Windows.Forms.TrackBar trackBarVolume;
         private System.Windows.Forms.TrackBar trackBarPosition;
         private System.Windows.Forms.Button buttonFullScreen;
-        private System.Windows.Forms.Button buttonSpeed;
         private System.Windows.Forms.Button buttonSettings;
         private System.Windows.Forms.Label labelPosition;
         private System.Windows.Forms.Label labelTitle;
         private System.Windows.Forms.Timer timerVCPUpdate;
+        private System.Windows.Forms.ComboBox comboBoxSpeed;
+        private System.Windows.Forms.Button buttonCancel;
     }
 }

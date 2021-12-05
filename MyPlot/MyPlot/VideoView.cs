@@ -75,6 +75,10 @@ namespace MyPlot
                 VideoUpdateViewPoint(e.KeyChar);
                 return;
             }
+            if (e.KeyChar == ' ')
+            {
+                ToogleVideoCtrlVisible();
+            }
         }
 
         private void VideoUpdateViewPoint(char keyChar)
@@ -180,62 +184,27 @@ namespace MyPlot
             videoView.MediaPlayer.UpdateViewpoint(yaw, pitch, roll, fov);
         }
 
-        private void videoInforShowHideToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (!videoView.Visible)
-                return;
-
-            if (labelViewInfo.Visible)
-            {
-                labelViewInfo.Visible = false;
-            }
-            else
-            {
-                string info = " ";
-                info += videoView.MediaPlayer.Media.Tracks[0].Data.Video.Width.ToString();
-                info += " x ";
-                info += videoView.MediaPlayer.Media.Tracks[0].Data.Video.Height.ToString();
-                info += ", ";
-                if (videoView.MediaPlayer.Media.Tracks[0].Data.Video.Projection == VideoProjection.Rectangular)
-                {
-                    info += "normal";
-                }
-                else if (videoView.MediaPlayer.Media.Tracks[0].Data.Video.Projection == VideoProjection.Equirectangular)
-                {
-                    info += "360°";
-                }
-                else
-                {
-                    info += "Cubemap";
-                }
-                info += " | File: ";
-                MainPlayerConfig config = playersConfig.configData.mainPlayerConfig;
-                info += config.media_files[config.play_index];
-
-                labelViewInfo.Text = info;
-                labelViewInfo.Location = new Point((ClientSize.Width - labelViewInfo.Width) / 2, 48);
-                labelViewInfo.Visible = true;
-                timerVideoInfo.Enabled = true;
-            }
-        }
-
-        private void timerVideoInfo_Tick(object sender, EventArgs e)
-        {
-            if (labelViewInfo.Visible)
-            {
-                timerVideoInfo.Enabled = false;
-                labelViewInfo.Visible = false;
-            }
-        }
-
         private void relocateVideoControl()
         {
             if (videoCtrl.Visible)
             {
                 var pSize = videoView.Size;
                 videoCtrl.Size = new Size(pSize.Width, 96);
-                videoCtrl.Location = PointToScreen(new Point(0, pSize.Height - videoCtrl.Height));
+                videoCtrl.Location = PointToScreen(new Point(videoView.Location.X, videoView.Location.Y + pSize.Height - videoCtrl.Height));
                 videoCtrl.LayoutControls();
+            }
+        }
+
+        private void ToogleVideoCtrlVisible()
+        {
+            if (videoCtrl.Visible)
+            {
+                videoCtrl.Hide();
+            }
+            else
+            {
+                videoCtrl.Show();
+                relocateVideoControl();
             }
         }
 
@@ -243,13 +212,7 @@ namespace MyPlot
         {
             if (e.Button == MouseButtons.Left)
             {
-                if (videoCtrl.Visible)
-                {
-                    videoCtrl.Hide();
-                } else {
-                    videoCtrl.Show();
-                    relocateVideoControl();
-                }
+                ToogleVideoCtrlVisible();
             }
         }
     }

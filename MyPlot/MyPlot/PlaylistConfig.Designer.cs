@@ -51,6 +51,7 @@ namespace MyPlot
             this.tabPageWeb = new System.Windows.Forms.TabPage();
             this.tabPageRadio = new System.Windows.Forms.TabPage();
             this.label5 = new System.Windows.Forms.Label();
+            this.buttonCancel = new System.Windows.Forms.Button();
             this.tabControlPlaylist.SuspendLayout();
             this.tabPageVideo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarVideoVol)).BeginInit();
@@ -63,6 +64,7 @@ namespace MyPlot
             this.textBoxConfigFile.ReadOnly = true;
             this.textBoxConfigFile.Size = new System.Drawing.Size(509, 20);
             this.textBoxConfigFile.TabIndex = 16;
+            this.textBoxConfigFile.TextChanged += new System.EventHandler(this.textBoxConfigFile_TextChanged);
             // 
             // ButtonSaveAs
             // 
@@ -72,6 +74,7 @@ namespace MyPlot
             this.ButtonSaveAs.TabIndex = 20;
             this.ButtonSaveAs.Text = "Save As";
             this.ButtonSaveAs.UseVisualStyleBackColor = true;
+            this.ButtonSaveAs.Click += new System.EventHandler(this.ButtonSaveAs_Click);
             // 
             // ButtonSave
             // 
@@ -81,6 +84,7 @@ namespace MyPlot
             this.ButtonSave.TabIndex = 19;
             this.ButtonSave.Text = "Save";
             this.ButtonSave.UseVisualStyleBackColor = true;
+            this.ButtonSave.Click += new System.EventHandler(this.ButtonSave_Click);
             // 
             // ButtonOpen
             // 
@@ -147,7 +151,7 @@ namespace MyPlot
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(407, 43);
+            this.label4.Location = new System.Drawing.Point(407, 42);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(257, 16);
             this.label4.TabIndex = 10;
@@ -157,7 +161,7 @@ namespace MyPlot
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(-2, 43);
+            this.label3.Location = new System.Drawing.Point(-2, 42);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(326, 16);
             this.label3.TabIndex = 9;
@@ -167,7 +171,7 @@ namespace MyPlot
             // 
             this.linkLabelDownload.AutoSize = true;
             this.linkLabelDownload.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkLabelDownload.Location = new System.Drawing.Point(325, 43);
+            this.linkLabelDownload.Location = new System.Drawing.Point(325, 42);
             this.linkLabelDownload.Name = "linkLabelDownload";
             this.linkLabelDownload.Size = new System.Drawing.Size(85, 16);
             this.linkLabelDownload.TabIndex = 8;
@@ -184,6 +188,7 @@ namespace MyPlot
             this.trackBarVideoVol.Size = new System.Drawing.Size(103, 18);
             this.trackBarVideoVol.TabIndex = 7;
             this.trackBarVideoVol.TickStyle = System.Windows.Forms.TickStyle.None;
+            this.trackBarVideoVol.Scroll += new System.EventHandler(this.trackBarVideoVol_Scroll);
             // 
             // checkBoxVideoEnable
             // 
@@ -205,7 +210,8 @@ namespace MyPlot
             this.ListBoxVideoList.Size = new System.Drawing.Size(762, 342);
             this.ListBoxVideoList.TabIndex = 5;
             this.ListBoxVideoList.DragDrop += new System.Windows.Forms.DragEventHandler(this.ListBoxVideoList_DragDrop);
-            this.ListBoxVideoList.DragLeave += new System.EventHandler(this.ListBoxVideoList_DragLeave);
+            this.ListBoxVideoList.DragOver += new System.Windows.Forms.DragEventHandler(this.ListBoxVideoList_DragOver);
+            this.ListBoxVideoList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ListBoxVideoList_KeyDown);
             // 
             // LabelVideoVolText
             // 
@@ -220,7 +226,7 @@ namespace MyPlot
             // CheckBoxMainLoop
             // 
             this.CheckBoxMainLoop.AutoSize = true;
-            this.CheckBoxMainLoop.Location = new System.Drawing.Point(273, 12);
+            this.CheckBoxMainLoop.Location = new System.Drawing.Point(289, 12);
             this.CheckBoxMainLoop.Name = "CheckBoxMainLoop";
             this.CheckBoxMainLoop.Size = new System.Drawing.Size(50, 17);
             this.CheckBoxMainLoop.TabIndex = 0;
@@ -240,7 +246,7 @@ namespace MyPlot
             // CheckBoxMainReshuffle
             // 
             this.CheckBoxMainReshuffle.AutoSize = true;
-            this.CheckBoxMainReshuffle.Location = new System.Drawing.Point(348, 12);
+            this.CheckBoxMainReshuffle.Location = new System.Drawing.Point(364, 12);
             this.CheckBoxMainReshuffle.Name = "CheckBoxMainReshuffle";
             this.CheckBoxMainReshuffle.Size = new System.Drawing.Size(71, 17);
             this.CheckBoxMainReshuffle.TabIndex = 1;
@@ -282,15 +288,29 @@ namespace MyPlot
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(22, 481);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(222, 13);
+            this.label5.Size = new System.Drawing.Size(449, 13);
             this.label5.TabIndex = 23;
-            this.label5.Text = "Note: Drag files in to add, drag out to remove.";
+            this.label5.Text = "Note: Drag files(.mp4, .mov, .wmv, .flv, .avi, .mkv) in to add. Del key or right " +
+    "mouse to remove.";
+            // 
+            // buttonCancel
+            // 
+            this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.buttonCancel.Location = new System.Drawing.Point(600, 484);
+            this.buttonCancel.Name = "buttonCancel";
+            this.buttonCancel.Size = new System.Drawing.Size(87, 24);
+            this.buttonCancel.TabIndex = 24;
+            this.buttonCancel.Text = "Cancel";
+            this.buttonCancel.UseVisualStyleBackColor = true;
             // 
             // PlaylistSetup
             // 
+            this.AcceptButton = this.ButtonOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.buttonCancel;
             this.ClientSize = new System.Drawing.Size(807, 520);
+            this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.tabControlPlaylist);
             this.Controls.Add(this.textBoxConfigFile);
@@ -338,5 +358,6 @@ namespace MyPlot
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.LinkLabel linkLabelDownload;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Button buttonCancel;
     }
 }

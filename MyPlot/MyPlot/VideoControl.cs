@@ -45,17 +45,19 @@ namespace MyPlot
             trackBarPosition.Size = new Size(ClientSize.Width - 14 * 2, 22);
 
             int leftMargin = 334;  //left starting point of labelTitle
-            int rightMargin = 128; //right size reservation for other controls
+            int rightMargin = 146; //right size reservation for other controls
             labelTitle.Location = new Point(leftMargin, 48);
             labelTitle.Size = new Size(ClientSize.Width - leftMargin - rightMargin, 22);
 
-            buttonFullScreen.Location = new Point(ClientSize.Width - 14 - 36, 48);
-            buttonSpeed.Location = new Point(ClientSize.Width - 14 - 36 - 36, 48);
-            buttonSettings.Location = new Point(ClientSize.Width - 14 - 36 - 36 - 36, 48);
+            buttonFullScreen.Location = new Point(ClientSize.Width - 14 - 38, 48);
+            comboBoxSpeed.Location = new Point(ClientSize.Width - 14 - 36 - 36 - 18, 52);
+            buttonSettings.Location = new Point(ClientSize.Width - 14 - 36 - 36 - 36 - 18, 48);
         }
 
         private void VideoControl_Load(object sender, EventArgs e)
         {
+            comboBoxSpeed.SelectedIndex = 3;
+            
         }
 
         private void VideoControl_VisibleChanged(object sender, EventArgs e)
@@ -224,16 +226,22 @@ namespace MyPlot
 
         private void buttonFullScreen_Click(object sender, EventArgs e)
         {
-            if (_myplot.FormBorderStyle == FormBorderStyle.None)
+            _myplot.ToogleFullScreenMode();
+        }
+
+        private void comboBoxSpeed_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            float[] speeds = { 0.25f, 0.50f, 0.75f, 1.00f, 1.25f, 1.50f, 1.75f, 2.00f};
+            int index = comboBoxSpeed.SelectedIndex;
+            if (index >= 0)
             {
-                _myplot.FormBorderStyle = FormBorderStyle.Sizable;
-                _myplot.WindowState = FormWindowState.Normal;
+                _videoMP.SetRate(speeds[index]);
             }
-            else
-            {
-                _myplot.FormBorderStyle = FormBorderStyle.None;
-                _myplot.WindowState = FormWindowState.Maximized;
-            }
+        }
+
+        private void buttonCancel_Click(object sender, EventArgs e)
+        {
+            Visible = false;
         }
     }
 }
