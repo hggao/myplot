@@ -30,10 +30,9 @@ namespace MyPlot
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(VideoControl));
             this.buttonPlay = new System.Windows.Forms.Button();
-            this.buttonPause = new System.Windows.Forms.Button();
             this.buttonNext = new System.Windows.Forms.Button();
-            this.checkBoxSpeaker = new System.Windows.Forms.CheckBox();
             this.trackBarVolume = new System.Windows.Forms.TrackBar();
             this.trackBarPosition = new System.Windows.Forms.TrackBar();
             this.buttonFullScreen = new System.Windows.Forms.Button();
@@ -43,49 +42,35 @@ namespace MyPlot
             this.timerVCPUpdate = new System.Windows.Forms.Timer(this.components);
             this.comboBoxSpeed = new System.Windows.Forms.ComboBox();
             this.buttonCancel = new System.Windows.Forms.Button();
+            this.checkBoxSpeaker = new System.Windows.Forms.CheckBox();
+            this.buttonPause = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarVolume)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarPosition)).BeginInit();
             this.SuspendLayout();
             // 
             // buttonPlay
             // 
+            this.buttonPlay.FlatAppearance.BorderSize = 0;
+            this.buttonPlay.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonPlay.Image = ((System.Drawing.Image)(resources.GetObject("buttonPlay.Image")));
             this.buttonPlay.Location = new System.Drawing.Point(14, 42);
             this.buttonPlay.Name = "buttonPlay";
             this.buttonPlay.Size = new System.Drawing.Size(32, 32);
             this.buttonPlay.TabIndex = 0;
-            this.buttonPlay.Text = ">";
             this.buttonPlay.UseVisualStyleBackColor = true;
             this.buttonPlay.Click += new System.EventHandler(this.buttonPlay_Click);
             // 
-            // buttonPause
-            // 
-            this.buttonPause.Location = new System.Drawing.Point(14, 42);
-            this.buttonPause.Name = "buttonPause";
-            this.buttonPause.Size = new System.Drawing.Size(32, 32);
-            this.buttonPause.TabIndex = 1;
-            this.buttonPause.Text = "II";
-            this.buttonPause.UseVisualStyleBackColor = true;
-            this.buttonPause.Click += new System.EventHandler(this.buttonPause_Click);
-            // 
             // buttonNext
             // 
+            this.buttonNext.FlatAppearance.BorderSize = 0;
+            this.buttonNext.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonNext.Image = ((System.Drawing.Image)(resources.GetObject("buttonNext.Image")));
             this.buttonNext.Location = new System.Drawing.Point(46, 42);
             this.buttonNext.Name = "buttonNext";
             this.buttonNext.Size = new System.Drawing.Size(32, 32);
             this.buttonNext.TabIndex = 2;
-            this.buttonNext.Text = ">I";
             this.buttonNext.UseVisualStyleBackColor = true;
             this.buttonNext.Click += new System.EventHandler(this.buttonNext_Click);
-            // 
-            // checkBoxSpeaker
-            // 
-            this.checkBoxSpeaker.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBoxSpeaker.Location = new System.Drawing.Point(78, 42);
-            this.checkBoxSpeaker.Name = "checkBoxSpeaker";
-            this.checkBoxSpeaker.Size = new System.Drawing.Size(32, 32);
-            this.checkBoxSpeaker.TabIndex = 3;
-            this.checkBoxSpeaker.Text = ":<";
-            this.checkBoxSpeaker.UseVisualStyleBackColor = true;
             // 
             // trackBarVolume
             // 
@@ -115,21 +100,25 @@ namespace MyPlot
             // 
             // buttonFullScreen
             // 
+            this.buttonFullScreen.FlatAppearance.BorderSize = 0;
+            this.buttonFullScreen.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonFullScreen.Image = ((System.Drawing.Image)(resources.GetObject("buttonFullScreen.Image")));
             this.buttonFullScreen.Location = new System.Drawing.Point(970, 42);
             this.buttonFullScreen.Name = "buttonFullScreen";
             this.buttonFullScreen.Size = new System.Drawing.Size(32, 32);
             this.buttonFullScreen.TabIndex = 7;
-            this.buttonFullScreen.Text = "F";
             this.buttonFullScreen.UseVisualStyleBackColor = true;
             this.buttonFullScreen.Click += new System.EventHandler(this.buttonFullScreen_Click);
             // 
             // buttonSettings
             // 
+            this.buttonSettings.FlatAppearance.BorderSize = 0;
+            this.buttonSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonSettings.Image = ((System.Drawing.Image)(resources.GetObject("buttonSettings.Image")));
             this.buttonSettings.Location = new System.Drawing.Point(880, 42);
             this.buttonSettings.Name = "buttonSettings";
             this.buttonSettings.Size = new System.Drawing.Size(32, 32);
             this.buttonSettings.TabIndex = 8;
-            this.buttonSettings.Text = "*";
             this.buttonSettings.UseVisualStyleBackColor = true;
             // 
             // labelPosition
@@ -161,7 +150,9 @@ namespace MyPlot
             // 
             // comboBoxSpeed
             // 
+            this.comboBoxSpeed.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.comboBoxSpeed.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxSpeed.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.comboBoxSpeed.FormattingEnabled = true;
             this.comboBoxSpeed.Items.AddRange(new object[] {
             "0.25",
@@ -188,6 +179,31 @@ namespace MyPlot
             this.buttonCancel.Text = "Cancel";
             this.buttonCancel.UseVisualStyleBackColor = true;
             this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
+            // 
+            // checkBoxSpeaker
+            // 
+            this.checkBoxSpeaker.Appearance = System.Windows.Forms.Appearance.Button;
+            this.checkBoxSpeaker.FlatAppearance.BorderSize = 0;
+            this.checkBoxSpeaker.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.checkBoxSpeaker.Image = ((System.Drawing.Image)(resources.GetObject("checkBoxSpeaker.Image")));
+            this.checkBoxSpeaker.Location = new System.Drawing.Point(78, 42);
+            this.checkBoxSpeaker.Name = "checkBoxSpeaker";
+            this.checkBoxSpeaker.Size = new System.Drawing.Size(32, 32);
+            this.checkBoxSpeaker.TabIndex = 3;
+            this.checkBoxSpeaker.UseVisualStyleBackColor = true;
+            // 
+            // buttonPause
+            // 
+            this.buttonPause.FlatAppearance.BorderSize = 0;
+            this.buttonPause.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonPause.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.buttonPause.Image = ((System.Drawing.Image)(resources.GetObject("buttonPause.Image")));
+            this.buttonPause.Location = new System.Drawing.Point(14, 42);
+            this.buttonPause.Name = "buttonPause";
+            this.buttonPause.Size = new System.Drawing.Size(32, 32);
+            this.buttonPause.TabIndex = 1;
+            this.buttonPause.UseVisualStyleBackColor = true;
+            this.buttonPause.Click += new System.EventHandler(this.buttonPause_Click);
             // 
             // VideoControl
             // 

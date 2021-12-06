@@ -63,16 +63,6 @@ namespace MyPlot.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Bitmap1 {
-            get {
-                object obj = ResourceManager.GetObject("Bitmap1", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap music_notes {
             get {
                 object obj = ResourceManager.GetObject("music_notes", resourceCulture);
@@ -83,19 +73,9 @@ namespace MyPlot.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Pause {
+        internal static System.Drawing.Bitmap pause {
             get {
-                object obj = ResourceManager.GetObject("Pause", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Play {
-            get {
-                object obj = ResourceManager.GetObject("Play", resourceCulture);
+                object obj = ResourceManager.GetObject("pause", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
