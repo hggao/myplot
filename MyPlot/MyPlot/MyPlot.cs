@@ -532,5 +532,10 @@ namespace MyPlot
                 RadioPlayerStart();
             }
         }
+
+        private void videoView_DoubleClick(object sender, EventArgs e)
+        {
+            ToogleFullScreenMode();
+        }
     }
 }

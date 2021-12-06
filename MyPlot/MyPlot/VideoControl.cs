@@ -107,10 +107,10 @@ namespace MyPlot
             }
 
             //Volume Tracking
-            if (!trackBarVolume.ContainsFocus || !mouseLeftButtonDown)
+            if (!trackBarVideoVol.ContainsFocus || !mouseLeftButtonDown)
             {
                 int vol = _videoMP.Volume;
-                trackBarVolume.Value = vol >= 0 ? vol : 0;
+                trackBarVideoVol.Value = vol >= 0 ? vol : 0;
             }
 
             //Video playing position text
@@ -242,6 +242,30 @@ namespace MyPlot
         private void buttonCancel_Click(object sender, EventArgs e)
         {
             Visible = false;
+        }
+
+        private int previousVideoVol = 0;
+        private void checkBoxSpeaker_CheckedChanged(object sender, EventArgs e)
+        {
+            mouseInside = true;
+            if (checkBoxSpeaker.Checked)
+            {
+                checkBoxSpeaker.Image = Image.FromFile("muted.png");
+                previousVideoVol = trackBarVideoVol.Value;
+                trackBarVideoVol.Value = 0;
+                trackBarVideoVol.Enabled = false;
+            }
+            else
+            {
+                checkBoxSpeaker.Image = Image.FromFile("spkr.png");
+                trackBarVideoVol.Enabled = true;
+                trackBarVideoVol.Value = previousVideoVol;
+            }
+            _videoMP.Volume = trackBarVideoVol.Value;
+            if (_myplot.playersConfig != null)
+            {
+                _myplot.playersConfig.configData.mainPlayerConfig.volume = trackBarVideoVol.Value;
+            }
         }
     }
 }

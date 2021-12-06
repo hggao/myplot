@@ -88,6 +88,7 @@ namespace MyPlot
             this.videoView.TabIndex = 5;
             this.videoView.Text = " ";
             this.videoView.Visible = false;
+            this.videoView.DoubleClick += new System.EventHandler(this.videoView_DoubleClick);
             this.videoView.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.videoView_KeyPress);
             this.videoView.MouseClick += new System.Windows.Forms.MouseEventHandler(this.videoView_MouseClick);
             this.videoView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.videoView_MouseDown);

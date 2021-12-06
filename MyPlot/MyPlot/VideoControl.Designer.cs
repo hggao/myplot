@@ -33,7 +33,7 @@ namespace MyPlot
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(VideoControl));
             this.buttonPlay = new System.Windows.Forms.Button();
             this.buttonNext = new System.Windows.Forms.Button();
-            this.trackBarVolume = new System.Windows.Forms.TrackBar();
+            this.trackBarVideoVol = new System.Windows.Forms.TrackBar();
             this.trackBarPosition = new System.Windows.Forms.TrackBar();
             this.buttonFullScreen = new System.Windows.Forms.Button();
             this.buttonSettings = new System.Windows.Forms.Button();
@@ -44,7 +44,7 @@ namespace MyPlot
             this.buttonCancel = new System.Windows.Forms.Button();
             this.checkBoxSpeaker = new System.Windows.Forms.CheckBox();
             this.buttonPause = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBarVolume)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarVideoVol)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarPosition)).BeginInit();
             this.SuspendLayout();
             // 
@@ -72,18 +72,18 @@ namespace MyPlot
             this.buttonNext.UseVisualStyleBackColor = true;
             this.buttonNext.Click += new System.EventHandler(this.buttonNext_Click);
             // 
-            // trackBarVolume
+            // trackBarVideoVol
             // 
-            this.trackBarVolume.AutoSize = false;
-            this.trackBarVolume.Location = new System.Drawing.Point(110, 48);
-            this.trackBarVolume.Maximum = 100;
-            this.trackBarVolume.Name = "trackBarVolume";
-            this.trackBarVolume.Size = new System.Drawing.Size(100, 22);
-            this.trackBarVolume.TabIndex = 4;
-            this.trackBarVolume.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.trackBarVolume.Scroll += new System.EventHandler(this.trackBarVolume_Scroll);
-            this.trackBarVolume.MouseDown += new System.Windows.Forms.MouseEventHandler(this.trackBarPosition_MouseDown);
-            this.trackBarVolume.MouseUp += new System.Windows.Forms.MouseEventHandler(this.trackBarPosition_MouseUp);
+            this.trackBarVideoVol.AutoSize = false;
+            this.trackBarVideoVol.Location = new System.Drawing.Point(110, 48);
+            this.trackBarVideoVol.Maximum = 100;
+            this.trackBarVideoVol.Name = "trackBarVideoVol";
+            this.trackBarVideoVol.Size = new System.Drawing.Size(100, 22);
+            this.trackBarVideoVol.TabIndex = 4;
+            this.trackBarVideoVol.TickStyle = System.Windows.Forms.TickStyle.None;
+            this.trackBarVideoVol.Scroll += new System.EventHandler(this.trackBarVolume_Scroll);
+            this.trackBarVideoVol.MouseDown += new System.Windows.Forms.MouseEventHandler(this.trackBarPosition_MouseDown);
+            this.trackBarVideoVol.MouseUp += new System.Windows.Forms.MouseEventHandler(this.trackBarPosition_MouseUp);
             // 
             // trackBarPosition
             // 
@@ -191,6 +191,7 @@ namespace MyPlot
             this.checkBoxSpeaker.Size = new System.Drawing.Size(32, 32);
             this.checkBoxSpeaker.TabIndex = 3;
             this.checkBoxSpeaker.UseVisualStyleBackColor = true;
+            this.checkBoxSpeaker.CheckedChanged += new System.EventHandler(this.checkBoxSpeaker_CheckedChanged);
             // 
             // buttonPause
             // 
@@ -219,7 +220,7 @@ namespace MyPlot
             this.Controls.Add(this.buttonSettings);
             this.Controls.Add(this.buttonFullScreen);
             this.Controls.Add(this.trackBarPosition);
-            this.Controls.Add(this.trackBarVolume);
+            this.Controls.Add(this.trackBarVideoVol);
             this.Controls.Add(this.checkBoxSpeaker);
             this.Controls.Add(this.buttonNext);
             this.Controls.Add(this.buttonPause);
@@ -233,7 +234,7 @@ namespace MyPlot
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.VideoControl_Paint);
             this.MouseEnter += new System.EventHandler(this.VideoControl_MouseEnter);
             this.MouseLeave += new System.EventHandler(this.VideoControl_MouseLeave);
-            ((System.ComponentModel.ISupportInitialize)(this.trackBarVolume)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarVideoVol)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarPosition)).EndInit();
             this.ResumeLayout(false);
 
@@ -245,7 +246,7 @@ namespace MyPlot
         private System.Windows.Forms.Button buttonPause;
         private System.Windows.Forms.Button buttonNext;
         private System.Windows.Forms.CheckBox checkBoxSpeaker;
-        private System.Windows.Forms.TrackBar trackBarVolume;
+        private System.Windows.Forms.TrackBar trackBarVideoVol;
         private System.Windows.Forms.TrackBar trackBarPosition;
         private System.Windows.Forms.Button buttonFullScreen;
         private System.Windows.Forms.Button buttonSettings;
