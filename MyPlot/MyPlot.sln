@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.31729.503
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyPlot", "MyPlot\MyPlot.csproj", "{3E59A299-3BD9-44FF-9A6E-386EF223BC02}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "My Plot Installer", "My Plot Installer\My Plot Installer.vdproj", "{73147EA6-AC64-476C-85AF-59AF99B337B3}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,8 +15,6 @@ Global
 		{3E59A299-3BD9-44FF-9A6E-386EF223BC02}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E59A299-3BD9-44FF-9A6E-386EF223BC02}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E59A299-3BD9-44FF-9A6E-386EF223BC02}.Release|Any CPU.Build.0 = Release|Any CPU
-		{73147EA6-AC64-476C-85AF-59AF99B337B3}.Debug|Any CPU.ActiveCfg = Debug
-		{73147EA6-AC64-476C-85AF-59AF99B337B3}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
