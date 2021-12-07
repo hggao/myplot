@@ -117,10 +117,33 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="menuMain.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 13</value>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="buttonNext.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAIAAABvFaqvAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        wwAADsMBx2+oZAAAAK9JREFUOE/NkssNwyAQRF0TFdAIzVERFXBLHxkxY0KsNdnYlux38n70NAaWeBGP
+        FeWc+eHhtaK6IRG6tdaUEss5tADVjY8IwOWJxmWguvElItCFENg30d5PEZhH05JHREopZjSN/SJgRtPs
+        LxHZuNQ9IALjDah1WNRfmVr3/NoYpKOZX4Tr53SDxk7RBQ9yvCAT7c1FkyAdre6JzHM1oQWobki0d64m
+        0pii8zxNFOMb7aL3f+OAbyMAAAAASUVORK5CYII=
+</value>
+  </data>
+  <metadata name="timerACPUpdate.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
   </metadata>
-  <metadata name="timerAudio.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>127, 13</value>
-  </metadata>
+  <data name="checkBoxSpeaker.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAIAAABvFaqvAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        wwAADsMBx2+oZAAAALdJREFUOE/N09ENwyAMRdHOxAQswjZM0j3YgQn4Y48+6bmWRaBUJqp6v2wlOVJE
+        8og39VsohCDTuj0EpbUmy7oNBKX3fgpROYVUQX7IKkihnDOHawLhjqdJgHcKYcBVzkMClVLkoVkWwppS
+        4mrzQLVWrjYPpKvNAyGuNg+Em7naPND0IxAIB8GDZ/oKzEK4ynlIoCH+qMIYaHrwbA4hayn0oSWE1DqF
+        EK0bIARr+ikP7aEv+zcoxheE2KqHi/QHtwAAAABJRU5ErkJggg==
+</value>
+  </data>
+  <data name="buttonPlayPause.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAIAAABvFaqvAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        wwAADsMBx2+oZAAAAERJREFUOE/tzNEJACAUQtFGe7O+3dqjSEFrhPB8XsFRR3fP2y6YHpwNeo6Es0HP
+        kXA26DkSzgY9R8LZoOdIOBv0b4+qFntP5cYk8+hrAAAAAElFTkSuQmCC
+</value>
+  </data>
 </root>

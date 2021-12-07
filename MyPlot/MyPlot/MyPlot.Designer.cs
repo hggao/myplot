@@ -29,6 +29,7 @@ namespace MyPlot
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.webView = new Microsoft.Web.WebView2.WinForms.WebView2();
             this.videoView = new LibVLCSharp.WinForms.VideoView();
             this.menuMain = new System.Windows.Forms.MenuStrip();
@@ -54,14 +55,13 @@ namespace MyPlot
             this.userGuideToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.radioPicBox = new System.Windows.Forms.PictureBox();
-            this.audioPicBox = new System.Windows.Forms.PictureBox();
             this.radioView = new LibVLCSharp.WinForms.VideoView();
             this.audioView = new LibVLCSharp.WinForms.VideoView();
+            this.timerAudio = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.webView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.videoView)).BeginInit();
             this.menuMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.radioPicBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.audioPicBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radioView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.audioView)).BeginInit();
             this.SuspendLayout();
@@ -281,17 +281,6 @@ namespace MyPlot
             this.radioPicBox.TabStop = false;
             this.radioPicBox.Visible = false;
             // 
-            // audioPicBox
-            // 
-            this.audioPicBox.Image = global::MyPlot.Properties.Resources.music_notes;
-            this.audioPicBox.Location = new System.Drawing.Point(169, 37);
-            this.audioPicBox.Name = "audioPicBox";
-            this.audioPicBox.Size = new System.Drawing.Size(96, 54);
-            this.audioPicBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.audioPicBox.TabIndex = 9;
-            this.audioPicBox.TabStop = false;
-            this.audioPicBox.Visible = false;
-            // 
             // radioView
             // 
             this.radioView.BackColor = System.Drawing.SystemColors.Control;
@@ -307,16 +296,26 @@ namespace MyPlot
             // 
             // audioView
             // 
-            this.audioView.BackColor = System.Drawing.SystemColors.Control;
-            this.audioView.BackgroundImage = global::MyPlot.Properties.Resources.music_notes;
+            this.audioView.BackColor = System.Drawing.Color.Black;
             this.audioView.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.audioView.Location = new System.Drawing.Point(67, 37);
             this.audioView.MediaPlayer = null;
             this.audioView.Name = "audioView";
-            this.audioView.Size = new System.Drawing.Size(96, 54);
+            this.audioView.Size = new System.Drawing.Size(112, 64);
             this.audioView.TabIndex = 6;
             this.audioView.Text = "audioView";
             this.audioView.Visible = false;
+            this.audioView.Paint += new System.Windows.Forms.PaintEventHandler(this.audioView_Paint);
+            this.audioView.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.audioView_KeyPress);
+            this.audioView.MouseClick += new System.Windows.Forms.MouseEventHandler(this.audioView_MouseClick);
+            this.audioView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.audioView_MouseDown);
+            this.audioView.MouseMove += new System.Windows.Forms.MouseEventHandler(this.audioView_MouseMove);
+            this.audioView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.audioView_MouseUp);
+            // 
+            // timerAudio
+            // 
+            this.timerAudio.Interval = 50;
+            this.timerAudio.Tick += new System.EventHandler(this.timerAudio_Tick);
             // 
             // MyPlot
             // 
@@ -326,7 +325,6 @@ namespace MyPlot
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1152, 648);
             this.Controls.Add(this.radioPicBox);
-            this.Controls.Add(this.audioPicBox);
             this.Controls.Add(this.menuMain);
             this.Controls.Add(this.radioView);
             this.Controls.Add(this.audioView);
@@ -346,7 +344,6 @@ namespace MyPlot
             this.menuMain.ResumeLayout(false);
             this.menuMain.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.radioPicBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.audioPicBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radioView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.audioView)).EndInit();
             this.ResumeLayout(false);
@@ -370,7 +367,6 @@ namespace MyPlot
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fullScreenToolStripMenuItem;
-        private System.Windows.Forms.PictureBox audioPicBox;
         private System.Windows.Forms.PictureBox radioPicBox;
         private System.Windows.Forms.ToolStripMenuItem videoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem enableDisableVideo;
@@ -383,6 +379,7 @@ namespace MyPlot
         private System.Windows.Forms.ToolStripMenuItem backwardToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem radioToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem enableToolStripMenuItem3;
+        private System.Windows.Forms.Timer timerAudio;
     }
 }
 

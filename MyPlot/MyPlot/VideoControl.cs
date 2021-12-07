@@ -57,7 +57,6 @@ namespace MyPlot
         private void VideoControl_Load(object sender, EventArgs e)
         {
             comboBoxSpeed.SelectedIndex = 3;
-            
         }
 
         private void VideoControl_VisibleChanged(object sender, EventArgs e)
@@ -176,8 +175,7 @@ namespace MyPlot
         {
             mouseInside = true;
             TrackBar tb = (TrackBar)sender;
-            float newPos = (float)tb.Value / (float)tb.Maximum;
-            _videoMP.Position = newPos;
+            _videoMP.Position = (float)tb.Value / (float)tb.Maximum;
         }
 
         private void trackBarVolume_Scroll(object sender, EventArgs e)

@@ -2,6 +2,7 @@
 using System.IO;
 using System.Diagnostics;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -9,6 +10,8 @@ using LibVLCSharp;
 using LibVLCSharp.Shared;
 using LibVLCSharp.WinForms;
 using Microsoft.Web.WebView2.Core;
+using NAudio.CoreAudioApi;
+using NAudio.Wave;
 
 
 namespace MyPlot
@@ -26,6 +29,14 @@ namespace MyPlot
         public MediaPlayer _radioMP;
 
         private VideoControl videoCtrl = null;
+        private AudioControl audioCtrl = null;
+
+        private WasapiLoopbackCapture capture = null;
+        private WaveFormat waveFormat = null;
+
+        //audio visualization
+        private const int SAMPLE_LEN = 100;
+        private readonly short[] samples;
 
         public MyPlot()
         {
@@ -54,11 +65,14 @@ namespace MyPlot
             _audioMP.SetRole(MediaPlayerRole.Music);
             _audioMP.EndReached += AudioPlayer_EndReached;
             audioView.MediaPlayer = _audioMP;
+            audioCtrl = new AudioControl(this);
 
             _radioMP = new MediaPlayer(_libVLC);
             _radioMP.SetRole(MediaPlayerRole.Music);
             _radioMP.EndReached += RadioPlayer_EndReached;
             radioView.MediaPlayer = _radioMP;
+
+            samples = new short[SAMPLE_LEN];
         }
 
         private async void MyPlot_Load(object sender, EventArgs e)
@@ -75,6 +89,10 @@ namespace MyPlot
             }
             webView.CoreWebView2.NewWindowRequested += CoreWebView2_NewWindowRequested;
 
+            //Setup Capture
+            capture = new WasapiLoopbackCapture();
+            waveFormat = capture.WaveFormat;
+            capture.DataAvailable += OnWaveInDataAvailable;
             formLoaded = true;
 
             //Based on configration to set all controls appearance
@@ -85,6 +103,7 @@ namespace MyPlot
             WebPlayerStart();
             AudioPlayerStart();
             RadioPlayerStart();
+
         }
 
         private void MyPlot_FormClosed(object sender, FormClosedEventArgs e)
@@ -96,6 +115,8 @@ namespace MyPlot
             _radioMP.Stop();
             _radioMP.Dispose();
             _libVLC.Dispose();
+
+            capture?.Dispose();
         }
 
         private async Task InitializeAsync()
@@ -118,12 +139,14 @@ namespace MyPlot
         private void MyPlot_Move(object sender, EventArgs e)
         {
             relocateVideoControl();
+            relocateAudioControl();
         }
 
         private void MyPlot_Resize(object sender, EventArgs e)
         {
             SetPlayerControlAppearance();
             relocateVideoControl();
+            relocateAudioControl();
         }
 
         private void SetPlayerControlAppearance()
@@ -162,6 +185,17 @@ namespace MyPlot
             }
         }
 
+
+        [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
+        private static extern IntPtr CreateRoundRectRgn
+        (
+            int nLeftRect,     // x-coordinate of upper-left corner
+            int nTopRect,      // y-coordinate of upper-left corner
+            int nRightRect,    // x-coordinate of lower-right corner
+            int nBottomRect,   // y-coordinate of lower-right corner
+            int nWidthEllipse, // width of ellipse
+            int nHeightEllipse // height of ellipse
+        );
         private void SetAudioViewAppearance()
         {
             Size newSize = ClientSize;
@@ -177,14 +211,23 @@ namespace MyPlot
                 {
                     audioView.Location = new Point((ClientSize.Width - audioView.Width) / 2, (ClientSize.Height - audioView.Height) / 2);
                 }
-                audioPicBox.Location = audioView.Location;
+
+                audioView.Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, audioView.Width, audioView.Height, 20, 20));
                 audioView.Visible = true;
-                audioPicBox.Visible = true;
+                timerAudio.Enabled = true;
+                if (capture != null && capture.CaptureState == CaptureState.Stopped)
+                {
+                    capture.StartRecording();
+                }
             }
             else
             {
                 audioView.Visible = false;
-                audioPicBox.Visible = false;
+                timerAudio.Enabled = false;
+                if (capture != null && capture.CaptureState == CaptureState.Capturing)
+                {
+                    capture.StopRecording();
+                }
             }
         }
 
@@ -536,6 +579,103 @@ namespace MyPlot
         private void videoView_DoubleClick(object sender, EventArgs e)
         {
             ToogleFullScreenMode();
+        }
+
+        private void OnWaveInDataAvailable(object sender, WaveInEventArgs e)
+        {
+            if (e.BytesRecorded == 0)
+            {
+                for (int i = 0; i < SAMPLE_LEN; i++)
+                    samples[i] = 0;
+                return;
+            }
+
+            var waveBuffer = new WaveBuffer(e.Buffer);
+            int nblocks = e.BytesRecorded / waveFormat.BlockAlign;
+            int nsamples = nblocks * waveFormat.Channels;
+            short value;
+            int n = 0;
+            for (int i = 0; i < nsamples && n < SAMPLE_LEN; )
+            {
+                i++; //Skip sample of left channel
+                samples[n] = (short)(waveBuffer.FloatBuffer[i++] * 70); //Should be 50, but when overall volume low, the number is too small
+                while (i * SAMPLE_LEN / nsamples == n)
+                {
+                    i++; //Skip sampe of left channel
+                    value = (short)(waveBuffer.FloatBuffer[i++] * 70); //Should be 50, but when overall volume low, the number is too small
+                    if (samples[n] > 0 && samples[n] < value || samples[n] < 0 && samples[n] > value)
+                    {
+                        samples[n] = value;
+                    }
+                }
+                n++;
+            }
+            while (n < SAMPLE_LEN)
+                samples[n++] = 0;
+        }
+
+        private void audioView_Paint(object sender, PaintEventArgs e)
+        {
+            var p = new Pen(Color.FromArgb(255, 255, 224, 0));
+            e.Graphics.Clear(Color.Black);
+            var y = audioView.Height / 2;
+            for (int x = 0; x < SAMPLE_LEN; x++)
+            {
+                e.Graphics.DrawLine(p, 6+x, y, 6+x, y + samples[x]);
+            }
+        }
+
+        private void timerAudio_Tick(object sender, EventArgs e)
+        {
+            audioView.Invalidate();
+        }
+
+        private void relocateAudioControl()
+        {
+            if (audioCtrl.Visible)
+            {
+                audioCtrl.Location = PointToScreen(new Point(audioView.Location.X + audioView.Width - 1, audioView.Location.Y));
+            }
+        }
+
+        private void audioView_KeyPress(object sender, KeyPressEventArgs e)
+        {
+
+        }
+
+        private void audioView_MouseDown(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void ToogleAudioCtrlVisible()
+        {
+            if (audioCtrl.Visible)
+            {
+                audioCtrl.Hide();
+            }
+            else
+            {
+                audioCtrl.Show();
+                relocateAudioControl();
+            }
+        }
+
+        private void audioView_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                ToogleAudioCtrlVisible();
+            }
+        }
+
+        private void audioView_MouseMove(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void audioView_MouseUp(object sender, MouseEventArgs e)
+        {
         }
     }
 }

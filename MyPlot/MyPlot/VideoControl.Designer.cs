@@ -57,6 +57,7 @@ namespace MyPlot
             this.buttonPlay.Name = "buttonPlay";
             this.buttonPlay.Size = new System.Drawing.Size(32, 32);
             this.buttonPlay.TabIndex = 0;
+            this.buttonPlay.TabStop = false;
             this.buttonPlay.UseVisualStyleBackColor = true;
             this.buttonPlay.Click += new System.EventHandler(this.buttonPlay_Click);
             // 
@@ -69,6 +70,7 @@ namespace MyPlot
             this.buttonNext.Name = "buttonNext";
             this.buttonNext.Size = new System.Drawing.Size(32, 32);
             this.buttonNext.TabIndex = 2;
+            this.buttonNext.TabStop = false;
             this.buttonNext.UseVisualStyleBackColor = true;
             this.buttonNext.Click += new System.EventHandler(this.buttonNext_Click);
             // 
@@ -80,6 +82,7 @@ namespace MyPlot
             this.trackBarVideoVol.Name = "trackBarVideoVol";
             this.trackBarVideoVol.Size = new System.Drawing.Size(100, 22);
             this.trackBarVideoVol.TabIndex = 4;
+            this.trackBarVideoVol.TabStop = false;
             this.trackBarVideoVol.TickStyle = System.Windows.Forms.TickStyle.None;
             this.trackBarVideoVol.Scroll += new System.EventHandler(this.trackBarVolume_Scroll);
             this.trackBarVideoVol.MouseDown += new System.Windows.Forms.MouseEventHandler(this.trackBarPosition_MouseDown);
@@ -93,6 +96,7 @@ namespace MyPlot
             this.trackBarPosition.Name = "trackBarPosition";
             this.trackBarPosition.Size = new System.Drawing.Size(1000, 22);
             this.trackBarPosition.TabIndex = 5;
+            this.trackBarPosition.TabStop = false;
             this.trackBarPosition.TickStyle = System.Windows.Forms.TickStyle.None;
             this.trackBarPosition.Scroll += new System.EventHandler(this.trackBarPosition_Scroll);
             this.trackBarPosition.MouseDown += new System.Windows.Forms.MouseEventHandler(this.trackBarPosition_MouseDown);
@@ -107,6 +111,7 @@ namespace MyPlot
             this.buttonFullScreen.Name = "buttonFullScreen";
             this.buttonFullScreen.Size = new System.Drawing.Size(32, 32);
             this.buttonFullScreen.TabIndex = 7;
+            this.buttonFullScreen.TabStop = false;
             this.buttonFullScreen.UseVisualStyleBackColor = true;
             this.buttonFullScreen.Click += new System.EventHandler(this.buttonFullScreen_Click);
             // 
@@ -119,6 +124,7 @@ namespace MyPlot
             this.buttonSettings.Name = "buttonSettings";
             this.buttonSettings.Size = new System.Drawing.Size(32, 32);
             this.buttonSettings.TabIndex = 8;
+            this.buttonSettings.TabStop = false;
             this.buttonSettings.UseVisualStyleBackColor = true;
             // 
             // labelPosition
@@ -167,6 +173,7 @@ namespace MyPlot
             this.comboBoxSpeed.Name = "comboBoxSpeed";
             this.comboBoxSpeed.Size = new System.Drawing.Size(45, 21);
             this.comboBoxSpeed.TabIndex = 11;
+            this.comboBoxSpeed.TabStop = false;
             this.comboBoxSpeed.SelectedIndexChanged += new System.EventHandler(this.comboBoxSpeed_SelectedIndexChanged);
             // 
             // buttonCancel
@@ -176,6 +183,7 @@ namespace MyPlot
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(1, 1);
             this.buttonCancel.TabIndex = 12;
+            this.buttonCancel.TabStop = false;
             this.buttonCancel.Text = "Cancel";
             this.buttonCancel.UseVisualStyleBackColor = true;
             this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
@@ -190,6 +198,7 @@ namespace MyPlot
             this.checkBoxSpeaker.Name = "checkBoxSpeaker";
             this.checkBoxSpeaker.Size = new System.Drawing.Size(32, 32);
             this.checkBoxSpeaker.TabIndex = 3;
+            this.checkBoxSpeaker.TabStop = false;
             this.checkBoxSpeaker.UseVisualStyleBackColor = true;
             this.checkBoxSpeaker.CheckedChanged += new System.EventHandler(this.checkBoxSpeaker_CheckedChanged);
             // 
@@ -203,6 +212,7 @@ namespace MyPlot
             this.buttonPause.Name = "buttonPause";
             this.buttonPause.Size = new System.Drawing.Size(32, 32);
             this.buttonPause.TabIndex = 1;
+            this.buttonPause.TabStop = false;
             this.buttonPause.UseVisualStyleBackColor = true;
             this.buttonPause.Click += new System.EventHandler(this.buttonPause_Click);
             // 
