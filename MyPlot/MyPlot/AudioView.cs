@@ -129,7 +129,7 @@ namespace MyPlot
 
         private void relocateAudioControl()
         {
-            if (audioCtrl != null && audioCtrl.Visible)
+            if (audioCtrl.Visible)
             {
                 audioCtrl.Location = PointToScreen(new Point(audioView.Location.X + audioView.Width - 1, audioView.Location.Y));
             }

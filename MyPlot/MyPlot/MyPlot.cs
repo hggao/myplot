@@ -106,6 +106,8 @@ namespace MyPlot
             waveFormat = capture.WaveFormat;
             capture.DataAvailable += OnWaveInDataAvailable;
 
+            //In Chinese Windows, app would receive resize event much earlier before all controls are actually created
+            //So that we use this flag to indicate would could only do resize after this flag set.
             formLoaded = true;
 
             //Based on configration to set all controls appearance
@@ -157,6 +159,11 @@ namespace MyPlot
 
         private void MyPlot_Resize(object sender, EventArgs e)
         {
+            //In some windows, we found form resize was called before form loaded, if so we are not ready yet
+            if (!formLoaded)
+            {
+                return;
+            }
             SetPlayerControlAppearance();
             relocateVideoControl();
             relocateAudioControl();
@@ -164,11 +171,6 @@ namespace MyPlot
 
         private void SetPlayerControlAppearance()
         {
-            //In some windows, we found form resize was called before form loaded, if so we are not ready yet
-            if (!formLoaded)
-            {
-                return;
-            }
             SetVideoviewAppearance();
             SetAudioViewAppearance();
             SetWebViewAppearance();

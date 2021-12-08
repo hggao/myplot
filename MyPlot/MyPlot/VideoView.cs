@@ -194,7 +194,7 @@ namespace MyPlot
 
         private void relocateVideoControl()
         {
-            if (videoCtrl != null && videoCtrl.Visible)
+            if (videoCtrl.Visible)
             {
                 var pSize = videoView.Size;
                 videoCtrl.Size = new Size(pSize.Width, 96);
