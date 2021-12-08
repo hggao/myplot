@@ -35,9 +35,9 @@ namespace MyPlot
             this.labelTitle = new System.Windows.Forms.Label();
             this.labelPosition = new System.Windows.Forms.Label();
             this.trackBarAudioVol = new System.Windows.Forms.TrackBar();
-            this.buttonNext = new System.Windows.Forms.Button();
             this.timerACPUpdate = new System.Windows.Forms.Timer(this.components);
             this.buttonCancel = new System.Windows.Forms.Button();
+            this.buttonNext = new System.Windows.Forms.Button();
             this.checkBoxSpeaker = new System.Windows.Forms.CheckBox();
             this.buttonPlayPause = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarAudioPos)).BeginInit();
@@ -94,6 +94,23 @@ namespace MyPlot
             this.trackBarAudioVol.MouseDown += new System.Windows.Forms.MouseEventHandler(this.trackBarAudioPos_MouseDown);
             this.trackBarAudioVol.MouseUp += new System.Windows.Forms.MouseEventHandler(this.trackBarAudioPos_MouseUp);
             // 
+            // timerACPUpdate
+            // 
+            this.timerACPUpdate.Interval = 50;
+            this.timerACPUpdate.Tick += new System.EventHandler(this.timerACPUpdate_Tick);
+            // 
+            // buttonCancel
+            // 
+            this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.buttonCancel.Location = new System.Drawing.Point(598, 61);
+            this.buttonCancel.Name = "buttonCancel";
+            this.buttonCancel.Size = new System.Drawing.Size(1, 1);
+            this.buttonCancel.TabIndex = 24;
+            this.buttonCancel.TabStop = false;
+            this.buttonCancel.Text = "Cancel";
+            this.buttonCancel.UseVisualStyleBackColor = true;
+            this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
+            // 
             // buttonNext
             // 
             this.buttonNext.FlatAppearance.BorderSize = 0;
@@ -106,21 +123,6 @@ namespace MyPlot
             this.buttonNext.TabStop = false;
             this.buttonNext.UseVisualStyleBackColor = true;
             this.buttonNext.Click += new System.EventHandler(this.buttonNext_Click);
-            // 
-            // timerACPUpdate
-            // 
-            this.timerACPUpdate.Interval = 50;
-            this.timerACPUpdate.Tick += new System.EventHandler(this.timerACPUpdate_Tick);
-            // 
-            // buttonCancel
-            // 
-            this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(597, 61);
-            this.buttonCancel.Name = "buttonCancel";
-            this.buttonCancel.Size = new System.Drawing.Size(1, 1);
-            this.buttonCancel.TabIndex = 24;
-            this.buttonCancel.Text = "Cancel";
-            this.buttonCancel.UseVisualStyleBackColor = true;
             // 
             // checkBoxSpeaker
             // 

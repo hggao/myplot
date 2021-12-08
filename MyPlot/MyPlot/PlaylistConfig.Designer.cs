@@ -37,9 +37,6 @@ namespace MyPlot
             this.ButtonOK = new System.Windows.Forms.Button();
             this.tabControlPlaylist = new System.Windows.Forms.TabControl();
             this.tabPageVideo = new System.Windows.Forms.TabPage();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.linkLabelDownload = new System.Windows.Forms.LinkLabel();
             this.trackBarVideoVol = new System.Windows.Forms.TrackBar();
             this.checkBoxVideoEnable = new System.Windows.Forms.CheckBox();
             this.ListBoxVideoList = new System.Windows.Forms.ListBox();
@@ -50,11 +47,26 @@ namespace MyPlot
             this.tabPageAudio = new System.Windows.Forms.TabPage();
             this.tabPageWeb = new System.Windows.Forms.TabPage();
             this.tabPageRadio = new System.Windows.Forms.TabPage();
-            this.label5 = new System.Windows.Forms.Label();
+            this.labelNote = new System.Windows.Forms.Label();
             this.buttonCancel = new System.Windows.Forms.Button();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.linkLabelAudioDownload = new System.Windows.Forms.LinkLabel();
+            this.trackBarAudioVol = new System.Windows.Forms.TrackBar();
+            this.checkBoxAudioEnable = new System.Windows.Forms.CheckBox();
+            this.listBoxAudioList = new System.Windows.Forms.ListBox();
+            this.labelAudioVolText = new System.Windows.Forms.Label();
+            this.checkBoxAudioLoop = new System.Windows.Forms.CheckBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.checkBoxAudioReshuffle = new System.Windows.Forms.CheckBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.linkLabelVideoDownload = new System.Windows.Forms.LinkLabel();
             this.tabControlPlaylist.SuspendLayout();
             this.tabPageVideo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarVideoVol)).BeginInit();
+            this.tabPageAudio.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarAudioVol)).BeginInit();
             this.SuspendLayout();
             // 
             // textBoxConfigFile
@@ -126,12 +138,13 @@ namespace MyPlot
             this.tabControlPlaylist.SelectedIndex = 0;
             this.tabControlPlaylist.Size = new System.Drawing.Size(772, 429);
             this.tabControlPlaylist.TabIndex = 22;
+            this.tabControlPlaylist.Selected += new System.Windows.Forms.TabControlEventHandler(this.tabControlPlaylist_Selected);
             // 
             // tabPageVideo
             // 
-            this.tabPageVideo.Controls.Add(this.label4);
-            this.tabPageVideo.Controls.Add(this.label3);
-            this.tabPageVideo.Controls.Add(this.linkLabelDownload);
+            this.tabPageVideo.Controls.Add(this.label5);
+            this.tabPageVideo.Controls.Add(this.label8);
+            this.tabPageVideo.Controls.Add(this.linkLabelVideoDownload);
             this.tabPageVideo.Controls.Add(this.trackBarVideoVol);
             this.tabPageVideo.Controls.Add(this.checkBoxVideoEnable);
             this.tabPageVideo.Controls.Add(this.ListBoxVideoList);
@@ -146,38 +159,6 @@ namespace MyPlot
             this.tabPageVideo.TabIndex = 0;
             this.tabPageVideo.Text = "Video";
             this.tabPageVideo.UseVisualStyleBackColor = true;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(407, 42);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(257, 16);
-            this.label4.TabIndex = 10;
-            this.label4.Text = "to your PC, then drag and drop here.";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(-2, 42);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(326, 16);
-            this.label3.TabIndex = 9;
-            this.label3.Text = "Download your wanted scenery video from our";
-            // 
-            // linkLabelDownload
-            // 
-            this.linkLabelDownload.AutoSize = true;
-            this.linkLabelDownload.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkLabelDownload.Location = new System.Drawing.Point(325, 42);
-            this.linkLabelDownload.Name = "linkLabelDownload";
-            this.linkLabelDownload.Size = new System.Drawing.Size(85, 16);
-            this.linkLabelDownload.TabIndex = 8;
-            this.linkLabelDownload.TabStop = true;
-            this.linkLabelDownload.Text = "Server Site";
-            this.linkLabelDownload.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelDownload_LinkClicked);
             // 
             // trackBarVideoVol
             // 
@@ -255,6 +236,16 @@ namespace MyPlot
             // 
             // tabPageAudio
             // 
+            this.tabPageAudio.Controls.Add(this.label6);
+            this.tabPageAudio.Controls.Add(this.label7);
+            this.tabPageAudio.Controls.Add(this.linkLabelAudioDownload);
+            this.tabPageAudio.Controls.Add(this.trackBarAudioVol);
+            this.tabPageAudio.Controls.Add(this.checkBoxAudioEnable);
+            this.tabPageAudio.Controls.Add(this.listBoxAudioList);
+            this.tabPageAudio.Controls.Add(this.labelAudioVolText);
+            this.tabPageAudio.Controls.Add(this.checkBoxAudioLoop);
+            this.tabPageAudio.Controls.Add(this.label9);
+            this.tabPageAudio.Controls.Add(this.checkBoxAudioReshuffle);
             this.tabPageAudio.Location = new System.Drawing.Point(4, 22);
             this.tabPageAudio.Name = "tabPageAudio";
             this.tabPageAudio.Padding = new System.Windows.Forms.Padding(3);
@@ -283,14 +274,14 @@ namespace MyPlot
             this.tabPageRadio.Text = "Radio";
             this.tabPageRadio.UseVisualStyleBackColor = true;
             // 
-            // label5
+            // labelNote
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(22, 481);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(449, 13);
-            this.label5.TabIndex = 23;
-            this.label5.Text = "Note: Drag files(.mp4, .mov, .wmv, .flv, .avi, .mkv) in to add. Del key or right " +
+            this.labelNote.AutoSize = true;
+            this.labelNote.Location = new System.Drawing.Point(22, 481);
+            this.labelNote.Name = "labelNote";
+            this.labelNote.Size = new System.Drawing.Size(449, 13);
+            this.labelNote.TabIndex = 23;
+            this.labelNote.Text = "Note: Drag files(.mp4, .mov, .wmv, .flv, .avi, .mkv) in to add. Del key or right " +
     "mouse to remove.";
             // 
             // buttonCancel
@@ -303,6 +294,144 @@ namespace MyPlot
             this.buttonCancel.Text = "Cancel";
             this.buttonCancel.UseVisualStyleBackColor = true;
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(408, 36);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(257, 16);
+            this.label6.TabIndex = 20;
+            this.label6.Text = "to your PC, then drag and drop here.";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Location = new System.Drawing.Point(-1, 36);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(326, 16);
+            this.label7.TabIndex = 19;
+            this.label7.Text = "Download your wanted scenery video from our";
+            // 
+            // linkLabelAudioDownload
+            // 
+            this.linkLabelAudioDownload.AutoSize = true;
+            this.linkLabelAudioDownload.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkLabelAudioDownload.Location = new System.Drawing.Point(326, 36);
+            this.linkLabelAudioDownload.Name = "linkLabelAudioDownload";
+            this.linkLabelAudioDownload.Size = new System.Drawing.Size(85, 16);
+            this.linkLabelAudioDownload.TabIndex = 18;
+            this.linkLabelAudioDownload.TabStop = true;
+            this.linkLabelAudioDownload.Text = "Server Site";
+            this.linkLabelAudioDownload.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelAudioDownload_LinkClicked);
+            // 
+            // trackBarAudioVol
+            // 
+            this.trackBarAudioVol.AutoSize = false;
+            this.trackBarAudioVol.Location = new System.Drawing.Point(128, 6);
+            this.trackBarAudioVol.Maximum = 100;
+            this.trackBarAudioVol.Name = "trackBarAudioVol";
+            this.trackBarAudioVol.Size = new System.Drawing.Size(103, 18);
+            this.trackBarAudioVol.TabIndex = 17;
+            this.trackBarAudioVol.TickStyle = System.Windows.Forms.TickStyle.None;
+            this.trackBarAudioVol.Scroll += new System.EventHandler(this.trackBarAudioVol_Scroll);
+            // 
+            // checkBoxAudioEnable
+            // 
+            this.checkBoxAudioEnable.AutoSize = true;
+            this.checkBoxAudioEnable.Location = new System.Drawing.Point(2, 6);
+            this.checkBoxAudioEnable.Name = "checkBoxAudioEnable";
+            this.checkBoxAudioEnable.Size = new System.Drawing.Size(59, 17);
+            this.checkBoxAudioEnable.TabIndex = 16;
+            this.checkBoxAudioEnable.Text = "Enable";
+            this.checkBoxAudioEnable.UseVisualStyleBackColor = true;
+            // 
+            // listBoxAudioList
+            // 
+            this.listBoxAudioList.AllowDrop = true;
+            this.listBoxAudioList.FormattingEnabled = true;
+            this.listBoxAudioList.HorizontalScrollbar = true;
+            this.listBoxAudioList.Location = new System.Drawing.Point(3, 55);
+            this.listBoxAudioList.Name = "listBoxAudioList";
+            this.listBoxAudioList.Size = new System.Drawing.Size(762, 342);
+            this.listBoxAudioList.TabIndex = 15;
+            this.listBoxAudioList.DragDrop += new System.Windows.Forms.DragEventHandler(this.listBoxAudioList_DragDrop);
+            this.listBoxAudioList.DragOver += new System.Windows.Forms.DragEventHandler(this.listBoxAudioList_DragOver);
+            this.listBoxAudioList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listBoxAudioList_KeyDown);
+            // 
+            // labelAudioVolText
+            // 
+            this.labelAudioVolText.AutoSize = true;
+            this.labelAudioVolText.Location = new System.Drawing.Point(236, 8);
+            this.labelAudioVolText.Name = "labelAudioVolText";
+            this.labelAudioVolText.Size = new System.Drawing.Size(13, 13);
+            this.labelAudioVolText.TabIndex = 14;
+            this.labelAudioVolText.Text = "0";
+            this.labelAudioVolText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // checkBoxAudioLoop
+            // 
+            this.checkBoxAudioLoop.AutoSize = true;
+            this.checkBoxAudioLoop.Location = new System.Drawing.Point(290, 6);
+            this.checkBoxAudioLoop.Name = "checkBoxAudioLoop";
+            this.checkBoxAudioLoop.Size = new System.Drawing.Size(50, 17);
+            this.checkBoxAudioLoop.TabIndex = 11;
+            this.checkBoxAudioLoop.Text = "Loop";
+            this.checkBoxAudioLoop.UseVisualStyleBackColor = true;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(80, 8);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(42, 13);
+            this.label9.TabIndex = 13;
+            this.label9.Text = "Volume";
+            this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // checkBoxAudioReshuffle
+            // 
+            this.checkBoxAudioReshuffle.AutoSize = true;
+            this.checkBoxAudioReshuffle.Location = new System.Drawing.Point(365, 6);
+            this.checkBoxAudioReshuffle.Name = "checkBoxAudioReshuffle";
+            this.checkBoxAudioReshuffle.Size = new System.Drawing.Size(71, 17);
+            this.checkBoxAudioReshuffle.TabIndex = 12;
+            this.checkBoxAudioReshuffle.Text = "Reshuffle";
+            this.checkBoxAudioReshuffle.UseVisualStyleBackColor = true;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(409, 42);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(257, 16);
+            this.label5.TabIndex = 23;
+            this.label5.Text = "to your PC, then drag and drop here.";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.Location = new System.Drawing.Point(0, 42);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(326, 16);
+            this.label8.TabIndex = 22;
+            this.label8.Text = "Download your wanted scenery video from our";
+            // 
+            // linkLabelVideoDownload
+            // 
+            this.linkLabelVideoDownload.AutoSize = true;
+            this.linkLabelVideoDownload.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkLabelVideoDownload.Location = new System.Drawing.Point(327, 42);
+            this.linkLabelVideoDownload.Name = "linkLabelVideoDownload";
+            this.linkLabelVideoDownload.Size = new System.Drawing.Size(85, 16);
+            this.linkLabelVideoDownload.TabIndex = 21;
+            this.linkLabelVideoDownload.TabStop = true;
+            this.linkLabelVideoDownload.Text = "Server Site";
+            this.linkLabelVideoDownload.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelVideoDownload_LinkClicked);
+            // 
             // PlaylistSetup
             // 
             this.AcceptButton = this.ButtonOK;
@@ -311,7 +440,7 @@ namespace MyPlot
             this.CancelButton = this.buttonCancel;
             this.ClientSize = new System.Drawing.Size(807, 520);
             this.Controls.Add(this.buttonCancel);
-            this.Controls.Add(this.label5);
+            this.Controls.Add(this.labelNote);
             this.Controls.Add(this.tabControlPlaylist);
             this.Controls.Add(this.textBoxConfigFile);
             this.Controls.Add(this.ButtonSaveAs);
@@ -329,6 +458,9 @@ namespace MyPlot
             this.tabPageVideo.ResumeLayout(false);
             this.tabPageVideo.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarVideoVol)).EndInit();
+            this.tabPageAudio.ResumeLayout(false);
+            this.tabPageAudio.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarAudioVol)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -354,10 +486,20 @@ namespace MyPlot
         private System.Windows.Forms.TabPage tabPageAudio;
         private System.Windows.Forms.TabPage tabPageWeb;
         private System.Windows.Forms.TabPage tabPageRadio;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.LinkLabel linkLabelDownload;
-        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label labelNote;
         private System.Windows.Forms.Button buttonCancel;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.LinkLabel linkLabelAudioDownload;
+        private System.Windows.Forms.TrackBar trackBarAudioVol;
+        private System.Windows.Forms.CheckBox checkBoxAudioEnable;
+        private System.Windows.Forms.ListBox listBoxAudioList;
+        private System.Windows.Forms.Label labelAudioVolText;
+        private System.Windows.Forms.CheckBox checkBoxAudioLoop;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.CheckBox checkBoxAudioReshuffle;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.LinkLabel linkLabelVideoDownload;
     }
 }

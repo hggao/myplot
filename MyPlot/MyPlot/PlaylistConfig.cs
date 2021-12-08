@@ -24,13 +24,27 @@ namespace MyPlot
             delMenu = new ContextMenu();
             delMenu.MenuItems.Add("Remove", OnMenuItemRemove_Clicked);
             ListBoxVideoList.ContextMenu = delMenu;
+            listBoxAudioList.ContextMenu = delMenu;
         }
 
         private void PlaylistSetup_Load(object sender, EventArgs e)
-        {
-            config = new ConfigureMain();
-            config.LoadConfigure(configFile);
-            ApplyConfigDataToUI();
+        { 
+            if (configFile == null)
+            {
+                //Disable all controls except Open and Cancel
+                foreach (Control c in Controls)
+                {
+                    c.Enabled = false;
+                }
+                ButtonOpen.Enabled = true;
+                buttonCancel.Enabled = true;
+            }
+            else
+            {
+                config = new ConfigureMain();
+                config.LoadConfigure(configFile);
+                ApplyConfigDataToUI();
+            }
         }
 
         private void ApplyConfigDataToUI()
@@ -51,6 +65,19 @@ namespace MyPlot
             }
             this.checkBoxVideoEnable.Checked = mainCfg.enabled;
 
+            //Initialize audio player controls
+            AudioPlayerConfig audioCfg = config.configData.audioPlayerConfig;
+            this.checkBoxAudioLoop.Checked = audioCfg.loop;
+            this.checkBoxAudioReshuffle.Checked = audioCfg.reshuffle;
+            this.trackBarAudioVol.Value = audioCfg.volume;
+            this.labelAudioVolText.Text = trackBarAudioVol.Value.ToString();
+            this.listBoxAudioList.Items.Clear();
+            for (int i = 0; i < audioCfg.audio_files.Count; i++)
+            {
+                this.listBoxAudioList.Items.Add(audioCfg.audio_files[i]);
+            }
+            this.checkBoxAudioEnable.Checked = audioCfg.enabled;
+
             /*
             //Initialize web player controls
             WebPlayerConfig webCfg = config.configData.webPlayerConfig;
@@ -67,23 +94,6 @@ namespace MyPlot
             if (!CheckBoxWebPlayer.Checked)
             {
                 GroupBoxWebPlayer.Enabled = false;
-            }
-
-            //Initialize audio player controls
-            AudioPlayerConfig audioCfg = config.configData.audioPlayerConfig;
-            this.CheckBoxAudioLoop.Checked = audioCfg.loop;
-            this.CheckBoxAudioReshuffle.Checked = audioCfg.reshuffle;
-            this.TrackBarAudioVolume.Value = audioCfg.volume;
-            this.LabelAudioVolumeText.Text = TrackBarAudioVolume.Value.ToString();
-            this.ListBoxAudioFiles.Items.Clear();
-            for (int i = 0; i < audioCfg.audio_files.Count; i++)
-            {
-                this.ListBoxAudioFiles.Items.Add(audioCfg.audio_files[i]);
-            }
-            this.CheckBoxAudioPlayer.Checked = audioCfg.enabled;
-            if (!CheckBoxAudioPlayer.Checked)
-            {
-                GroupBoxAudioPlayer.Enabled = false;
             }
 
             //Initialize radio player controls
@@ -132,6 +142,18 @@ namespace MyPlot
             }
             mainCfg.enabled = this.checkBoxVideoEnable.Checked;
 
+            //Update audio player config
+            AudioPlayerConfig audioCfg = config.configData.audioPlayerConfig;
+            audioCfg.loop = this.checkBoxAudioLoop.Checked;
+            audioCfg.reshuffle = this.checkBoxAudioReshuffle.Checked;
+            audioCfg.volume = this.trackBarAudioVol.Value;
+
+            audioCfg.audio_files.Clear();
+            foreach (string file in this.listBoxAudioList.Items)
+            {
+                audioCfg.audio_files.Add(file);
+            }
+            audioCfg.enabled = this.checkBoxAudioEnable.Checked;
         }
 
         private void textBoxConfigFile_TextChanged(object sender, EventArgs e)
@@ -146,10 +168,14 @@ namespace MyPlot
         {
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.InitialDirectory = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "config");
-            ofd.Filter = "MyPlot Config (*.myplot.json)|*.myplot.json";
+            ofd.Filter = "MyPlot playlist(*.myplot.json)|*.myplot.json";
             if (ofd.ShowDialog() == DialogResult.OK)
             {
                 textBoxConfigFile.Text = ofd.FileName;
+                foreach (Control c in Controls)
+                {
+                    c.Enabled = true;
+                }
             }
         }
 
@@ -173,10 +199,10 @@ namespace MyPlot
             }
         }
 
-        private void linkLabelDownload_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void linkLabelVideoDownload_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             // Specify that the link was visited.
-            linkLabelDownload.LinkVisited = true;
+            linkLabelVideoDownload.LinkVisited = true;
 
             // Navigate to a URL.
             System.Diagnostics.Process.Start("http://98.234.74.74/");
@@ -192,7 +218,6 @@ namespace MyPlot
 
         private void ListBoxVideoList_DragDrop(object sender, DragEventArgs e)
         {
-            string[] videoExts = {".mp4", ".mov", ".wmv", ".flv", ".avi", ".mkv"};
             string[] files = e.Data.GetData(DataFormats.FileDrop) as string[];
             if (files == null || !files.Any())
                 return;
@@ -200,7 +225,7 @@ namespace MyPlot
             foreach (string file in files)
             {
                 string ext = Path.GetExtension(file);
-                if (videoExts.Contains(ext) && !ListBoxVideoList.Items.Contains(file))
+                if (GlobalDefs.videoExts.Contains(ext) && !ListBoxVideoList.Items.Contains(file))
                 {
                     ListBoxVideoList.Items.Add(file);
                 }
@@ -219,16 +244,82 @@ namespace MyPlot
 
         private void OnMenuItemRemove_Clicked(object sender, EventArgs e)
         {
-            int selectIndex = ListBoxVideoList.SelectedIndex;
+            ListBox lb = (ListBox)sender;
+            int selectIndex = lb.SelectedIndex;
             if (selectIndex >= 0)
             {
-                ListBoxVideoList.Items.RemoveAt(selectIndex);
+                lb.Items.RemoveAt(selectIndex);
             }
         }
 
         private void trackBarVideoVol_Scroll(object sender, EventArgs e)
         {
             LabelVideoVolText.Text = trackBarVideoVol.Value.ToString();
+        }
+
+        private void tabControlPlaylist_Selected(object sender, TabControlEventArgs e)
+        {
+            if (e.TabPage == tabPageVideo)
+            {
+                labelNote.Text = "Note: Drag files(.mp4, .mov, .wmv, .flv, .avi, .mkv) in to add. Del key or right mouse to remove.";
+            }
+            else if (e.TabPage == tabPageAudio)
+            {
+                labelNote.Text = "Note: Drag files(.mp3, .wav, .wma, .aac) in to add. Del key or right mouse to remove.";
+            }
+            else
+             
+            {
+                labelNote.Text = "";
+            }
+        }
+
+        private void linkLabelAudioDownload_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            // Specify that the link was visited.
+            linkLabelAudioDownload.LinkVisited = true;
+
+            // Navigate to a URL.
+            System.Diagnostics.Process.Start("http://98.234.74.74/music.html");
+        }
+
+        private void listBoxAudioList_DragOver(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                e.Effect = DragDropEffects.Move;
+            else
+                e.Effect = DragDropEffects.None;
+        }
+
+        private void listBoxAudioList_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] files = e.Data.GetData(DataFormats.FileDrop) as string[];
+            if (files == null || !files.Any())
+                return;
+
+            foreach (string file in files)
+            {
+                string ext = Path.GetExtension(file);
+                if (GlobalDefs.audioExts.Contains(ext) && !listBoxAudioList.Items.Contains(file))
+                {
+                    listBoxAudioList.Items.Add(file);
+                }
+            }
+        }
+
+        private void listBoxAudioList_KeyDown(object sender, KeyEventArgs e)
+        {
+            int selectIndex = listBoxAudioList.SelectedIndex;
+
+            if (selectIndex >= 0 && e.KeyCode == Keys.Delete)
+            {
+                listBoxAudioList.Items.RemoveAt(selectIndex);
+            }
+        }
+
+        private void trackBarAudioVol_Scroll(object sender, EventArgs e)
+        {
+            labelAudioVolText.Text = trackBarAudioVol.Value.ToString();
         }
     }
 }

@@ -18,7 +18,7 @@ namespace MyPlot
 {
     public partial class MyPlot : Form
     {
-        private string configFile = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "config\\default.myplot.json"); 
+        private string configFile = null; //Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "config\\default.myplot.json"); 
         public ConfigureMain playersConfig = null;
         private bool formLoaded = false;
 
@@ -64,6 +64,7 @@ namespace MyPlot
             _audioMP = new MediaPlayer(_libVLC);
             _audioMP.SetRole(MediaPlayerRole.Music);
             _audioMP.EndReached += AudioPlayer_EndReached;
+            _audioMP.Playing += AudioPlayer_Playing;
             audioView.MediaPlayer = _audioMP;
             audioCtrl = new AudioControl(this);
 
@@ -75,6 +76,16 @@ namespace MyPlot
             samples = new short[SAMPLE_LEN];
         }
 
+        [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
+        private static extern IntPtr CreateRoundRectRgn
+        (
+            int nLeftRect,     // x-coordinate of upper-left corner
+            int nTopRect,      // y-coordinate of upper-left corner
+            int nRightRect,    // x-coordinate of lower-right corner
+            int nBottomRect,   // y-coordinate of lower-right corner
+            int nWidthEllipse, // width of ellipse
+            int nHeightEllipse // height of ellipse
+        );
         private async void MyPlot_Load(object sender, EventArgs e)
         {
             //Special waiting for webView2 control done its initialization
@@ -89,10 +100,12 @@ namespace MyPlot
             }
             webView.CoreWebView2.NewWindowRequested += CoreWebView2_NewWindowRequested;
 
-            //Setup Capture
+            //Setup audio related: round region and capture for visualization
+            audioView.Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, audioView.Width, audioView.Height, 20, 20));
             capture = new WasapiLoopbackCapture();
             waveFormat = capture.WaveFormat;
             capture.DataAvailable += OnWaveInDataAvailable;
+
             formLoaded = true;
 
             //Based on configration to set all controls appearance
@@ -185,17 +198,6 @@ namespace MyPlot
             }
         }
 
-
-        [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
-        private static extern IntPtr CreateRoundRectRgn
-        (
-            int nLeftRect,     // x-coordinate of upper-left corner
-            int nTopRect,      // y-coordinate of upper-left corner
-            int nRightRect,    // x-coordinate of lower-right corner
-            int nBottomRect,   // y-coordinate of lower-right corner
-            int nWidthEllipse, // width of ellipse
-            int nHeightEllipse // height of ellipse
-        );
         private void SetAudioViewAppearance()
         {
             Size newSize = ClientSize;
@@ -203,16 +205,7 @@ namespace MyPlot
             //Set Audio player at the bottom left if video/web enalbed, otherwise put it at center.
             if (playersConfig.configData.audioPlayerConfig.enabled)
             {
-                if (playersConfig.configData.mainPlayerConfig.enabled || playersConfig.configData.webPlayerConfig.enabled)
-                {
-                    audioView.Location = new Point(64, 32);
-                }
-                else
-                {
-                    audioView.Location = new Point((ClientSize.Width - audioView.Width) / 2, (ClientSize.Height - audioView.Height) / 2);
-                }
-
-                audioView.Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, audioView.Width, audioView.Height, 20, 20));
+                audioView.Location = new Point(64, 32);
                 audioView.Visible = true;
                 timerAudio.Enabled = true;
                 if (capture != null && capture.CaptureState == CaptureState.Stopped)
@@ -294,63 +287,25 @@ namespace MyPlot
             {
                 return;
             }
+            if (playersConfig.configData.webPlayerConfig.web_urls.Count < 1)
+            {
+                return;
+            }
 
             webView.NavigateToString(System.IO.File.ReadAllText(playersConfig.configData.webPlayerConfig.web_urls[0]));
-        }
-
-        private void AudioPlayerStart()
-        {
-            if (audioView.Visible == false)
-            {
-                return;
-            }
-
-            AudioPlayerConfig config = playersConfig.configData.audioPlayerConfig;
-            config.play_index = -1;
-            config.play_position = 0.0f;
-            config.play_speed = 1.0f;
-            audioView.MediaPlayer.Volume = config.volume;
-            AudioPlayerPlayNext();
-        }
-
-        public void AudioPlayerPlayNext()
-        {
-            AudioPlayerConfig config = playersConfig.configData.audioPlayerConfig;
-
-            //TODO: add looping, reshuffle flags later. Now we loop it without reshuffle by default
-            config.play_index = (config.play_index + 1) % config.audio_files.Count;
-            var media = new Media(_libVLC, new Uri(config.audio_files[config.play_index]));
-            audioView.MediaPlayer.Play(media);
-            Debug.WriteLine("======Playing audio started");
-            Debug.WriteLine(config.audio_files[config.play_index]);
-            media.Dispose();
-        }
-
-        private void AudioPlayer_EndReached(object sender, EventArgs e)
-        {
-            Thread t = new Thread(new ThreadStart(AudioPlayerPlayNext));
-            t.Start();
-        }
-
-        private void AudioPlayerStop()
-        {
-            if (audioView.Visible == false)
-            {
-                return;
-            }
-            if (audioView.MediaPlayer.IsPlaying)
-            {
-                audioView.MediaPlayer.Stop();
-            }
         }
 
         private void RadioPlayerStart()
         {
             if (radioView.Visible == false)
             {
+
                 return;
             }
-
+            if (playersConfig.configData.radioPlayerConfig.radio_urls.Count < 1)
+            {
+                return;
+            }
             Debug.WriteLine("======Prepare to play the first radio URL");
             string firstRadio = playersConfig.configData.radioPlayerConfig.radio_urls[0];
             radioView.MediaPlayer.Volume = playersConfig.configData.radioPlayerConfig.volume;
@@ -382,7 +337,11 @@ namespace MyPlot
         {
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.InitialDirectory = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "config");
-            ofd.Filter = "MyPlot Config (*.myplot.json)|*.myplot.json";
+            string playlist_filter = "MyPlot playlist(*.myplot.json)|*.myplot.json";
+            string video_filter = String.Format("Video file({0})|{0}", GlobalDefs.GetVideoFilter());
+            string photo_filter = String.Format("Photo file({0})|{0}", GlobalDefs.GetPhotoFilter());
+            string audio_filter = String.Format("Audio file({0})|{0}", GlobalDefs.GetAudioFilter());
+            ofd.Filter = String.Format("{0}|{1}|{2}|{3}", playlist_filter, video_filter, photo_filter, audio_filter);
             if (ofd.ShowDialog() == DialogResult.OK)
             {
                 RestartPlayerWithNewConfig(ofd.FileName);
@@ -497,12 +456,15 @@ namespace MyPlot
             if (playersConfig.configData.mainPlayerConfig.enabled)
             {
                 playersConfig.configData.mainPlayerConfig.enabled = false;
+                VideoPlayerStop();
+                SetPlayerControlAppearance();
             }
             else
             {
                 playersConfig.configData.mainPlayerConfig.enabled = true;
+                SetPlayerControlAppearance();
+                VideoPlayerStart();
             }
-            RestartPlayerWithNewConfig(null);
         }
 
         private void enableDisableAudio_Click(object sender, EventArgs e)
@@ -574,108 +536,6 @@ namespace MyPlot
                 SetRadioviewAppearance();
                 RadioPlayerStart();
             }
-        }
-
-        private void videoView_DoubleClick(object sender, EventArgs e)
-        {
-            ToogleFullScreenMode();
-        }
-
-        private void OnWaveInDataAvailable(object sender, WaveInEventArgs e)
-        {
-            if (e.BytesRecorded == 0)
-            {
-                for (int i = 0; i < SAMPLE_LEN; i++)
-                    samples[i] = 0;
-                return;
-            }
-
-            var waveBuffer = new WaveBuffer(e.Buffer);
-            int nblocks = e.BytesRecorded / waveFormat.BlockAlign;
-            int nsamples = nblocks * waveFormat.Channels;
-            short value;
-            int n = 0;
-            for (int i = 0; i < nsamples && n < SAMPLE_LEN; )
-            {
-                i++; //Skip sample of left channel
-                samples[n] = (short)(waveBuffer.FloatBuffer[i++] * 70); //Should be 50, but when overall volume low, the number is too small
-                while (i * SAMPLE_LEN / nsamples == n)
-                {
-                    i++; //Skip sampe of left channel
-                    value = (short)(waveBuffer.FloatBuffer[i++] * 70); //Should be 50, but when overall volume low, the number is too small
-                    if (samples[n] > 0 && samples[n] < value || samples[n] < 0 && samples[n] > value)
-                    {
-                        samples[n] = value;
-                    }
-                }
-                n++;
-            }
-            while (n < SAMPLE_LEN)
-                samples[n++] = 0;
-        }
-
-        private void audioView_Paint(object sender, PaintEventArgs e)
-        {
-            var p = new Pen(Color.FromArgb(255, 255, 224, 0));
-            e.Graphics.Clear(Color.Black);
-            var y = audioView.Height / 2;
-            for (int x = 0; x < SAMPLE_LEN; x++)
-            {
-                e.Graphics.DrawLine(p, 6+x, y, 6+x, y + samples[x]);
-            }
-        }
-
-        private void timerAudio_Tick(object sender, EventArgs e)
-        {
-            audioView.Invalidate();
-        }
-
-        private void relocateAudioControl()
-        {
-            if (audioCtrl.Visible)
-            {
-                audioCtrl.Location = PointToScreen(new Point(audioView.Location.X + audioView.Width - 1, audioView.Location.Y));
-            }
-        }
-
-        private void audioView_KeyPress(object sender, KeyPressEventArgs e)
-        {
-
-        }
-
-        private void audioView_MouseDown(object sender, MouseEventArgs e)
-        {
-
-        }
-
-        private void ToogleAudioCtrlVisible()
-        {
-            if (audioCtrl.Visible)
-            {
-                audioCtrl.Hide();
-            }
-            else
-            {
-                audioCtrl.Show();
-                relocateAudioControl();
-            }
-        }
-
-        private void audioView_MouseClick(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                ToogleAudioCtrlVisible();
-            }
-        }
-
-        private void audioView_MouseMove(object sender, MouseEventArgs e)
-        {
-
-        }
-
-        private void audioView_MouseUp(object sender, MouseEventArgs e)
-        {
         }
     }
 }

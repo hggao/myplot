@@ -201,5 +201,10 @@ namespace MyPlot
                 _myplot.playersConfig.configData.audioPlayerConfig.volume = trackBarAudioVol.Value;
             }
         }
+
+        private void buttonCancel_Click(object sender, EventArgs e)
+        {
+            Visible = false;
+        }
     }
 }

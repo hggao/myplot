@@ -21,6 +21,10 @@ namespace MyPlot
             }
 
             MainPlayerConfig config = playersConfig.configData.mainPlayerConfig;
+            if (config.media_files.Count < 1)
+            {
+                return;
+            }
             config.play_index = -1;
             config.play_position = 0.0f;
             config.play_speed = 1.0f;
@@ -32,7 +36,11 @@ namespace MyPlot
         {
             MainPlayerConfig config = playersConfig.configData.mainPlayerConfig;
 
-            //TODO: add looping, reshuffle flags later. Now we loop it without reshuffle by default
+            //TODO: add reshuffle flag handling later.
+            if (!config.loop && config.play_index + 1 >= config.media_files.Count)
+            {
+                return;
+            }
             config.play_index = (config.play_index + 1) % config.media_files.Count;
             var media = new Media(_libVLC, new Uri(config.media_files[config.play_index]));
             videoView.MediaPlayer.Play(media);
@@ -214,6 +222,11 @@ namespace MyPlot
             {
                 ToogleVideoCtrlVisible();
             }
+        }
+
+        private void videoView_DoubleClick(object sender, EventArgs e)
+        {
+            ToogleFullScreenMode();
         }
     }
 }

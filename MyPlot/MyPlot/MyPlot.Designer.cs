@@ -306,7 +306,6 @@ namespace MyPlot
             this.audioView.Text = "audioView";
             this.audioView.Visible = false;
             this.audioView.Paint += new System.Windows.Forms.PaintEventHandler(this.audioView_Paint);
-            this.audioView.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.audioView_KeyPress);
             this.audioView.MouseClick += new System.Windows.Forms.MouseEventHandler(this.audioView_MouseClick);
             this.audioView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.audioView_MouseDown);
             this.audioView.MouseMove += new System.Windows.Forms.MouseEventHandler(this.audioView_MouseMove);
