@@ -37,6 +37,9 @@ namespace MyPlot
             this.ButtonOK = new System.Windows.Forms.Button();
             this.tabControlPlaylist = new System.Windows.Forms.TabControl();
             this.tabPageVideo = new System.Windows.Forms.TabPage();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.linkLabelVideoDownload = new System.Windows.Forms.LinkLabel();
             this.trackBarVideoVol = new System.Windows.Forms.TrackBar();
             this.checkBoxVideoEnable = new System.Windows.Forms.CheckBox();
             this.ListBoxVideoList = new System.Windows.Forms.ListBox();
@@ -45,10 +48,6 @@ namespace MyPlot
             this.label2 = new System.Windows.Forms.Label();
             this.CheckBoxMainReshuffle = new System.Windows.Forms.CheckBox();
             this.tabPageAudio = new System.Windows.Forms.TabPage();
-            this.tabPageWeb = new System.Windows.Forms.TabPage();
-            this.tabPageRadio = new System.Windows.Forms.TabPage();
-            this.labelNote = new System.Windows.Forms.Label();
-            this.buttonCancel = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.linkLabelAudioDownload = new System.Windows.Forms.LinkLabel();
@@ -59,9 +58,10 @@ namespace MyPlot
             this.checkBoxAudioLoop = new System.Windows.Forms.CheckBox();
             this.label9 = new System.Windows.Forms.Label();
             this.checkBoxAudioReshuffle = new System.Windows.Forms.CheckBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.linkLabelVideoDownload = new System.Windows.Forms.LinkLabel();
+            this.tabPageWeb = new System.Windows.Forms.TabPage();
+            this.tabPageRadio = new System.Windows.Forms.TabPage();
+            this.labelNote = new System.Windows.Forms.Label();
+            this.buttonCancel = new System.Windows.Forms.Button();
             this.tabControlPlaylist.SuspendLayout();
             this.tabPageVideo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarVideoVol)).BeginInit();
@@ -76,7 +76,6 @@ namespace MyPlot
             this.textBoxConfigFile.ReadOnly = true;
             this.textBoxConfigFile.Size = new System.Drawing.Size(509, 20);
             this.textBoxConfigFile.TabIndex = 16;
-            this.textBoxConfigFile.TextChanged += new System.EventHandler(this.textBoxConfigFile_TextChanged);
             // 
             // ButtonSaveAs
             // 
@@ -159,6 +158,38 @@ namespace MyPlot
             this.tabPageVideo.TabIndex = 0;
             this.tabPageVideo.Text = "Video";
             this.tabPageVideo.UseVisualStyleBackColor = true;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(409, 42);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(257, 16);
+            this.label5.TabIndex = 23;
+            this.label5.Text = "to your PC, then drag and drop here.";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.Location = new System.Drawing.Point(0, 42);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(326, 16);
+            this.label8.TabIndex = 22;
+            this.label8.Text = "Download your wanted scenery video from our";
+            // 
+            // linkLabelVideoDownload
+            // 
+            this.linkLabelVideoDownload.AutoSize = true;
+            this.linkLabelVideoDownload.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkLabelVideoDownload.Location = new System.Drawing.Point(327, 42);
+            this.linkLabelVideoDownload.Name = "linkLabelVideoDownload";
+            this.linkLabelVideoDownload.Size = new System.Drawing.Size(85, 16);
+            this.linkLabelVideoDownload.TabIndex = 21;
+            this.linkLabelVideoDownload.TabStop = true;
+            this.linkLabelVideoDownload.Text = "Server Site";
+            this.linkLabelVideoDownload.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelVideoDownload_LinkClicked);
             // 
             // trackBarVideoVol
             // 
@@ -253,46 +284,6 @@ namespace MyPlot
             this.tabPageAudio.TabIndex = 1;
             this.tabPageAudio.Text = "Audio";
             this.tabPageAudio.UseVisualStyleBackColor = true;
-            // 
-            // tabPageWeb
-            // 
-            this.tabPageWeb.Location = new System.Drawing.Point(4, 22);
-            this.tabPageWeb.Name = "tabPageWeb";
-            this.tabPageWeb.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageWeb.Size = new System.Drawing.Size(764, 403);
-            this.tabPageWeb.TabIndex = 2;
-            this.tabPageWeb.Text = "Web";
-            this.tabPageWeb.UseVisualStyleBackColor = true;
-            // 
-            // tabPageRadio
-            // 
-            this.tabPageRadio.Location = new System.Drawing.Point(4, 22);
-            this.tabPageRadio.Name = "tabPageRadio";
-            this.tabPageRadio.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageRadio.Size = new System.Drawing.Size(764, 403);
-            this.tabPageRadio.TabIndex = 3;
-            this.tabPageRadio.Text = "Radio";
-            this.tabPageRadio.UseVisualStyleBackColor = true;
-            // 
-            // labelNote
-            // 
-            this.labelNote.AutoSize = true;
-            this.labelNote.Location = new System.Drawing.Point(22, 481);
-            this.labelNote.Name = "labelNote";
-            this.labelNote.Size = new System.Drawing.Size(449, 13);
-            this.labelNote.TabIndex = 23;
-            this.labelNote.Text = "Note: Drag files(.mp4, .mov, .wmv, .flv, .avi, .mkv) in to add. Del key or right " +
-    "mouse to remove.";
-            // 
-            // buttonCancel
-            // 
-            this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(600, 484);
-            this.buttonCancel.Name = "buttonCancel";
-            this.buttonCancel.Size = new System.Drawing.Size(87, 24);
-            this.buttonCancel.TabIndex = 24;
-            this.buttonCancel.Text = "Cancel";
-            this.buttonCancel.UseVisualStyleBackColor = true;
             // 
             // label6
             // 
@@ -400,37 +391,45 @@ namespace MyPlot
             this.checkBoxAudioReshuffle.Text = "Reshuffle";
             this.checkBoxAudioReshuffle.UseVisualStyleBackColor = true;
             // 
-            // label5
+            // tabPageWeb
             // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(409, 42);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(257, 16);
-            this.label5.TabIndex = 23;
-            this.label5.Text = "to your PC, then drag and drop here.";
+            this.tabPageWeb.Location = new System.Drawing.Point(4, 22);
+            this.tabPageWeb.Name = "tabPageWeb";
+            this.tabPageWeb.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageWeb.Size = new System.Drawing.Size(764, 403);
+            this.tabPageWeb.TabIndex = 2;
+            this.tabPageWeb.Text = "Web";
+            this.tabPageWeb.UseVisualStyleBackColor = true;
             // 
-            // label8
+            // tabPageRadio
             // 
-            this.label8.AutoSize = true;
-            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(0, 42);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(326, 16);
-            this.label8.TabIndex = 22;
-            this.label8.Text = "Download your wanted scenery video from our";
+            this.tabPageRadio.Location = new System.Drawing.Point(4, 22);
+            this.tabPageRadio.Name = "tabPageRadio";
+            this.tabPageRadio.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageRadio.Size = new System.Drawing.Size(764, 403);
+            this.tabPageRadio.TabIndex = 3;
+            this.tabPageRadio.Text = "Radio";
+            this.tabPageRadio.UseVisualStyleBackColor = true;
             // 
-            // linkLabelVideoDownload
+            // labelNote
             // 
-            this.linkLabelVideoDownload.AutoSize = true;
-            this.linkLabelVideoDownload.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkLabelVideoDownload.Location = new System.Drawing.Point(327, 42);
-            this.linkLabelVideoDownload.Name = "linkLabelVideoDownload";
-            this.linkLabelVideoDownload.Size = new System.Drawing.Size(85, 16);
-            this.linkLabelVideoDownload.TabIndex = 21;
-            this.linkLabelVideoDownload.TabStop = true;
-            this.linkLabelVideoDownload.Text = "Server Site";
-            this.linkLabelVideoDownload.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelVideoDownload_LinkClicked);
+            this.labelNote.AutoSize = true;
+            this.labelNote.Location = new System.Drawing.Point(22, 481);
+            this.labelNote.Name = "labelNote";
+            this.labelNote.Size = new System.Drawing.Size(449, 13);
+            this.labelNote.TabIndex = 23;
+            this.labelNote.Text = "Note: Drag files(.mp4, .mov, .wmv, .flv, .avi, .mkv) in to add. Del key or right " +
+    "mouse to remove.";
+            // 
+            // buttonCancel
+            // 
+            this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.buttonCancel.Location = new System.Drawing.Point(600, 484);
+            this.buttonCancel.Name = "buttonCancel";
+            this.buttonCancel.Size = new System.Drawing.Size(87, 24);
+            this.buttonCancel.TabIndex = 24;
+            this.buttonCancel.Text = "Cancel";
+            this.buttonCancel.UseVisualStyleBackColor = true;
             // 
             // PlaylistSetup
             // 

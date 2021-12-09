@@ -18,7 +18,7 @@ namespace MyPlot
 {
     public partial class MyPlot : Form
     {
-        private string configFile = null; //Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "config\\default.myplot.json"); 
+        private string configFile = null;
         public ConfigureMain playersConfig = null;
         private bool formLoaded = false;
 
@@ -41,8 +41,7 @@ namespace MyPlot
         public MyPlot()
         {
             //Load the configurations of all player controls.
-            playersConfig = new ConfigureMain();
-            playersConfig.LoadConfigure(configFile);
+            playersConfig = new ConfigureMain(configFile);
 
             if (!DesignMode)
             {
@@ -339,30 +338,63 @@ namespace MyPlot
         {
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.InitialDirectory = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "config");
-            string playlist_filter = "MyPlot playlist(*.myplot.json)|*.myplot.json";
+            ofd.Filter = "MyPlot playlist(*.myplot.json)|*.myplot.json";
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                RestartPlayerWithNewConfig(ofd.FileName, null);
+            }
+        }
+
+        private void openAddMediaFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.InitialDirectory = Path.GetDirectoryName(Application.ExecutablePath);
             string video_filter = String.Format("Video file({0})|{0}", GlobalDefs.GetVideoFilter());
             string photo_filter = String.Format("Photo file({0})|{0}", GlobalDefs.GetPhotoFilter());
             string audio_filter = String.Format("Audio file({0})|{0}", GlobalDefs.GetAudioFilter());
-            ofd.Filter = String.Format("{0}|{1}|{2}|{3}", playlist_filter, video_filter, photo_filter, audio_filter);
+            string all_filter = String.Format("All files({0})|{0}", GlobalDefs.GetAllFilter());
+            ofd.Filter = String.Format("{0}|{1}|{2}|{3}", video_filter, photo_filter, audio_filter, all_filter);
             if (ofd.ShowDialog() == DialogResult.OK)
             {
-                RestartPlayerWithNewConfig(ofd.FileName);
+                MediaType type = GlobalDefs.GetMediaType(ofd.FileName);
+                int count = playersConfig.AddMediaToConfigure(ofd.FileName, type);
+                if (count == 1)
+                {
+                    SetPlayerControlAppearance();
+                }
+                switch (type)
+                {
+                    case MediaType.Video:
+                        if (!_videoMP.IsPlaying)
+                        {
+                            playersConfig.configData.mainPlayerConfig.play_index = count - 2;
+                            VideoPlayerPlayNext();
+                        }
+                        break;
+                    case MediaType.Audio:
+                        if (!_audioMP.IsPlaying)
+                        {
+                            playersConfig.configData.audioPlayerConfig.play_index = count - 2;
+                            AudioPlayerPlayNext();
+                        }
+                        break;
+                }
             }
         }
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            PlaylistSetup plSetup = new PlaylistSetup();
-            plSetup.configFile = configFile;
+            PlaylistSetup plSetup = new PlaylistSetup(this.playersConfig);
+            plSetup.configFile = this.configFile;
             plSetup.StartPosition = FormStartPosition.Manual;
             plSetup.Location = this.PointToScreen(new Point(64, 36));
             if (plSetup.ShowDialog() == DialogResult.OK)
             {
-                RestartPlayerWithNewConfig(plSetup.configFile);
+                RestartPlayerWithNewConfig(plSetup.configFile, plSetup.config);
             }
         }
 
-        private void RestartPlayerWithNewConfig(string newConfigFile)
+        private void RestartPlayerWithNewConfig(string newConfigFile, ConfigureMain newConfig)
         {
             VideoPlayerStop();
             AudioPlayerStop();
@@ -370,8 +402,11 @@ namespace MyPlot
             if (newConfigFile != null)
             {
                 configFile = newConfigFile;
-                playersConfig = new ConfigureMain();
-                playersConfig.LoadConfigure(configFile);
+                playersConfig = newConfig;
+                if (playersConfig == null)
+                {
+                    playersConfig = new ConfigureMain(configFile);
+                }
             }
             SetPlayerControlAppearance();
             VideoPlayerStart(); 

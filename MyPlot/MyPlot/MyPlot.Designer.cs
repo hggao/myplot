@@ -58,6 +58,8 @@ namespace MyPlot
             this.radioView = new LibVLCSharp.WinForms.VideoView();
             this.audioView = new LibVLCSharp.WinForms.VideoView();
             this.timerAudio = new System.Windows.Forms.Timer(this.components);
+            this.openAddMediaFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             ((System.ComponentModel.ISupportInitialize)(this.webView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.videoView)).BeginInit();
             this.menuMain.SuspendLayout();
@@ -115,6 +117,8 @@ namespace MyPlot
             // 
             this.testToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openToolStripMenuItem,
+            this.openAddMediaFileToolStripMenuItem,
+            this.toolStripSeparator2,
             this.settingsToolStripMenuItem,
             this.toolStripSeparator1,
             this.exitToolStripMenuItem});
@@ -125,26 +129,26 @@ namespace MyPlot
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
-            this.openToolStripMenuItem.Text = "&Open";
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.openToolStripMenuItem.Text = "&Open Playlist";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
-            this.settingsToolStripMenuItem.Text = "Settings";
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.settingsToolStripMenuItem.Text = "Playlist Config";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(113, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(185, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -316,6 +320,18 @@ namespace MyPlot
             this.timerAudio.Interval = 50;
             this.timerAudio.Tick += new System.EventHandler(this.timerAudio_Tick);
             // 
+            // openAddMediaFileToolStripMenuItem
+            // 
+            this.openAddMediaFileToolStripMenuItem.Name = "openAddMediaFileToolStripMenuItem";
+            this.openAddMediaFileToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.openAddMediaFileToolStripMenuItem.Text = "Open(&Add) Media file";
+            this.openAddMediaFileToolStripMenuItem.Click += new System.EventHandler(this.openAddMediaFileToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(185, 6);
+            // 
             // MyPlot
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -379,6 +395,8 @@ namespace MyPlot
         private System.Windows.Forms.ToolStripMenuItem radioToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem enableToolStripMenuItem3;
         private System.Windows.Forms.Timer timerAudio;
+        private System.Windows.Forms.ToolStripMenuItem openAddMediaFileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
     }
 }
 

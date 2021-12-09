@@ -17,9 +17,11 @@ namespace MyPlot
         public ConfigureMain config = null;
         private ContextMenu delMenu = null;
 
-        public PlaylistSetup()
+        public PlaylistSetup(ConfigureMain cur_config)
         {
             InitializeComponent();
+
+            config = cur_config.Clone();
 
             delMenu = new ContextMenu();
             delMenu.MenuItems.Add("Remove", OnMenuItemRemove_Clicked);
@@ -28,29 +30,14 @@ namespace MyPlot
         }
 
         private void PlaylistSetup_Load(object sender, EventArgs e)
-        { 
-            if (configFile == null)
-            {
-                //Disable all controls except Open and Cancel
-                foreach (Control c in Controls)
-                {
-                    c.Enabled = false;
-                }
-                ButtonOpen.Enabled = true;
-                buttonCancel.Enabled = true;
-            }
-            else
-            {
-                config = new ConfigureMain();
-                config.LoadConfigure(configFile);
-                ApplyConfigDataToUI();
-            }
+        {
+            ApplyConfigDataToUI();
         }
 
         private void ApplyConfigDataToUI()
         {
             //Initialize configure file field with current loaded config file
-            textBoxConfigFile.Text = configFile;
+            textBoxConfigFile.Text = configFile == null ? "" : configFile;
 
             //Initialize main player controls
             MainPlayerConfig mainCfg = config.configData.mainPlayerConfig;
@@ -112,18 +99,6 @@ namespace MyPlot
             {
                 GroupBoxRadioPlayer.Enabled = false;
             }
-
-            //Disable for now until we could save the changes.
-            ButtonSave.Enabled = false;
-            ButtonSaveAs.Enabled = false;
-            CheckBoxMainPlayer.Enabled = false;
-            GroupBoxMainPlayer.Enabled = false;
-            CheckBoxWebPlayer.Enabled = false;
-            GroupBoxWebPlayer.Enabled = false;
-            CheckBoxAudioPlayer.Enabled = false;
-            GroupBoxAudioPlayer.Enabled = false;
-            CheckBoxRadioPlayer.Enabled = false;
-            GroupBoxRadioPlayer.Enabled = false;
             */
         }
 
@@ -156,14 +131,6 @@ namespace MyPlot
             audioCfg.enabled = this.checkBoxAudioEnable.Checked;
         }
 
-        private void textBoxConfigFile_TextChanged(object sender, EventArgs e)
-        {
-            configFile = textBoxConfigFile.Text;
-            config = new ConfigureMain();
-            config.LoadConfigure(configFile);
-            ApplyConfigDataToUI();
-        }
-
         private void ButtonOpen_Click(object sender, EventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
@@ -172,10 +139,9 @@ namespace MyPlot
             if (ofd.ShowDialog() == DialogResult.OK)
             {
                 textBoxConfigFile.Text = ofd.FileName;
-                foreach (Control c in Controls)
-                {
-                    c.Enabled = true;
-                }
+                configFile = textBoxConfigFile.Text;
+                config = new ConfigureMain(configFile);
+                ApplyConfigDataToUI();
             }
         }
 
