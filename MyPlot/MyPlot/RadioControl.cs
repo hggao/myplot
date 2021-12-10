@@ -20,6 +20,10 @@ namespace MyPlot
         private bool mouseLeftButtonDown = false;
         private bool mouseInside = false;
         private long mouseOutTimeMS = 0;
+        private Image imagePlay = null;
+        private Image imagePause = null;
+        private Image imageSpkr = null;
+        private Image imageMuted = null;
 
         public RadioControl(MyPlot myplot)
         {
@@ -27,6 +31,11 @@ namespace MyPlot
 
             _myplot = myplot;
             _radioMP = myplot._radioMP;
+
+            imagePlay = Image.FromFile("play.png");
+            imagePause = Image.FromFile("pause.png");
+            imageSpkr = Image.FromFile("spkr.png");
+            imageMuted = Image.FromFile("muted.png");
         }
 
         private void buttonCancel_Click(object sender, EventArgs e)
@@ -117,12 +126,12 @@ namespace MyPlot
             if (_radioMP.IsPlaying)
             {
                 _radioMP.Pause();
-                buttonPlayPause.Image = Image.FromFile("play.png");
+                buttonPlayPause.Image = imagePlay;
             }
             else
             {
                 _radioMP.Pause();
-                buttonPlayPause.Image = Image.FromFile("pause.png");
+                buttonPlayPause.Image = imagePause;
             }
         }
 
@@ -132,14 +141,14 @@ namespace MyPlot
             mouseInside = true;
             if (checkBoxSpeaker.Checked)
             {
-                checkBoxSpeaker.Image = Image.FromFile("muted.png");
+                checkBoxSpeaker.Image = imageMuted;
                 previousRadioVol = trackBarRadioVol.Value;
                 trackBarRadioVol.Value = 0;
                 trackBarRadioVol.Enabled = false;
             }
             else
             {
-                checkBoxSpeaker.Image = Image.FromFile("spkr.png");
+                checkBoxSpeaker.Image = imageSpkr;
                 trackBarRadioVol.Enabled = true;
                 trackBarRadioVol.Value = previousRadioVol;
             }

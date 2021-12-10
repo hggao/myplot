@@ -31,7 +31,7 @@ namespace MyPlot
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(VideoControl));
-            this.buttonPlay = new System.Windows.Forms.Button();
+            this.buttonPlayPause = new System.Windows.Forms.Button();
             this.buttonNext = new System.Windows.Forms.Button();
             this.trackBarVideoVol = new System.Windows.Forms.TrackBar();
             this.trackBarPosition = new System.Windows.Forms.TrackBar();
@@ -43,23 +43,22 @@ namespace MyPlot
             this.comboBoxSpeed = new System.Windows.Forms.ComboBox();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.checkBoxSpeaker = new System.Windows.Forms.CheckBox();
-            this.buttonPause = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarVideoVol)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarPosition)).BeginInit();
             this.SuspendLayout();
             // 
-            // buttonPlay
+            // buttonPlayPause
             // 
-            this.buttonPlay.FlatAppearance.BorderSize = 0;
-            this.buttonPlay.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonPlay.Image = ((System.Drawing.Image)(resources.GetObject("buttonPlay.Image")));
-            this.buttonPlay.Location = new System.Drawing.Point(14, 42);
-            this.buttonPlay.Name = "buttonPlay";
-            this.buttonPlay.Size = new System.Drawing.Size(32, 32);
-            this.buttonPlay.TabIndex = 0;
-            this.buttonPlay.TabStop = false;
-            this.buttonPlay.UseVisualStyleBackColor = true;
-            this.buttonPlay.Click += new System.EventHandler(this.buttonPlay_Click);
+            this.buttonPlayPause.FlatAppearance.BorderSize = 0;
+            this.buttonPlayPause.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonPlayPause.Image = ((System.Drawing.Image)(resources.GetObject("buttonPlayPause.Image")));
+            this.buttonPlayPause.Location = new System.Drawing.Point(14, 42);
+            this.buttonPlayPause.Name = "buttonPlayPause";
+            this.buttonPlayPause.Size = new System.Drawing.Size(32, 32);
+            this.buttonPlayPause.TabIndex = 0;
+            this.buttonPlayPause.TabStop = false;
+            this.buttonPlayPause.UseVisualStyleBackColor = true;
+            this.buttonPlayPause.Click += new System.EventHandler(this.buttonPlayPause_Click);
             // 
             // buttonNext
             // 
@@ -202,20 +201,6 @@ namespace MyPlot
             this.checkBoxSpeaker.UseVisualStyleBackColor = true;
             this.checkBoxSpeaker.CheckedChanged += new System.EventHandler(this.checkBoxSpeaker_CheckedChanged);
             // 
-            // buttonPause
-            // 
-            this.buttonPause.FlatAppearance.BorderSize = 0;
-            this.buttonPause.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonPause.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.buttonPause.Image = ((System.Drawing.Image)(resources.GetObject("buttonPause.Image")));
-            this.buttonPause.Location = new System.Drawing.Point(14, 42);
-            this.buttonPause.Name = "buttonPause";
-            this.buttonPause.Size = new System.Drawing.Size(32, 32);
-            this.buttonPause.TabIndex = 1;
-            this.buttonPause.TabStop = false;
-            this.buttonPause.UseVisualStyleBackColor = true;
-            this.buttonPause.Click += new System.EventHandler(this.buttonPause_Click);
-            // 
             // VideoControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -233,15 +218,13 @@ namespace MyPlot
             this.Controls.Add(this.trackBarVideoVol);
             this.Controls.Add(this.checkBoxSpeaker);
             this.Controls.Add(this.buttonNext);
-            this.Controls.Add(this.buttonPause);
-            this.Controls.Add(this.buttonPlay);
+            this.Controls.Add(this.buttonPlayPause);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "VideoControl";
             this.Opacity = 0.5D;
             this.TopMost = true;
             this.Load += new System.EventHandler(this.VideoControl_Load);
             this.VisibleChanged += new System.EventHandler(this.VideoControl_VisibleChanged);
-            this.Paint += new System.Windows.Forms.PaintEventHandler(this.VideoControl_Paint);
             this.MouseEnter += new System.EventHandler(this.VideoControl_MouseEnter);
             this.MouseLeave += new System.EventHandler(this.VideoControl_MouseLeave);
             ((System.ComponentModel.ISupportInitialize)(this.trackBarVideoVol)).EndInit();
@@ -252,8 +235,7 @@ namespace MyPlot
 
         #endregion
 
-        private System.Windows.Forms.Button buttonPlay;
-        private System.Windows.Forms.Button buttonPause;
+        private System.Windows.Forms.Button buttonPlayPause;
         private System.Windows.Forms.Button buttonNext;
         private System.Windows.Forms.CheckBox checkBoxSpeaker;
         private System.Windows.Forms.TrackBar trackBarVideoVol;

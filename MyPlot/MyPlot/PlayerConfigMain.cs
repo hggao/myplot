@@ -10,7 +10,6 @@ using Newtonsoft.Json;
 
 namespace MyPlot
 {
-
     public class ConfigureMain
     {
         public ConfigData configData;
@@ -200,6 +199,14 @@ namespace MyPlot
         LocalReady  = 2
     };
 
+    public enum PlayerStatus
+    {
+        Unknown         = 0,
+        PlayingPrepare  = 1,
+        PlayingStarted  = 2,
+        PlayingEnd      = 3
+    };
+     
     public class GlobalDefs
     {
         public static string serverIP = "98.234.74.74";
@@ -295,6 +302,7 @@ namespace MyPlot
         public IList<string> media_files { get; set; }
 
         //Runtime values
+        public int player_status;
         public int play_index;
         public float play_position;
         public float play_speed;
@@ -314,6 +322,7 @@ namespace MyPlot
         public IList<string> audio_files { get; set; }
 
         //Runtime values
+        public int player_status;
         public int play_index;
         public float play_position;
         public float play_speed;
@@ -326,6 +335,8 @@ namespace MyPlot
         public bool loop { get; set; }
         public bool reshuffle { get; set; }
         public IList<string> radio_urls { get; set; }
+
+        public int player_status;
     }
 
     public class ConfigData

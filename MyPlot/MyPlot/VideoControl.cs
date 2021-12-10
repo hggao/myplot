@@ -18,6 +18,11 @@ namespace MyPlot
         private bool mouseLeftButtonDown = false;
         private bool mouseInside = false;
         private long mouseOutTimeMS = 0;
+        private Image imagePlay = null;
+        private Image imagePause = null;
+        private Image imageReplay = null;
+        private Image imageSpkr = null;
+        private Image imageMuted = null;
 
         public VideoControl(MyPlot myplot)
         {
@@ -25,18 +30,12 @@ namespace MyPlot
 
             _myplot = myplot;
             _videoMP = myplot._videoMP;
-        }
 
-        private void VideoControl_Paint(object sender, PaintEventArgs e)
-        {
-            /*
-            int l = 0;
-            for (l = 0; l < 96; l++)
-            {
-                var p = new Pen(Color.FromArgb(255, l*2, l*2, l*2));
-                e.Graphics.DrawLine(p, 0, Height - l, Width, Height - l);
-            }
-            */
+            imagePlay = Image.FromFile("play.png");
+            imagePause = Image.FromFile("pause.png");
+            imageReplay = Image.FromFile("replay.png");
+            imageSpkr = Image.FromFile("spkr.png");
+            imageMuted = Image.FromFile("muted.png");
         }
 
         public void LayoutControls()
@@ -52,6 +51,8 @@ namespace MyPlot
             buttonFullScreen.Location = new Point(ClientSize.Width - 14 - 38, 48);
             comboBoxSpeed.Location = new Point(ClientSize.Width - 14 - 36 - 36 - 18, 52);
             buttonSettings.Location = new Point(ClientSize.Width - 14 - 36 - 36 - 36 - 18, 48);
+
+
         }
 
         private void VideoControl_Load(object sender, EventArgs e)
@@ -84,19 +85,36 @@ namespace MyPlot
                 }
             }
 
-            //Play/Pause buttons
-            if (_videoMP.IsPlaying)
+            MainPlayerConfig config = _myplot.playersConfig.configData.mainPlayerConfig;
+
+            //Play/Pause/Replay button
+            if (config.player_status == (int)PlayerStatus.PlayingStarted)
             {
-                buttonPlay.Enabled = false;
-                buttonPause.Enabled = true;
-            } else {
-                buttonPlay.Enabled = true;
-                buttonPause.Enabled = false;
+                if (_videoMP.IsPlaying)
+                {
+                    buttonPlayPause.Image = imagePause;
+                }
+                else
+                {
+                    buttonPlayPause.Image = imagePlay;
+                }
+            }
+            else if (config.player_status == (int)PlayerStatus.PlayingEnd)
+            {
+                buttonPlayPause.Image = imageReplay;
+            }
+            else
+            {
+                MessageBox.Show("Unexpected Video player status: " + config.player_status.ToString(), "Debug");
             }
 
             //Position tracking
             if (!trackBarPosition.ContainsFocus || !mouseLeftButtonDown)
             {
+                if (config.player_status == (int)PlayerStatus.PlayingEnd)
+                {
+                    _videoMP.Position = 1.0f;
+                }
                 int pos = (int)(_videoMP.Position * trackBarPosition.Maximum);
                 if (pos < trackBarPosition.Minimum)
                     pos = trackBarPosition.Minimum;
@@ -153,7 +171,6 @@ namespace MyPlot
                     info += "Cubemap";
                 }
                 info += " | File: ";
-                MainPlayerConfig config = _myplot.playersConfig.configData.mainPlayerConfig;
                 info += config.media_files[config.play_index];
                 labelTitle.Text = info;
             }
@@ -200,20 +217,25 @@ namespace MyPlot
             mouseOutTimeMS = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
         }
 
-        private void buttonPause_Click(object sender, EventArgs e)
+        private void buttonPlayPause_Click(object sender, EventArgs e)
         {
             mouseInside = true;
-            _videoMP.Pause();
-            buttonPause.Visible = false;
-            buttonPlay.Visible = true;
-        }
+            if (buttonPlayPause.Image == imageReplay)
+            {
+                _myplot.VideoPlayerStart();
+                buttonPlayPause.Image = imagePause;
+                return;
+            }
+            if (buttonPlayPause.Image == imagePlay)
+            {
+                _videoMP.Pause();
+                buttonPlayPause.Image = imagePause;
+                return;
+            }
 
-        private void buttonPlay_Click(object sender, EventArgs e)
-        {
-            mouseInside = true;
+            //Remaining condition is imagePause
             _videoMP.Pause();
-            buttonPause.Visible = true;
-            buttonPlay.Visible = false;
+            buttonPlayPause.Image = imagePlay;
         }
 
         private void buttonNext_Click(object sender, EventArgs e)
@@ -248,14 +270,14 @@ namespace MyPlot
             mouseInside = true;
             if (checkBoxSpeaker.Checked)
             {
-                checkBoxSpeaker.Image = Image.FromFile("muted.png");
+                checkBoxSpeaker.Image = imageMuted;
                 previousVideoVol = trackBarVideoVol.Value;
                 trackBarVideoVol.Value = 0;
                 trackBarVideoVol.Enabled = false;
             }
             else
             {
-                checkBoxSpeaker.Image = Image.FromFile("spkr.png");
+                checkBoxSpeaker.Image = imageSpkr;
                 trackBarVideoVol.Enabled = true;
                 trackBarVideoVol.Value = previousVideoVol;
             }

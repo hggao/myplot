@@ -19,6 +19,11 @@ namespace MyPlot
         private bool mouseLeftButtonDown = false;
         private bool mouseInside = false;
         private long mouseOutTimeMS = 0;
+        private Image imagePlay = null;
+        private Image imagePause = null;
+        private Image imageReplay = null;
+        private Image imageSpkr = null;
+        private Image imageMuted = null;
 
         public AudioControl(MyPlot myplot)
         {
@@ -26,6 +31,12 @@ namespace MyPlot
 
             _myplot = myplot;
             _audioMP = myplot._audioMP;
+
+            imagePlay = Image.FromFile("play.png");
+            imagePause = Image.FromFile("pause.png");
+            imageReplay = Image.FromFile("replay.png");
+            imageSpkr = Image.FromFile("spkr.png");
+            imageMuted = Image.FromFile("muted.png");
         }
 
         [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
@@ -68,9 +79,36 @@ namespace MyPlot
                 }
             }
 
+            AudioPlayerConfig config = _myplot.playersConfig.configData.audioPlayerConfig;
+
+            //Play/Pause/Replay button
+            if (config.player_status == (int)PlayerStatus.PlayingStarted)
+            {
+                if (_audioMP.IsPlaying)
+                {
+                    buttonPlayPause.Image = imagePause;
+                }
+                else
+                {
+                    buttonPlayPause.Image = imagePlay;
+                }
+            }
+            else if (config.player_status == (int)PlayerStatus.PlayingEnd)
+            {
+                buttonPlayPause.Image = imageReplay;
+            }
+            else
+            {
+                MessageBox.Show("Unexpected Audio player status: " + config.player_status.ToString(), "Debug");
+            }
+
             //Position tracking
             if (!trackBarAudioPos.ContainsFocus || !mouseLeftButtonDown)
             {
+                if (config.player_status == (int)PlayerStatus.PlayingEnd)
+                {
+                    _audioMP.Position = 1.0f;
+                }
                 int pos = (int)(_audioMP.Position * trackBarAudioPos.Maximum);
                 if (pos < trackBarAudioPos.Minimum)
                     pos = trackBarAudioPos.Minimum;
@@ -111,7 +149,6 @@ namespace MyPlot
             //Audio Information
             if (_audioMP.IsPlaying)
             {
-                AudioPlayerConfig config = _myplot.playersConfig.configData.audioPlayerConfig;
                 labelTitle.Text = config.audio_files[config.play_index];
             }
         }
@@ -160,16 +197,22 @@ namespace MyPlot
         private void buttonPlayPause_Click(object sender, EventArgs e)
         {
             mouseInside = true;
-            if (_audioMP.IsPlaying)
+            if (buttonPlayPause.Image == imageReplay)
+            {
+                _myplot.AudioPlayerStart();
+                buttonPlayPause.Image = imagePause;
+                return;
+            }
+            if (buttonPlayPause.Image == imagePlay)
             {
                 _audioMP.Pause();
-                buttonPlayPause.Image = Image.FromFile("play.png");
+                buttonPlayPause.Image = imagePause;
+                return;
             }
-            else
-            {
-                _audioMP.Pause();
-                buttonPlayPause.Image = Image.FromFile("pause.png");
-            }
+
+            //Remaining condition is imagePause
+            _audioMP.Pause();
+            buttonPlayPause.Image = imagePlay;
         }
 
         private void buttonNext_Click(object sender, EventArgs e)
@@ -184,14 +227,14 @@ namespace MyPlot
             mouseInside = true;
             if (checkBoxSpeaker.Checked)
             {
-                checkBoxSpeaker.Image = Image.FromFile("muted.png");
+                checkBoxSpeaker.Image = imageMuted;
                 previousAudioVol = trackBarAudioVol.Value;
                 trackBarAudioVol.Value = 0;
                 trackBarAudioVol.Enabled = false;
             }
             else
             {
-                checkBoxSpeaker.Image = Image.FromFile("spkr.png");
+                checkBoxSpeaker.Image = imageSpkr;
                 trackBarAudioVol.Enabled = true;
                 trackBarAudioVol.Value = previousAudioVol;
             }

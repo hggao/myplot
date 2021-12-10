@@ -18,7 +18,7 @@ namespace MyPlot
 {
     public partial class MyPlot : Form
     {
-        private void AudioPlayerStart()
+        public void AudioPlayerStart()
         {
             if (audioView.Visible == false)
             {
@@ -30,6 +30,7 @@ namespace MyPlot
             {
                 return;
             }
+            config.player_status = (int)PlayerStatus.PlayingPrepare;
             config.play_index = -1;
             config.play_position = 0.0f;
             config.play_speed = 1.0f;
@@ -48,6 +49,7 @@ namespace MyPlot
             }
             config.play_index = (config.play_index + 1) % config.audio_files.Count;
             var media = new Media(_libVLC, new Uri(config.audio_files[config.play_index]));
+            config.player_status = (int)PlayerStatus.PlayingStarted;
             audioView.MediaPlayer.Play(media);
             Debug.WriteLine("======Playing audio started");
             Debug.WriteLine(config.audio_files[config.play_index]);
@@ -56,6 +58,7 @@ namespace MyPlot
 
         private void AudioPlayer_EndReached(object sender, EventArgs e)
         {
+            playersConfig.configData.audioPlayerConfig.player_status = (int)PlayerStatus.PlayingEnd;
             Thread t = new Thread(new ThreadStart(AudioPlayerPlayNext));
             t.Start();
         }
@@ -69,6 +72,7 @@ namespace MyPlot
             if (audioView.MediaPlayer.IsPlaying)
             {
                 audioView.MediaPlayer.Stop();
+                playersConfig.configData.audioPlayerConfig.player_status = (int)PlayerStatus.PlayingEnd;
             }
         }
 

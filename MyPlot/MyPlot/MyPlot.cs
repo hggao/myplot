@@ -60,6 +60,7 @@ namespace MyPlot
             videoView.MediaPlayer = _videoMP;
             videoView.MouseWheel += videoView_MouseWheel;
             videoCtrl = new VideoControl(this);
+            playersConfig.configData.mainPlayerConfig.player_status = (int)PlayerStatus.Unknown;
 
             _audioMP = new MediaPlayer(_libVLC);
             _audioMP.SetRole(MediaPlayerRole.Music);
@@ -67,12 +68,14 @@ namespace MyPlot
             _audioMP.Playing += AudioPlayer_Playing;
             audioView.MediaPlayer = _audioMP;
             audioCtrl = new AudioControl(this);
+            playersConfig.configData.audioPlayerConfig.player_status = (int)PlayerStatus.Unknown;
 
             _radioMP = new MediaPlayer(_libVLC);
             _radioMP.SetRole(MediaPlayerRole.Music);
             _radioMP.EndReached += RadioPlayer_EndReached;
             radioView.MediaPlayer = _radioMP;
             radioCtrl = new RadioControl(this);
+            playersConfig.configData.radioPlayerConfig.player_status = (int)PlayerStatus.Unknown;
 
             samples = new short[SAMPLE_LEN];
         }

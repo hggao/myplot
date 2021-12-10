@@ -13,7 +13,7 @@ namespace MyPlot
 {
     public partial class MyPlot : Form
     {
-        private void VideoPlayerStart()
+        public void VideoPlayerStart()
         {
             if (videoView.Visible == false)
             {
@@ -25,6 +25,7 @@ namespace MyPlot
             {
                 return;
             }
+            config.player_status = (int)PlayerStatus.PlayingPrepare;
             config.play_index = -1;
             config.play_position = 0.0f;
             config.play_speed = 1.0f;
@@ -43,6 +44,7 @@ namespace MyPlot
             }
             config.play_index = (config.play_index + 1) % config.media_files.Count;
             var media = new Media(_libVLC, new Uri(config.media_files[config.play_index]));
+            config.player_status = (int)PlayerStatus.PlayingStarted;
             videoView.MediaPlayer.Play(media);
             videoView.MediaPlayer.UpdateViewpoint(0, 0, 0, 115);
             Debug.WriteLine("======Video playing started");
@@ -58,6 +60,7 @@ namespace MyPlot
 
         private void VideoPlayer_EndReached(object sender, EventArgs e)
         {
+            playersConfig.configData.mainPlayerConfig.player_status = (int)PlayerStatus.PlayingEnd;
             Thread t = new Thread(new ThreadStart(VideoPlayerPlayNext));
             t.Start();
         }
@@ -71,6 +74,7 @@ namespace MyPlot
             if (videoView.MediaPlayer.IsPlaying)
             {
                 videoView.MediaPlayer.Stop();
+                playersConfig.configData.mainPlayerConfig.player_status = (int)PlayerStatus.PlayingEnd;
             }
         }
 
