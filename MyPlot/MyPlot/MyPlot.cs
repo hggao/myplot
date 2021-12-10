@@ -30,6 +30,7 @@ namespace MyPlot
 
         private VideoControl videoCtrl = null;
         private AudioControl audioCtrl = null;
+        private RadioControl radioCtrl = null;
 
         private WasapiLoopbackCapture capture = null;
         private WaveFormat waveFormat = null;
@@ -71,6 +72,7 @@ namespace MyPlot
             _radioMP.SetRole(MediaPlayerRole.Music);
             _radioMP.EndReached += RadioPlayer_EndReached;
             radioView.MediaPlayer = _radioMP;
+            radioCtrl = new RadioControl(this);
 
             samples = new short[SAMPLE_LEN];
         }
@@ -104,6 +106,11 @@ namespace MyPlot
             capture = new WasapiLoopbackCapture();
             waveFormat = capture.WaveFormat;
             capture.DataAvailable += OnWaveInDataAvailable;
+
+            //Radio round corner region
+            radioView.Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, radioView.Width, radioView.Height, 20, 20));
+            radioPicBox.Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, radioPicBox.Width, radioPicBox.Height, 20, 20));
+
 
             //In Chinese Windows, app would receive resize event much earlier before all controls are actually created
             //So that we use this flag to indicate would could only do resize after this flag set.
@@ -154,6 +161,7 @@ namespace MyPlot
         {
             relocateVideoControl();
             relocateAudioControl();
+            relocateRadioControl();
         }
 
         private void MyPlot_Resize(object sender, EventArgs e)
@@ -166,6 +174,7 @@ namespace MyPlot
             SetPlayerControlAppearance();
             relocateVideoControl();
             relocateAudioControl();
+            relocateRadioControl();
         }
 
         private void SetPlayerControlAppearance()
@@ -262,15 +271,7 @@ namespace MyPlot
             //NOTE: We assume Audio and Radio don't exist together
             if (playersConfig.configData.radioPlayerConfig.enabled)
             {
-                if (playersConfig.configData.mainPlayerConfig.enabled || playersConfig.configData.webPlayerConfig.enabled)
-                {
-                    radioView.Location = new Point(ClientSize.Width - radioView.Width - 64, 32);
-
-                }
-                else
-                {
-                    radioView.Location = new Point((ClientSize.Width - audioView.Width) / 2, (ClientSize.Height - audioView.Height) / 2);
-                }
+                radioView.Location = new Point(ClientSize.Width - radioView.Width - 64, 32);
                 radioPicBox.Location = radioView.Location;
                 radioView.Visible = true;
                 radioPicBox.Visible = true;
@@ -285,7 +286,6 @@ namespace MyPlot
         private string web_pageStart = "<html><head><meta http-equiv=\"refresh\" content=\"0; url=";
         private string web_pageMid = "\"><title>Initial Page</title></head><body><br><br><h1 align=\"center\" style=\"color:red\">Cannot navigate to [";
         private string web_pageEnd = "]! Check the URL you supplied in config!</h1></body></html>";
-
         private void WebPlayerStart()
         {
             if (webView.Visible == false)
@@ -581,6 +581,35 @@ namespace MyPlot
                 playersConfig.configData.radioPlayerConfig.enabled = true;
                 SetRadioviewAppearance();
                 RadioPlayerStart();
+            }
+        }
+
+        private void relocateRadioControl()
+        {
+            if (radioCtrl.Visible)
+            {
+                radioCtrl.Location = PointToScreen(new Point(radioView.Location.X - radioCtrl.Width, radioView.Location.Y));
+            }
+        }
+
+        private void ToogleRadioCtrlVisible()
+        {
+            if (radioCtrl.Visible)
+            {
+                radioCtrl.Hide();
+            }
+            else
+            {
+                radioCtrl.Show();
+                relocateRadioControl();
+            }
+        }
+
+        private void radioPicBox_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                ToogleRadioCtrlVisible();
             }
         }
     }

@@ -35,6 +35,8 @@ namespace MyPlot
             this.menuMain = new System.Windows.Forms.MenuStrip();
             this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openAddMediaFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -58,8 +60,6 @@ namespace MyPlot
             this.radioView = new LibVLCSharp.WinForms.VideoView();
             this.audioView = new LibVLCSharp.WinForms.VideoView();
             this.timerAudio = new System.Windows.Forms.Timer(this.components);
-            this.openAddMediaFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             ((System.ComponentModel.ISupportInitialize)(this.webView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.videoView)).BeginInit();
             this.menuMain.SuspendLayout();
@@ -132,6 +132,18 @@ namespace MyPlot
             this.openToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
             this.openToolStripMenuItem.Text = "&Open Playlist";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
+            // 
+            // openAddMediaFileToolStripMenuItem
+            // 
+            this.openAddMediaFileToolStripMenuItem.Name = "openAddMediaFileToolStripMenuItem";
+            this.openAddMediaFileToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.openAddMediaFileToolStripMenuItem.Text = "Open(&Add) Media file";
+            this.openAddMediaFileToolStripMenuItem.Click += new System.EventHandler(this.openAddMediaFileToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(185, 6);
             // 
             // settingsToolStripMenuItem
             // 
@@ -277,13 +289,14 @@ namespace MyPlot
             // radioPicBox
             // 
             this.radioPicBox.Image = global::MyPlot.Properties.Resources.radio_playing;
-            this.radioPicBox.Location = new System.Drawing.Point(997, 37);
+            this.radioPicBox.Location = new System.Drawing.Point(1013, 37);
             this.radioPicBox.Name = "radioPicBox";
-            this.radioPicBox.Size = new System.Drawing.Size(96, 54);
+            this.radioPicBox.Size = new System.Drawing.Size(112, 64);
             this.radioPicBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.radioPicBox.TabIndex = 9;
             this.radioPicBox.TabStop = false;
             this.radioPicBox.Visible = false;
+            this.radioPicBox.MouseClick += new System.Windows.Forms.MouseEventHandler(this.radioPicBox_MouseClick);
             // 
             // radioView
             // 
@@ -293,7 +306,7 @@ namespace MyPlot
             this.radioView.Location = new System.Drawing.Point(895, 37);
             this.radioView.MediaPlayer = null;
             this.radioView.Name = "radioView";
-            this.radioView.Size = new System.Drawing.Size(96, 54);
+            this.radioView.Size = new System.Drawing.Size(112, 64);
             this.radioView.TabIndex = 6;
             this.radioView.Text = "radioView";
             this.radioView.Visible = false;
@@ -319,18 +332,6 @@ namespace MyPlot
             // 
             this.timerAudio.Interval = 50;
             this.timerAudio.Tick += new System.EventHandler(this.timerAudio_Tick);
-            // 
-            // openAddMediaFileToolStripMenuItem
-            // 
-            this.openAddMediaFileToolStripMenuItem.Name = "openAddMediaFileToolStripMenuItem";
-            this.openAddMediaFileToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
-            this.openAddMediaFileToolStripMenuItem.Text = "Open(&Add) Media file";
-            this.openAddMediaFileToolStripMenuItem.Click += new System.EventHandler(this.openAddMediaFileToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(185, 6);
             // 
             // MyPlot
             // 
