@@ -62,11 +62,29 @@ namespace MyPlot
             this.tabPageRadio = new System.Windows.Forms.TabPage();
             this.labelNote = new System.Windows.Forms.Label();
             this.buttonCancel = new System.Windows.Forms.Button();
+            this.checkBoxWebEnable = new System.Windows.Forms.CheckBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.listBoxWebUrls = new System.Windows.Forms.ListBox();
+            this.textBoxActiveURL = new System.Windows.Forms.TextBox();
+            this.textBoxAddNew = new System.Windows.Forms.TextBox();
+            this.buttonAddNew = new System.Windows.Forms.Button();
+            this.buttonRadioAddNew = new System.Windows.Forms.Button();
+            this.textBoxRadioAddNew = new System.Windows.Forms.TextBox();
+            this.textBoxActiveRadioUrl = new System.Windows.Forms.TextBox();
+            this.listBoxRadioUrls = new System.Windows.Forms.ListBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.checkBoxRadioEnable = new System.Windows.Forms.CheckBox();
+            this.trackBarRadioVol = new System.Windows.Forms.TrackBar();
+            this.labelRadioVolText = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
             this.tabControlPlaylist.SuspendLayout();
             this.tabPageVideo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarVideoVol)).BeginInit();
             this.tabPageAudio.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarAudioVol)).BeginInit();
+            this.tabPageWeb.SuspendLayout();
+            this.tabPageRadio.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarRadioVol)).BeginInit();
             this.SuspendLayout();
             // 
             // textBoxConfigFile
@@ -125,6 +143,7 @@ namespace MyPlot
             this.ButtonOK.TabIndex = 14;
             this.ButtonOK.Text = "OK";
             this.ButtonOK.UseVisualStyleBackColor = true;
+            this.ButtonOK.Click += new System.EventHandler(this.ButtonOK_Click);
             // 
             // tabControlPlaylist
             // 
@@ -393,6 +412,12 @@ namespace MyPlot
             // 
             // tabPageWeb
             // 
+            this.tabPageWeb.Controls.Add(this.buttonAddNew);
+            this.tabPageWeb.Controls.Add(this.textBoxAddNew);
+            this.tabPageWeb.Controls.Add(this.textBoxActiveURL);
+            this.tabPageWeb.Controls.Add(this.listBoxWebUrls);
+            this.tabPageWeb.Controls.Add(this.label3);
+            this.tabPageWeb.Controls.Add(this.checkBoxWebEnable);
             this.tabPageWeb.Location = new System.Drawing.Point(4, 22);
             this.tabPageWeb.Name = "tabPageWeb";
             this.tabPageWeb.Padding = new System.Windows.Forms.Padding(3);
@@ -403,6 +428,15 @@ namespace MyPlot
             // 
             // tabPageRadio
             // 
+            this.tabPageRadio.Controls.Add(this.trackBarRadioVol);
+            this.tabPageRadio.Controls.Add(this.labelRadioVolText);
+            this.tabPageRadio.Controls.Add(this.label11);
+            this.tabPageRadio.Controls.Add(this.buttonRadioAddNew);
+            this.tabPageRadio.Controls.Add(this.textBoxRadioAddNew);
+            this.tabPageRadio.Controls.Add(this.textBoxActiveRadioUrl);
+            this.tabPageRadio.Controls.Add(this.listBoxRadioUrls);
+            this.tabPageRadio.Controls.Add(this.label4);
+            this.tabPageRadio.Controls.Add(this.checkBoxRadioEnable);
             this.tabPageRadio.Location = new System.Drawing.Point(4, 22);
             this.tabPageRadio.Name = "tabPageRadio";
             this.tabPageRadio.Padding = new System.Windows.Forms.Padding(3);
@@ -430,6 +464,151 @@ namespace MyPlot
             this.buttonCancel.TabIndex = 24;
             this.buttonCancel.Text = "Cancel";
             this.buttonCancel.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxWebEnable
+            // 
+            this.checkBoxWebEnable.AutoSize = true;
+            this.checkBoxWebEnable.Location = new System.Drawing.Point(9, 16);
+            this.checkBoxWebEnable.Name = "checkBoxWebEnable";
+            this.checkBoxWebEnable.Size = new System.Drawing.Size(59, 17);
+            this.checkBoxWebEnable.TabIndex = 18;
+            this.checkBoxWebEnable.Text = "Enable";
+            this.checkBoxWebEnable.UseVisualStyleBackColor = true;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(6, 58);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(368, 16);
+            this.label3.TabIndex = 20;
+            this.label3.Text = "Active URL(Only one URL could be active in player):";
+            // 
+            // listBoxWebUrls
+            // 
+            this.listBoxWebUrls.AllowDrop = true;
+            this.listBoxWebUrls.FormattingEnabled = true;
+            this.listBoxWebUrls.HorizontalScrollbar = true;
+            this.listBoxWebUrls.Location = new System.Drawing.Point(6, 104);
+            this.listBoxWebUrls.Name = "listBoxWebUrls";
+            this.listBoxWebUrls.Size = new System.Drawing.Size(752, 251);
+            this.listBoxWebUrls.TabIndex = 21;
+            this.listBoxWebUrls.SelectedIndexChanged += new System.EventHandler(this.listBoxWebUrls_SelectedIndexChanged);
+            this.listBoxWebUrls.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listBoxWebUrls_KeyDown);
+            // 
+            // textBoxActiveURL
+            // 
+            this.textBoxActiveURL.Location = new System.Drawing.Point(6, 78);
+            this.textBoxActiveURL.Name = "textBoxActiveURL";
+            this.textBoxActiveURL.ReadOnly = true;
+            this.textBoxActiveURL.Size = new System.Drawing.Size(752, 20);
+            this.textBoxActiveURL.TabIndex = 22;
+            // 
+            // textBoxAddNew
+            // 
+            this.textBoxAddNew.Location = new System.Drawing.Point(6, 361);
+            this.textBoxAddNew.Name = "textBoxAddNew";
+            this.textBoxAddNew.Size = new System.Drawing.Size(658, 20);
+            this.textBoxAddNew.TabIndex = 23;
+            // 
+            // buttonAddNew
+            // 
+            this.buttonAddNew.Location = new System.Drawing.Point(670, 360);
+            this.buttonAddNew.Name = "buttonAddNew";
+            this.buttonAddNew.Size = new System.Drawing.Size(75, 23);
+            this.buttonAddNew.TabIndex = 24;
+            this.buttonAddNew.Text = "Add New";
+            this.buttonAddNew.UseVisualStyleBackColor = true;
+            this.buttonAddNew.Click += new System.EventHandler(this.buttonAddNew_Click);
+            // 
+            // buttonRadioAddNew
+            // 
+            this.buttonRadioAddNew.Location = new System.Drawing.Point(670, 362);
+            this.buttonRadioAddNew.Name = "buttonRadioAddNew";
+            this.buttonRadioAddNew.Size = new System.Drawing.Size(75, 23);
+            this.buttonRadioAddNew.TabIndex = 30;
+            this.buttonRadioAddNew.Text = "Add New";
+            this.buttonRadioAddNew.UseVisualStyleBackColor = true;
+            this.buttonRadioAddNew.Click += new System.EventHandler(this.buttonRadioAddNew_Click);
+            // 
+            // textBoxRadioAddNew
+            // 
+            this.textBoxRadioAddNew.Location = new System.Drawing.Point(6, 364);
+            this.textBoxRadioAddNew.Name = "textBoxRadioAddNew";
+            this.textBoxRadioAddNew.Size = new System.Drawing.Size(658, 20);
+            this.textBoxRadioAddNew.TabIndex = 29;
+            // 
+            // textBoxActiveRadioUrl
+            // 
+            this.textBoxActiveRadioUrl.Location = new System.Drawing.Point(6, 80);
+            this.textBoxActiveRadioUrl.Name = "textBoxActiveRadioUrl";
+            this.textBoxActiveRadioUrl.ReadOnly = true;
+            this.textBoxActiveRadioUrl.Size = new System.Drawing.Size(752, 20);
+            this.textBoxActiveRadioUrl.TabIndex = 28;
+            // 
+            // listBoxRadioUrls
+            // 
+            this.listBoxRadioUrls.AllowDrop = true;
+            this.listBoxRadioUrls.FormattingEnabled = true;
+            this.listBoxRadioUrls.HorizontalScrollbar = true;
+            this.listBoxRadioUrls.Location = new System.Drawing.Point(6, 106);
+            this.listBoxRadioUrls.Name = "listBoxRadioUrls";
+            this.listBoxRadioUrls.Size = new System.Drawing.Size(752, 251);
+            this.listBoxRadioUrls.TabIndex = 27;
+            this.listBoxRadioUrls.SelectedIndexChanged += new System.EventHandler(this.listBoxRadioUrls_SelectedIndexChanged);
+            this.listBoxRadioUrls.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listBoxRadioUrls_KeyDown);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(6, 60);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(368, 16);
+            this.label4.TabIndex = 26;
+            this.label4.Text = "Active URL(Only one URL could be active in player):";
+            // 
+            // checkBoxRadioEnable
+            // 
+            this.checkBoxRadioEnable.AutoSize = true;
+            this.checkBoxRadioEnable.Location = new System.Drawing.Point(9, 18);
+            this.checkBoxRadioEnable.Name = "checkBoxRadioEnable";
+            this.checkBoxRadioEnable.Size = new System.Drawing.Size(59, 17);
+            this.checkBoxRadioEnable.TabIndex = 25;
+            this.checkBoxRadioEnable.Text = "Enable";
+            this.checkBoxRadioEnable.UseVisualStyleBackColor = true;
+            // 
+            // trackBarRadioVol
+            // 
+            this.trackBarRadioVol.AutoSize = false;
+            this.trackBarRadioVol.Location = new System.Drawing.Point(133, 17);
+            this.trackBarRadioVol.Maximum = 100;
+            this.trackBarRadioVol.Name = "trackBarRadioVol";
+            this.trackBarRadioVol.Size = new System.Drawing.Size(103, 18);
+            this.trackBarRadioVol.TabIndex = 33;
+            this.trackBarRadioVol.TickStyle = System.Windows.Forms.TickStyle.None;
+            this.trackBarRadioVol.Scroll += new System.EventHandler(this.trackBarRadioVol_Scroll);
+            // 
+            // labelRadioVolText
+            // 
+            this.labelRadioVolText.AutoSize = true;
+            this.labelRadioVolText.Location = new System.Drawing.Point(241, 19);
+            this.labelRadioVolText.Name = "labelRadioVolText";
+            this.labelRadioVolText.Size = new System.Drawing.Size(13, 13);
+            this.labelRadioVolText.TabIndex = 32;
+            this.labelRadioVolText.Text = "0";
+            this.labelRadioVolText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(85, 19);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(42, 13);
+            this.label11.TabIndex = 31;
+            this.label11.Text = "Volume";
+            this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // PlaylistSetup
             // 
@@ -460,6 +639,11 @@ namespace MyPlot
             this.tabPageAudio.ResumeLayout(false);
             this.tabPageAudio.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarAudioVol)).EndInit();
+            this.tabPageWeb.ResumeLayout(false);
+            this.tabPageWeb.PerformLayout();
+            this.tabPageRadio.ResumeLayout(false);
+            this.tabPageRadio.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarRadioVol)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -500,5 +684,20 @@ namespace MyPlot
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.LinkLabel linkLabelVideoDownload;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.CheckBox checkBoxWebEnable;
+        private System.Windows.Forms.Button buttonAddNew;
+        private System.Windows.Forms.TextBox textBoxAddNew;
+        private System.Windows.Forms.TextBox textBoxActiveURL;
+        private System.Windows.Forms.ListBox listBoxWebUrls;
+        private System.Windows.Forms.TrackBar trackBarRadioVol;
+        private System.Windows.Forms.Label labelRadioVolText;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Button buttonRadioAddNew;
+        private System.Windows.Forms.TextBox textBoxRadioAddNew;
+        private System.Windows.Forms.TextBox textBoxActiveRadioUrl;
+        private System.Windows.Forms.ListBox listBoxRadioUrls;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.CheckBox checkBoxRadioEnable;
     }
 }

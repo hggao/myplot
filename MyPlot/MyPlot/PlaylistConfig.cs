@@ -27,6 +27,8 @@ namespace MyPlot
             delMenu.MenuItems.Add("Remove", OnMenuItemRemove_Clicked);
             ListBoxVideoList.ContextMenu = delMenu;
             listBoxAudioList.ContextMenu = delMenu;
+            listBoxWebUrls.ContextMenu = delMenu;
+            listBoxRadioUrls.ContextMenu = delMenu;
         }
 
         private void PlaylistSetup_Load(object sender, EventArgs e)
@@ -65,41 +67,33 @@ namespace MyPlot
             }
             this.checkBoxAudioEnable.Checked = audioCfg.enabled;
 
-            /*
             //Initialize web player controls
             WebPlayerConfig webCfg = config.configData.webPlayerConfig;
-            this.CheckBoxWebLoop.Checked = webCfg.loop;
-            this.CheckBoxWebReshuffle.Checked = webCfg.reshuffle;
-            this.TrackBarWebVolume.Value = webCfg.volume;
-            this.LabelWebVolumeText.Text = TrackBarWebVolume.Value.ToString();
-            this.ListBoxWebUrls.Items.Clear();
+            this.listBoxWebUrls.Items.Clear();
             for (int i = 0; i < webCfg.web_urls.Count; i++)
             {
-                this.ListBoxWebUrls.Items.Add(webCfg.web_urls[i]);
+                this.listBoxWebUrls.Items.Add(webCfg.web_urls[i]);
             }
-            this.CheckBoxWebPlayer.Checked = webCfg.enabled;
-            if (!CheckBoxWebPlayer.Checked)
+            if (webCfg.web_urls.Count > 0)
             {
-                GroupBoxWebPlayer.Enabled = false;
+                listBoxWebUrls.SelectedIndex = 0;
             }
+            this.checkBoxWebEnable.Checked = webCfg.enabled;
 
             //Initialize radio player controls
             RadioPlayerConfig radioCfg = config.configData.radioPlayerConfig;
-            this.CheckBoxRadioLoop.Checked = radioCfg.loop;
-            this.CheckBoxRadioReshuffle.Checked = radioCfg.reshuffle;
-            this.TrackBarRadioVolume.Value = radioCfg.volume;
-            this.LabelRadioVolumeText.Text = TrackBarRadioVolume.Value.ToString();
-            this.ListBoxRadioUrls.Items.Clear();
+            this.trackBarRadioVol.Value = radioCfg.volume;
+            this.labelRadioVolText.Text = trackBarRadioVol.Value.ToString();
+            this.listBoxRadioUrls.Items.Clear();
             for (int i = 0; i < radioCfg.radio_urls.Count; i++)
             {
-                this.ListBoxRadioUrls.Items.Add(radioCfg.radio_urls[i]);
+                this.listBoxRadioUrls.Items.Add(radioCfg.radio_urls[i]);
             }
-            this.CheckBoxRadioPlayer.Checked = radioCfg.enabled;
-            if (!CheckBoxRadioPlayer.Checked)
+            if (radioCfg.radio_urls.Count > 0)
             {
-                GroupBoxRadioPlayer.Enabled = false;
+                listBoxAudioList.SelectedIndex = 0;
             }
-            */
+            this.checkBoxRadioEnable.Checked = radioCfg.enabled;
         }
 
         private void UpdateConfigDataFromUI()
@@ -122,13 +116,47 @@ namespace MyPlot
             audioCfg.loop = this.checkBoxAudioLoop.Checked;
             audioCfg.reshuffle = this.checkBoxAudioReshuffle.Checked;
             audioCfg.volume = this.trackBarAudioVol.Value;
-
             audioCfg.audio_files.Clear();
             foreach (string file in this.listBoxAudioList.Items)
             {
                 audioCfg.audio_files.Add(file);
             }
             audioCfg.enabled = this.checkBoxAudioEnable.Checked;
+
+            //Update web player
+            WebPlayerConfig webCfg = config.configData.webPlayerConfig;
+            webCfg.web_urls.Clear();
+            string activeURL = textBoxActiveURL.Text.Trim();
+            if (activeURL != "")
+            {
+                webCfg.web_urls.Add(activeURL);
+            }
+            foreach (string url in listBoxWebUrls.Items)
+            {
+                if (url != activeURL)
+                {
+                    webCfg.web_urls.Add(url);
+                }
+            }
+            webCfg.enabled = this.checkBoxWebEnable.Checked;
+
+            //Update radio player
+            RadioPlayerConfig radioCfg = config.configData.radioPlayerConfig;
+            radioCfg.volume = this.trackBarRadioVol.Value;
+            radioCfg.radio_urls.Clear();
+            string activeRadioURL = textBoxActiveRadioUrl.Text.Trim();
+            if (activeRadioURL != "")
+            {
+                radioCfg.radio_urls.Add(activeRadioURL);
+            }
+            foreach (string url in listBoxRadioUrls.Items)
+            {
+                if (url != activeRadioURL)
+                {
+                    radioCfg.radio_urls.Add(url);
+                }
+            }
+            radioCfg.enabled = this.checkBoxRadioEnable.Checked;
         }
 
         private void ButtonOpen_Click(object sender, EventArgs e)
@@ -147,11 +175,18 @@ namespace MyPlot
 
         private void ButtonSave_Click(object sender, EventArgs e)
         {
-            UpdateConfigDataFromUI();
-            config.SaveConfigure(configFile);
+            if (configFile != null)
+            {
+                UpdateConfigDataFromUI();
+                config.SaveConfigure(configFile);
+            }
+            else
+            {
+                SaveAsNewFile();
+            }
         }
 
-        private void ButtonSaveAs_Click(object sender, EventArgs e)
+        private void SaveAsNewFile()
         {
             SaveFileDialog dialog = new SaveFileDialog();
             dialog.Filter = "MyPlot Config (*.myplot.json)|*.myplot.json";
@@ -162,6 +197,20 @@ namespace MyPlot
                 UpdateConfigDataFromUI();
                 config.SaveConfigure(dialog.FileName);
                 textBoxConfigFile.Text = dialog.FileName;
+            }
+        }
+
+        private void ButtonSaveAs_Click(object sender, EventArgs e)
+        {
+            SaveAsNewFile();
+        }
+
+        private void ButtonOK_Click(object sender, EventArgs e)
+        {
+            UpdateConfigDataFromUI();
+            if (configFile != null)
+            {
+                config.SaveConfigure(configFile);
             }
         }
 
@@ -210,7 +259,9 @@ namespace MyPlot
 
         private void OnMenuItemRemove_Clicked(object sender, EventArgs e)
         {
-            ListBox lb = (ListBox)sender;
+            
+
+            ListBox lb = (ListBox)((MenuItem)sender).GetContextMenu().SourceControl;
             int selectIndex = lb.SelectedIndex;
             if (selectIndex >= 0)
             {
@@ -233,10 +284,13 @@ namespace MyPlot
             {
                 labelNote.Text = "Note: Drag files(.mp3, .wav, .wma, .aac) in to add. Del key or right mouse to remove.";
             }
-            else
-             
+            else if (e.TabPage == tabPageWeb)
             {
-                labelNote.Text = "";
+                labelNote.Text = "Note: Please make sure the URL supplied here really working.";
+            }
+            else
+            {
+                labelNote.Text = "Note: Make sure URLs are internet audio only.";
             }
         }
 
@@ -286,6 +340,90 @@ namespace MyPlot
         private void trackBarAudioVol_Scroll(object sender, EventArgs e)
         {
             labelAudioVolText.Text = trackBarAudioVol.Value.ToString();
+        }
+
+        private void buttonAddNew_Click(object sender, EventArgs e)
+        {
+            string txt = textBoxAddNew.Text.Trim();
+            if (txt == "")
+                return;
+            if (listBoxWebUrls.Items.Contains(txt))
+            {
+                listBoxWebUrls.SelectedItem = txt;
+            }
+            else
+            {
+                listBoxWebUrls.Items.Insert(0, txt);
+                listBoxWebUrls.SelectedIndex = 0;
+            }
+            textBoxAddNew.Text = "";
+        }
+
+        private void listBoxWebUrls_KeyDown(object sender, KeyEventArgs e)
+        {
+            int selectIndex = listBoxWebUrls.SelectedIndex;
+
+            if (selectIndex >= 0 && e.KeyCode == Keys.Delete)
+            {
+                listBoxWebUrls.Items.RemoveAt(selectIndex);
+            }
+        }
+
+        private void listBoxWebUrls_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (listBoxWebUrls.SelectedItem != null)
+            {
+                textBoxActiveURL.Text = listBoxWebUrls.SelectedItem.ToString();
+            }
+            else
+            {
+                textBoxActiveURL.Text = "";
+            }
+        }
+
+        private void trackBarRadioVol_Scroll(object sender, EventArgs e)
+        {
+            labelRadioVolText.Text = trackBarRadioVol.Value.ToString();
+        }
+
+        private void buttonRadioAddNew_Click(object sender, EventArgs e)
+        {
+            string txt = textBoxRadioAddNew.Text.Trim();
+            if (txt == "")
+                return;
+
+            if (listBoxRadioUrls.Items.Contains(txt))
+            {
+                listBoxRadioUrls.SelectedItem = txt;
+            }
+            else
+            {
+                listBoxRadioUrls.Items.Insert(0, txt);
+                listBoxRadioUrls.SelectedIndex = 0;
+            }
+            textBoxRadioAddNew.Text = "";
+        }
+
+        private void listBoxRadioUrls_KeyDown(object sender, KeyEventArgs e)
+        {
+            int selectIndex = listBoxRadioUrls.SelectedIndex;
+
+            if (selectIndex >= 0 && e.KeyCode == Keys.Delete)
+            {
+                listBoxRadioUrls.Items.RemoveAt(selectIndex);
+            }
+        }
+
+        private void listBoxRadioUrls_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (listBoxRadioUrls.SelectedItem != null)
+            {
+                textBoxActiveRadioUrl.Text = listBoxRadioUrls.SelectedItem.ToString();
+            }
+            else
+            {
+                textBoxActiveRadioUrl.Text = "";
+            }
         }
     }
 }

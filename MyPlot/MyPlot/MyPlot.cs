@@ -282,6 +282,10 @@ namespace MyPlot
             }
         }
 
+        private string web_pageStart = "<html><head><meta http-equiv=\"refresh\" content=\"0; url=";
+        private string web_pageMid = "\"><title>Initial Page</title></head><body><br><br><h1 align=\"center\" style=\"color:red\">Cannot navigate to [";
+        private string web_pageEnd = "]! Check the URL you supplied in config!</h1></body></html>";
+
         private void WebPlayerStart()
         {
             if (webView.Visible == false)
@@ -292,8 +296,8 @@ namespace MyPlot
             {
                 return;
             }
-
-            webView.NavigateToString(System.IO.File.ReadAllText(playersConfig.configData.webPlayerConfig.web_urls[0]));
+            string url = playersConfig.configData.webPlayerConfig.web_urls[0];
+            webView.NavigateToString(web_pageStart + url + web_pageMid + url + web_pageEnd);
         }
 
         private void RadioPlayerStart()
@@ -396,18 +400,22 @@ namespace MyPlot
 
         private void RestartPlayerWithNewConfig(string newConfigFile, ConfigureMain newConfig)
         {
+            //TODO: check if config didn't change, then return without doing anything
+
             VideoPlayerStop();
             AudioPlayerStop();
             RadioPlayerStop();
-            if (newConfigFile != null)
+
+            configFile = newConfigFile;
+            if (newConfig == null)
             {
-                configFile = newConfigFile;
-                playersConfig = newConfig;
-                if (playersConfig == null)
-                {
-                    playersConfig = new ConfigureMain(configFile);
-                }
+                playersConfig = new ConfigureMain(configFile);
             }
+            else
+            {
+                playersConfig = newConfig;
+            }
+
             SetPlayerControlAppearance();
             VideoPlayerStart(); 
             WebPlayerStart();
@@ -537,9 +545,10 @@ namespace MyPlot
 
         private void homeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (webView.Visible)
+            if (webView.Visible && playersConfig.configData.webPlayerConfig.web_urls.Count > 0)
             {
-                webView.NavigateToString(System.IO.File.ReadAllText(playersConfig.configData.webPlayerConfig.web_urls[0]));
+                string url = playersConfig.configData.webPlayerConfig.web_urls[0];
+                webView.NavigateToString(web_pageStart + url + web_pageMid + url + web_pageEnd);
             }
         }
 

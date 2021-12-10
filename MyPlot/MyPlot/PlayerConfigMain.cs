@@ -40,9 +40,6 @@ namespace MyPlot
             //Web player init with default value
             configData.webPlayerConfig = new WebPlayerConfig();
             configData.webPlayerConfig.enabled = false;
-            configData.webPlayerConfig.volume = 0;
-            configData.webPlayerConfig.loop = false;
-            configData.webPlayerConfig.reshuffle = false;
             configData.webPlayerConfig.web_urls = new List<string>();
 
             //Radio player init with default value
@@ -63,7 +60,7 @@ namespace MyPlot
         {
             ConfigureMain destConf = new ConfigureMain(null);
 
-            //Video player
+            //Video settings
             destConf.configData.mainPlayerConfig.enabled = this.configData.mainPlayerConfig.enabled;
             destConf.configData.mainPlayerConfig.volume = this.configData.mainPlayerConfig.volume;
             destConf.configData.mainPlayerConfig.loop = this.configData.mainPlayerConfig.loop;
@@ -73,7 +70,7 @@ namespace MyPlot
                 destConf.configData.mainPlayerConfig.media_files.Add(file);
             }
 
-            //Audio player init with default value
+            //Audio settings
             destConf.configData.audioPlayerConfig.enabled = this.configData.audioPlayerConfig.enabled;
             destConf.configData.audioPlayerConfig.volume = this.configData.audioPlayerConfig.volume;
             destConf.configData.audioPlayerConfig.loop = this.configData.audioPlayerConfig.loop;
@@ -83,23 +80,20 @@ namespace MyPlot
                 destConf.configData.audioPlayerConfig.audio_files.Add(file);
             }
 
-            /* TODO:xxx
-            //Web player init with default value
-            configData.webPlayerConfig = new WebPlayerConfig();
-            configData.webPlayerConfig.enabled = false;
-            configData.webPlayerConfig.volume = 0;
-            configData.webPlayerConfig.loop = false;
-            configData.webPlayerConfig.reshuffle = false;
-            configData.webPlayerConfig.web_urls = new List<string>();
+            //Web settings
+            destConf.configData.webPlayerConfig.enabled = this.configData.webPlayerConfig.enabled;
+            foreach (string url in this.configData.webPlayerConfig.web_urls)
+            {
+                destConf.configData.webPlayerConfig.web_urls.Add(url);
+            }
 
-            //Radio player init with default value
-            configData.radioPlayerConfig = new RadioPlayerConfig();
-            configData.radioPlayerConfig.enabled = false;
-            configData.radioPlayerConfig.volume = 0;
-            configData.radioPlayerConfig.loop = false;
-            configData.radioPlayerConfig.reshuffle = false;
-            configData.radioPlayerConfig.radio_urls = new List<string>();
-            */
+            //Radio settings
+            destConf.configData.radioPlayerConfig.enabled = this.configData.radioPlayerConfig.enabled;
+            destConf.configData.radioPlayerConfig.volume = this.configData.radioPlayerConfig.volume;
+            foreach (string url in this.configData.radioPlayerConfig.radio_urls)
+            {
+                destConf.configData.radioPlayerConfig.radio_urls.Add(url);
+            }
 
             return destConf;
         }
@@ -308,9 +302,6 @@ namespace MyPlot
     public class WebPlayerConfig
     {
         public bool enabled { get; set; }
-        public int volume { get; set; }
-        public bool loop { get; set; }
-        public bool reshuffle { get; set; }
         public IList<string> web_urls { get; set; }
     }
 
