@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -105,7 +106,7 @@ namespace MyPlot
             }
             else
             {
-                MessageBox.Show("Unexpected Video player status: " + config.player_status.ToString(), "Debug");
+                Debug.WriteLine("Unexpected Video player status: " + config.player_status.ToString());
             }
 
             //Position tracking
