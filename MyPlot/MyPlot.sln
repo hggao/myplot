@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.31729.503
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyPlot", "MyPlot\MyPlot.csproj", "{3E59A299-3BD9-44FF-9A6E-386EF223BC02}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "MyPlot Setup", "MyPlot Setup\MyPlot Setup.vdproj", "{E54A1B3A-FE8F-485B-8F74-CDE13E770592}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{3E59A299-3BD9-44FF-9A6E-386EF223BC02}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3E59A299-3BD9-44FF-9A6E-386EF223BC02}.Release|x64.ActiveCfg = Release|x64
 		{3E59A299-3BD9-44FF-9A6E-386EF223BC02}.Release|x64.Build.0 = Release|x64
+		{E54A1B3A-FE8F-485B-8F74-CDE13E770592}.Debug|Any CPU.ActiveCfg = Debug
+		{E54A1B3A-FE8F-485B-8F74-CDE13E770592}.Debug|x64.ActiveCfg = Debug
+		{E54A1B3A-FE8F-485B-8F74-CDE13E770592}.Release|Any CPU.ActiveCfg = Release
+		{E54A1B3A-FE8F-485B-8F74-CDE13E770592}.Release|x64.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
